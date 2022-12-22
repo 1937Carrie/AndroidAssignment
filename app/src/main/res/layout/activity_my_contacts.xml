@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MyContactsActivity">
+
+    <View
+        android:id="@+id/viewTopContainer"
+
+        style="@style/viewStyle"
+
+        android:background="@color/topViewColor"
+
+        app:layout_constraintBottom_toTopOf="@id/viewBottomContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="0.2" />
+
+    <View
+        android:id="@+id/viewBottomContainer"
+
+        style="@style/viewStyle"
+
+        android:background="@color/alabaster"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewTopContainer"
+        app:layout_constraintVertical_weight="0.8" />
+
+    <ImageButton
+        android:id="@+id/imageButtonArrowBack"
+        style="@style/widthHeightIsWrapContent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+
+        android:background="@null"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewContacts"
+        style="@style/widthHeightIsWrapContent"
+        android:layout_marginTop="10dp"
+
+        android:fontFamily="@font/opensans_semi_bold"
+        android:text="@string/contacts"
+        android:textColor="@color/alabaster"
+        android:textSize="24sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButtonSearch"
+        style="@style/widthHeightIsWrapContent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+
+        android:background="@null"
+        android:src="@drawable/ic_search"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewAddContacts"
+        style="@style/widthHeightIsWrapContent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="16dp"
+
+        android:fontFamily="@font/opensans_semi_bold"
+        android:text="@string/add_contacts"
+        android:textColor="@color/alabaster"
+        android:textSize="14sp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonArrowBack" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewContacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintTop_toTopOf="@id/viewBottomContainer" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

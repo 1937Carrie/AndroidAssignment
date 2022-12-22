@@ -17,4 +17,6 @@
     <string name="by_clicking">Натиснувши «Реєстрація», ви погоджуєтеся з нашими умовами</string>
     <string name="already_hav">Вже є аккаунт?</string>
     <string name="sign_in">Увійти</string>
+    <string name="contacts">Контакти</string>
+    <string name="add_contacts">Додати контакти</string>
 </resources>

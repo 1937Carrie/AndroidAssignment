@@ -17,4 +17,6 @@
     <string name="by_clicking">By clicking Register you agree to our Terms\nand Conditions</string>
     <string name="already_hav">Already have an account?</string>
     <string name="sign_in">Sign in</string>
+    <string name="contacts">Contacts</string>
+    <string name="add_contacts">Add contacts</string>
 </resources>

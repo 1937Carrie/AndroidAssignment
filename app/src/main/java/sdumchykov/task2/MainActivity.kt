@@ -17,6 +17,14 @@ class MainActivity : AppCompatActivity() {
 
         setTextToTextName()
         setURIToImageInstagram()
+        buttonViewMyContactsSetOnClickListener()
+    }
+
+    private fun buttonViewMyContactsSetOnClickListener() {
+        binding.buttonViewMyContacts.setOnClickListener {
+            val intent = Intent(this, MyContactsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setURIToImageInstagram() {
