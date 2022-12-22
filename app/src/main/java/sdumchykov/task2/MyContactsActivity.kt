@@ -24,6 +24,25 @@ class MyContactsActivity : AppCompatActivity() {
 
     private fun setInitialData() {
         states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
+        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
     }
 
     private fun imageButtonArrowBackSetOnClickListener() {

@@ -9,5 +9,5 @@ data class Contact(
     val photo: Int?
 ) {
     @DrawableRes
-    val trashIcon: Int = R.drawable.ic_delete
+    val deleteIcon: Int = R.drawable.ic_delete
 }

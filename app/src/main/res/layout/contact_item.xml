@@ -8,8 +8,7 @@
         android:id="@+id/imageViewPhoto"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="8dp"
 
         android:contentDescription="Profile photo"
 
@@ -22,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
 
         android:fontFamily="@font/opensans_semi_bold"
         android:text="Tested name"
