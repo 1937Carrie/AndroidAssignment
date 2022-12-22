@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_weight="0.2" />
+        app:layout_constraintVertical_weight="0.16" />
 
     <View
         android:id="@+id/viewBottomContainer"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/viewTopContainer"
-        app:layout_constraintVertical_weight="0.8" />
+        app:layout_constraintVertical_weight="1" />
 
     <ImageButton
         android:id="@+id/imageButtonArrowBack"
@@ -74,7 +74,6 @@
         android:id="@+id/textViewAddContacts"
         style="@style/widthHeightIsWrapContent"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
         android:layout_marginBottom="16dp"
 
         android:fontFamily="@font/opensans_semi_bold"
@@ -82,8 +81,8 @@
         android:textColor="@color/alabaster"
         android:textSize="14sp"
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageButtonArrowBack" />
+        app:layout_constraintBottom_toBottomOf="@id/viewTopContainer"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewContacts"
