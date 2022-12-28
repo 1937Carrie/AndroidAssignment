@@ -13,7 +13,7 @@
 
         android:background="@color/steel_gray"
 
-        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline_activityMyContacts_014"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline_activityMyContactsLand_020"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -35,11 +35,11 @@
         app:layout_constraintGuide_percent="0.1" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontalGuideline_activityMyContacts_014"
+        android:id="@+id/horizontalGuideline_activityMyContactsLand_020"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.14" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalGuideline_activityMyContacts_004"
@@ -55,7 +55,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.96" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <ImageButton
         android:id="@+id/imageButtonArrowBack"
         style="@style/widthHeightIsWrapContent"
 
@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMyContacts_004"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMyContacts_003" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <ImageButton
         android:id="@+id/imageButtonSearch"
         style="@style/widthHeightIsWrapContent"
 
@@ -77,7 +77,7 @@
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline_activityMyContacts_096"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMyContacts_003" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:id="@+id/textViewContacts"
         style="@style/widthHeightIsWrapContent"
 
@@ -104,7 +104,7 @@
         app:layout_constraintVertical_weight="1" />
 
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <TextView
         android:id="@+id/textViewAddContacts"
         style="@style/widthHeightIsWrapContent"
 
@@ -112,7 +112,7 @@
         android:text="@string/add_contacts"
         android:textColor="@color/alabaster"
         android:textSize="@dimen/text_14sp"
-        app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline_activityMyContacts_014"
+        app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline_activityMyContactsLand_020"
         app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMyContacts_004"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMyContacts_010" />
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Pixels size  -->
+    <dimen name="dimension_8dp">8dp</dimen>
+    <dimen name="dimension_12dp">12dp</dimen>
+    <dimen name="dimension_16dp">16dp</dimen>
+    <dimen name="dimension_18dp">18dp</dimen>
+    <dimen name="dimension_24dp">24dp</dimen>
+    <dimen name="dimension_32dp">32dp</dimen>
+    <dimen name="dimension_40dp">40dp</dimen>
+    <dimen name="dimension_52dp">52dp</dimen>
+    <!-- Text size  -->
+    <dimen name="text_12sp">12sp</dimen>
+    <dimen name="text_14sp">14sp</dimen>
+    <dimen name="text_16sp">16sp</dimen>
+    <dimen name="text_18sp">18sp</dimen>
+    <dimen name="text_24sp">24sp</dimen>
+    <!--  corner radius  -->
+    <dimen name="corner_radius">4dp</dimen>
+</resources>

@@ -1,13 +1,20 @@
 <resources>
+    <!--  App name  -->
     <string name="app_name">RecyclerView</string>
+    <!--  Main activity  -->
     <string name="settings">Налаштування</string>
+    <string name="profile_image">Зображення профілю</string>
     <string name="name">Людмила Альвараденко</string>
     <string name="profession">Графічний дизайнер</string>
     <string name="address">Соборна 22</string>
-    <string name="edite_profile">Редагувати профіль</string>
+    <string name="edit_profile">Редагувати профіль</string>
     <string name="view_my_contacts">Переглянути контакти</string>
+    <!-- Main activity service strings  -->
+    <string name="error_message_email">Введіть валідний email</string>
+    <string name="error_message_password">Мінімум 8 символів. Букви і літери обов\'язково</string>
+    <!--  Sign up activity  -->
     <string name="let_s_get_a">Хто будеш?</string>
-    <string name="type_15">Заповніть профіль і переходьте до додатку!</string>
+    <string name="fill_out_the_profile">Заповніть профіль і переходьте до додатку!</string>
     <string name="email">E-mail</string>
     <string name="password">Пароль</string>
     <string name="remember_me">Запам\'ятати мене</string>
@@ -15,8 +22,12 @@
     <string name="or">або</string>
     <string name="register">Зареєструватися</string>
     <string name="by_clicking">Натиснувши «Реєстрація», ви погоджуєтеся з нашими умовами</string>
-    <string name="already_hav">Вже є аккаунт?</string>
+    <string name="already_have">Вже є аккаунт?</string>
     <string name="sign_in">Увійти</string>
+    <!--  contentDescription  -->
+    <string name="icon_facebook">Іконка Facebook</string>
+    <string name="icon_linkedin">Іконка Linkedin</string>
+    <string name="icon_instagram">Іконка Instagram</string>
     <string name="contacts">Контакти</string>
-    <string name="add_contacts">Додати контакти</string>
+    <string name="add_contacts">Додати контакт</string>
 </resources>

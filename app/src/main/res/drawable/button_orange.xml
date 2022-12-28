@@ -1,9 +1,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <corners android:radius="@dimen/corner_radius" />
-
-    <stroke
-        android:width="2dp"
-        android:color="@color/bombay" />
+    <solid android:color="@color/orange" />
 
 </shape>

@@ -1,13 +1,16 @@
 package sdumchykov.task2
 
 import android.os.Bundle
-import android.provider.ContactsContract.Contacts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import sdumchykov.task2.adapter.ItemAdapter
+import sdumchykov.task2.data.Datasource
 import sdumchykov.task2.databinding.ActivityMyContactsBinding
+import sdumchykov.task2.model.Contact
 
 class MyContactsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyContactsBinding
-    var states: ArrayList<Contact> = ArrayList<Contact>()
+    private var liveDataContacts = MutableLiveData<List<Contact>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,34 +19,15 @@ class MyContactsActivity : AppCompatActivity() {
 
         imageButtonArrowBackSetOnClickListener()
 
-        setInitialData()
+//        val myDataSet = Datasource().contactList()
+
+        liveDataContacts.value = Datasource().contactList()
 
         val recyclerView = binding.recyclerViewContacts
-        recyclerView.adapter = ContactAdapter(states)
+        recyclerView.adapter = ItemAdapter(this, liveDataContacts.value!!)
+
     }
 
-    private fun setInitialData() {
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-        states.add(Contact(name = "Ava Smith", profession = "Photograph", photo = R.drawable.tmp_rounded_image))
-    }
 
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageButtonArrowBack.setOnClickListener {

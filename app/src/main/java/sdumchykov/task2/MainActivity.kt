@@ -3,21 +3,26 @@ package sdumchykov.task2
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import sdumchykov.task2.databinding.ActivityMainBinding
 
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
+        setMainPicture()
         setTextToTextName()
         setURIToImageInstagram()
         buttonViewMyContactsSetOnClickListener()
+    }
+
+    private fun setMainPicture() {
+        val drawableSource = R.drawable.image
+
+        Glide.with(this)
+            .load(drawableSource).circleCrop().into(binding.imageViewPicture)
     }
 
     private fun buttonViewMyContactsSetOnClickListener() {

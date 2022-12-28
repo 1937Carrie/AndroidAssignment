@@ -1,83 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline_contactItem_034"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.34" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline_contactItem_054"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.54" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuideline_contactItem_066"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline_contactItem_006"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.06" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline_contactItem_018"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.18" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline_contactItem_092"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.92" />
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewBackground"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="8dp"
 
-        android:scaleType="fitXY"
         android:src="@drawable/contact_item_background"
 
-
-        app:layout_constraintBottom_toBottomOf="@id/guideline2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="85dp" />
-
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewPhoto"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="8dp"
-
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/dimension_8dp"
         android:contentDescription="Profile photo"
 
         app:layout_constraintBottom_toBottomOf="@id/imageViewBackground"
-        app:layout_constraintStart_toStartOf="@id/imageViewBackground"
+
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline_contactItem_018"
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline_contactItem_006"
         app:layout_constraintTop_toTopOf="@id/imageViewBackground" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="@dimen/dimension_8dp"
 
         android:fontFamily="@font/opensans_semi_bold"
         android:text="Tested name"
         android:textSize="18sp"
 
-        app:layout_constraintStart_toEndOf="@id/imageViewPhoto"
-        app:layout_constraintTop_toTopOf="@id/imageViewBackground" />
+        app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline_contactItem_054"
+        app:layout_constraintStart_toEndOf="@id/imageViewPhoto" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewProfession"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="@dimen/dimension_8dp"
 
         android:fontFamily="@font/opensans_regular"
         android:text="Profession"
         android:textSize="12sp"
 
-        app:layout_constraintBottom_toBottomOf="@id/imageViewBackground"
         app:layout_constraintStart_toStartOf="@id/textViewName"
-        app:layout_constraintTop_toBottomOf="@id/textViewName" />
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuideline_contactItem_054" />
 
-    <ImageButton
-        android:id="@+id/imageButtonDelete"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="14dp"
+        android:layout_marginStart="50dp"
+        android:textSize="@dimen/text_16sp"
+        app:layout_constraintBottom_toBottomOf="@id/textViewName"
+        app:layout_constraintStart_toEndOf="@id/textViewName"
+        tools:text="timer"/>
 
-        android:background="@null"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageButtonDelete"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
         android:src="@drawable/ic_delete"
-
-        app:layout_constraintEnd_toEndOf="@id/imageViewBackground"
-        app:layout_constraintTop_toTopOf="@id/imageViewBackground"
-        app:layout_constraintBottom_toBottomOf="@id/imageViewBackground"/>
+        app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline_contactItem_066"
+        app:layout_constraintDimensionRatio="22:26"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline_contactItem_092"
+        app:layout_constraintTop_toTopOf="@id/horizontalGuideline_contactItem_034" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
