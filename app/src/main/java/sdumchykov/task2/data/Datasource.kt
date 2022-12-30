@@ -3,39 +3,53 @@ package sdumchykov.task2.data
 import sdumchykov.task2.model.Contact
 
 class Datasource {
-    fun contactList(): List<Contact> {
-        return listOf<Contact>(
+    companion object {
+        private var data = arrayListOf(
             Contact(
                 name = "Ava Smith",
                 profession = "Photograph",
+                photo = "https://picsum.photos/200"
+            ),
+            Contact(
+                name = "Ava Smith",
+                profession = "Photograph",
+                photo = "https://picsum.photos/200"
             ), Contact(
                 name = "Ava Smith",
-                profession = "Photograph"
+                profession = "Photograph",
+                photo = "https://picsum.photos/200"
             ), Contact(
                 name = "Ava Smith",
-                profession = "Photograph"
+                profession = "Photograph",
+                photo = "https://picsum.photos/200"
             ), Contact(
                 name = "Ava Smith",
-                profession = "Photograph"
+                profession = "Photograph",
+                photo = "https://picsum.photos/200"
             ), Contact(
                 name = "Ava Smith",
-                profession = "Photograph"
+                profession = "Photograph",
+                photo = "https://picsum.photos/200"
             ), Contact(
                 name = "Ava Smith",
-                profession = "Photograph"
+                profession = "Photograph",
+                photo = "https://picsum.photos/200"
             ), Contact(
                 name = "Ava Smith",
-                profession = "Photograph"
+                profession = "Photograph",
+                photo = "https://picsum.photos/200"
             ), Contact(
                 name = "Ava Smith",
-                profession = "Photograph"
-            ), Contact(
-                name = "Ava Smith",
-                profession = "Photograph"
-            ), Contact(
-                name = "Ava Smith",
-                profession = "Photograph"
+                profession = "Photograph",
+                photo = "https://picsum.photos/200"
             )
         )
+
+        fun get() = data
+
+        fun set(value: ArrayList<Contact>) {
+            data = value
+        }
     }
+
 }

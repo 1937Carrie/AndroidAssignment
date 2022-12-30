@@ -1,47 +1,45 @@
 package sdumchykov.task2.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
-import sdumchykov.task2.R
+import sdumchykov.task2.databinding.ContactItemBinding
 import sdumchykov.task2.model.Contact
 
 
-class ItemAdapter(private val context: Context, private val dataSet: List<Contact>) :
-    RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+    var contacts = mutableListOf<Contact>()
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val image: ImageView
-        val name: TextView
-        val profession: TextView
-
-        init {
-            image = view.findViewById(R.id.imageViewPhoto)
-            name = view.findViewById(R.id.textViewName)
-            profession = view.findViewById(R.id.textViewProfession)
-        }
+    fun setContactList(contacts: List<Contact>) {
+        this.contacts = contacts.toMutableList()
+        notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(viewGroup.context).inflate(R.layout.contact_item, viewGroup, false)
-        return ViewHolder(view)
+    class ViewHolder(val binding: ContactItemBinding) : RecyclerView.ViewHolder(binding.root) {
+//        val name: TextView = view.findViewById(R.id.textViewName)
+//        val profession: TextView = view.findViewById(R.id.textViewProfession)
+//        val image: ImageView = view.findViewById(R.id.imageViewPhoto)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ContactItemBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        Glide.with(context).load("https://picsum.photos/200")
-            .signature(ObjectKey(System.currentTimeMillis().toString())).circleCrop()
-            .into(viewHolder.image)
-        viewHolder.name.text = dataSet[position].name
-        viewHolder.profession.text = dataSet[position].profession
+        with(viewHolder.binding) {
+            val contact = contacts[position]
+            textViewName.text = contact.name
+            textViewProfession.text = contact.profession
+            Glide.with(viewHolder.itemView.context).load(contact.photo)
+                .signature(ObjectKey(System.currentTimeMillis().toString())).circleCrop()
+                .into(imageViewPhoto)
+        }
     }
 
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = contacts.size
 
 }

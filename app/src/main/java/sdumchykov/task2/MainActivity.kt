@@ -49,8 +49,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if (splitted?.size!! > 1) {
             val firstName = splitted[0].replaceFirstChar { it.uppercase() }
             val secondName = splitted[1].replaceFirstChar { it.uppercase() }
+            val textContent = "$firstName $secondName"
 
-            binding.textViewName.text = "$firstName $secondName"
+            binding.textViewName.text = textContent
         } else {
             binding.textViewName.text = signupEmail.substring(0, signupEmail.indexOf('@'))
         }
