@@ -3,7 +3,6 @@ package sdumchykov.task2.data
 import sdumchykov.task2.model.Contact
 
 class Datasource {
-    companion object {
         private var data = arrayListOf(
             Contact(
                 name = "Ava Smith",
@@ -50,6 +49,5 @@ class Datasource {
         fun set(value: ArrayList<Contact>) {
             data = value
         }
-    }
 
 }

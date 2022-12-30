@@ -51,7 +51,7 @@ class MyContactsActivity : AppCompatActivity() {
         } else {
             viewModel = ViewModelProvider(
                 this,
-                MyViewModelFactory(Datasource.get())
+                MyViewModelFactory(Datasource().get())
             )[ContactViewModel::class.java]
         }
 
@@ -88,9 +88,10 @@ class MyContactsActivity : AppCompatActivity() {
         }
 
         binding.textViewContacts.setOnClickListener {
-            val contactList1 = Datasource.get()
-            contactList1[0].name = "Changed text"
-            Datasource.set(contactList1)
+//            val contactList1 = Datasource.get()
+//            contactList1[0].name = "Changed text"
+            viewModel.contactList.value?.set(0, Contact("Changed text", "Photograph", "https://picsum.photos/200"))
+//            Datasource().set(contactList1)
 
             viewModel.getAllContacts()
         }
