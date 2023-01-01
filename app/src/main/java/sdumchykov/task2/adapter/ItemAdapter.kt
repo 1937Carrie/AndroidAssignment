@@ -1,5 +1,6 @@
 package sdumchykov.task2.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,19 +10,17 @@ import sdumchykov.task2.databinding.ContactItemBinding
 import sdumchykov.task2.model.Contact
 
 
-class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
-    var contacts = mutableListOf<Contact>()
+class ItemAdapter(private val onDeleteCallback: (Contact) -> Unit) :
+    RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+    private var contacts = mutableListOf<Contact>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setContactList(contacts: List<Contact>) {
         this.contacts = contacts.toMutableList()
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val binding: ContactItemBinding) : RecyclerView.ViewHolder(binding.root) {
-//        val name: TextView = view.findViewById(R.id.textViewName)
-//        val profession: TextView = view.findViewById(R.id.textViewProfession)
-//        val image: ImageView = view.findViewById(R.id.imageViewPhoto)
-    }
+    class ViewHolder(val binding: ContactItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,6 +36,8 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
             Glide.with(viewHolder.itemView.context).load(contact.photo)
                 .signature(ObjectKey(System.currentTimeMillis().toString())).circleCrop()
                 .into(imageViewPhoto)
+
+            imageButtonDelete.setOnClickListener { onDeleteCallback(contact) }
         }
     }
 

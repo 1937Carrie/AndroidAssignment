@@ -23,13 +23,21 @@ import sdumchykov.task2.model.Contact
 import sdumchykov.task2.model.ContactViewModel
 import sdumchykov.task2.model.MyViewModelFactory
 
+
 class MyContactsActivity : AppCompatActivity() {
     private val contactsModeTumbler = false
     private val TAG = "MyContactsActivity"
     private lateinit var binding: ActivityMyContactsBinding
     private lateinit var viewModel: ContactViewModel
     private lateinit var contactList: ArrayList<Contact>
-    private val adapter = ItemAdapter()
+    private val adapter = ItemAdapter(::deleteContact)
+
+    private fun deleteContact(contact: Contact) {
+        viewModel.removeItem(contact)
+        Toast.makeText(
+            applicationContext, "${contact.name} has been deleted", Toast.LENGTH_LONG
+        ).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,42 +67,46 @@ class MyContactsActivity : AppCompatActivity() {
             Log.d(TAG, "onCreate: $it")
             adapter.setContactList(it)
         }
-        viewModel.getAllContacts()
+
 
         if (contactsModeTumbler) {
-            Dexter.withActivity(this).withPermission(Manifest.permission.READ_CONTACTS)
-                .withListener(object : PermissionListener {
-                    override fun onPermissionGranted(response: PermissionGrantedResponse) {
-                        if (response.permissionName == Manifest.permission.READ_CONTACTS) {
-                            contacts
-                        }
-                    }
-
-                    override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                        Toast.makeText(
-                            this@MyContactsActivity,
-                            "Permission should be granted!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    override fun onPermissionRationaleShouldBeShown(
-                        permission: PermissionRequest, token: PermissionToken
-                    ) {
-                        token.continuePermissionRequest()
-                    }
-
-                }).check()
+            getContactsListWithDexter()
         }
 
         binding.textViewContacts.setOnClickListener {
-//            val contactList1 = Datasource.get()
-//            contactList1[0].name = "Changed text"
-            viewModel.contactList.value?.set(0, Contact("Changed text", "Photograph", "https://picsum.photos/200"))
-//            Datasource().set(contactList1)
-
-            viewModel.getAllContacts()
+            viewModel.updateItem(
+                0,
+                Contact("Changed text", "Photograph", "https://picsum.photos/200")
+            )
         }
+
+    }
+
+
+    private fun getContactsListWithDexter() {
+        Dexter.withActivity(this).withPermission(Manifest.permission.READ_CONTACTS)
+            .withListener(object : PermissionListener {
+                override fun onPermissionGranted(response: PermissionGrantedResponse) {
+                    if (response.permissionName == Manifest.permission.READ_CONTACTS) {
+                        contacts
+                    }
+                }
+
+                override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                    Toast.makeText(
+                        this@MyContactsActivity,
+                        "Permission should be granted!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    permission: PermissionRequest, token: PermissionToken
+                ) {
+                    token.continuePermissionRequest()
+                }
+
+            }).check()
     }
 
     private val contacts: Unit

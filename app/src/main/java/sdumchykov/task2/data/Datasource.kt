@@ -5,40 +5,40 @@ import sdumchykov.task2.model.Contact
 class Datasource {
         private var data = arrayListOf(
             Contact(
-                name = "Ava Smith",
+                name = "James Mary",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             ),
             Contact(
-                name = "Ava Smith",
+                name = "Robert Patricia",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             ), Contact(
-                name = "Ava Smith",
+                name = "John Jennifer",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             ), Contact(
-                name = "Ava Smith",
+                name = "Michael Linda",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             ), Contact(
-                name = "Ava Smith",
+                name = "David Elizabeth",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             ), Contact(
-                name = "Ava Smith",
+                name = "William Barbara",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             ), Contact(
-                name = "Ava Smith",
+                name = "Richard Susan",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             ), Contact(
-                name = "Ava Smith",
+                name = "Joseph Jessica",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             ), Contact(
-                name = "Ava Smith",
+                name = "Thomas Sarah",
                 profession = "Photograph",
                 photo = "https://picsum.photos/200"
             )
