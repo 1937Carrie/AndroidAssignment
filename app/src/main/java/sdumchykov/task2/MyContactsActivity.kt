@@ -2,14 +2,19 @@ package sdumchykov.task2
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -23,27 +28,17 @@ import sdumchykov.task2.model.Contact
 import sdumchykov.task2.model.ContactViewModel
 import sdumchykov.task2.model.MyViewModelFactory
 
-
-class MyContactsActivity : AppCompatActivity() {
+class MyContactsActivity :
+    BaseActivity<ActivityMyContactsBinding>(ActivityMyContactsBinding::inflate) {
     private val contactsModeTumbler = false
     private val TAG = "MyContactsActivity"
-    private lateinit var binding: ActivityMyContactsBinding
     private lateinit var viewModel: ContactViewModel
     private lateinit var contactList: ArrayList<Contact>
     private val adapter = ItemAdapter(::deleteContact)
-
-    private fun deleteContact(contact: Contact) {
-        viewModel.removeItem(contact)
-        Toast.makeText(
-            applicationContext, "${contact.name} has been deleted", Toast.LENGTH_LONG
-        ).show()
-    }
+    private lateinit var dialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMyContactsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         imageButtonArrowBackSetOnClickListener()
 
@@ -80,8 +75,47 @@ class MyContactsActivity : AppCompatActivity() {
             )
         }
 
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val contact = viewModel.contactList.value?.get(position)
+
+                deleteContact(contact!!)
+            }
+
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewContacts)
+
+        createAddContactDialog()
+        binding.textViewAddContacts.setOnClickListener {
+            dialog.show()
+        }
     }
 
+    @SuppressLint("MissingInflatedId")
+    private fun createAddContactDialog() {
+        val view = layoutInflater.inflate(R.layout.add_contacts_dialog, null)
+        dialog = AlertDialog.Builder(this).setView(view).create()
+        val button: AppCompatButton = view.findViewById(R.id.button_addcontactsdialog_add)
+        button.setOnClickListener {
+            val name =
+                view.findViewById<TextInputEditText>(R.id.textinputedittext_addcontactsdialog_name).text.toString()
+            val surname =
+                view.findViewById<TextInputEditText>(R.id.textinputedittext_addcontactsdialog_surname).text.toString()
+            val profession =
+                view.findViewById<TextInputEditText>(R.id.textinputedittext_addcontactsdialog_profession).text.toString()
+            viewModel.addItem(
+                Contact(
+                    "$name $surname",
+                    profession,
+                    "https://picsum.photos/200"
+                )
+            )
+        }
+
+    }
 
     private fun getContactsListWithDexter() {
         Dexter.withActivity(this).withPermission(Manifest.permission.READ_CONTACTS)
@@ -109,6 +143,21 @@ class MyContactsActivity : AppCompatActivity() {
             }).check()
     }
 
+    private fun deleteContact(contact: Contact) {
+        viewModel.removeItem(contact)
+
+        val snackbar =
+            Snackbar.make(binding.recyclerViewContacts, "${contact.name} has been deleted", 5000)
+
+        snackbar.setAction("Undo") {
+            viewModel.addItem(contact)
+            Toast.makeText(
+                applicationContext, "${contact.name} has been restored", Toast.LENGTH_LONG
+            ).show()
+        }
+        snackbar.show()
+    }
+
     private val contacts: Unit
         @SuppressLint("NotifyDataSetChanged", "Recycle") get() {
             var phones: Cursor? = null
@@ -130,7 +179,6 @@ class MyContactsActivity : AppCompatActivity() {
             }
 
         }
-
 
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageButtonArrowBack.setOnClickListener {

@@ -14,6 +14,12 @@ class ContactViewModel(private val repository: ArrayList<Contact>) : ViewModel()
         contactList.postValue(repository)
     }
 
+    fun addItem(contact: Contact){
+        val tmp = contactList.value
+        tmp?.add(contact)
+        contactList.value = tmp
+    }
+
     fun updateItem(index: Int, newData: Contact) {
         val tmp = contactList.value
         tmp?.set(index, newData)
