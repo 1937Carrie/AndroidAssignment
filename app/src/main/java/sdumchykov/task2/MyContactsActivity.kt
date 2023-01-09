@@ -48,13 +48,11 @@ class MyContactsActivity :
             contactList = ArrayList()
 
             viewModel = ViewModelProvider(
-                this,
-                MyViewModelFactory(contactList)
+                this, MyViewModelFactory(contactList)
             )[ContactViewModel::class.java]
         } else {
             viewModel = ViewModelProvider(
-                this,
-                MyViewModelFactory(Datasource().get())
+                this, MyViewModelFactory(Datasource().get())
             )[ContactViewModel::class.java]
         }
 
@@ -70,8 +68,7 @@ class MyContactsActivity :
 
         binding.textViewContacts.setOnClickListener {
             viewModel.updateItem(
-                0,
-                Contact("Changed text", "Photograph", "https://picsum.photos/200")
+                0, Contact("Changed text", "Photograph", "https://picsum.photos/200")
             )
         }
 
@@ -108,9 +105,7 @@ class MyContactsActivity :
                 view.findViewById<TextInputEditText>(R.id.textinputedittext_addcontactsdialog_profession).text.toString()
             viewModel.addItem(
                 Contact(
-                    "$name $surname",
-                    profession,
-                    "https://picsum.photos/200"
+                    "$name $surname", profession, "https://picsum.photos/200"
                 )
             )
         }
@@ -128,9 +123,7 @@ class MyContactsActivity :
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
                     Toast.makeText(
-                        this@MyContactsActivity,
-                        "Permission should be granted!",
-                        Toast.LENGTH_SHORT
+                        this@MyContactsActivity, "Permission should be granted!", Toast.LENGTH_SHORT
                     ).show()
                 }
 

@@ -140,27 +140,13 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayoutPassword"
             tools:ignore="RtlSymmetry" />
 
-        <!--        -->
-        <Button
+        <sdumchykov.task2.ui.GoogleButton
             android:id="@+id/buttonSignInWithGoogle"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimension_40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dimension_16dp"
-            android:layout_marginTop="@dimen/dimension_16dp"
 
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/opensans_semi_bold"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:letterSpacing="0"
             android:text="@string/google"
-            android:textColor="@color/black"
-            app:icon="@drawable/google_logo"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/dimension_24dp"
-            app:iconTint="@null"
 
             app:layout_constraintBottom_toTopOf="@id/textViewOr"
             app:layout_constraintEnd_toEndOf="parent"

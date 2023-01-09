@@ -13,13 +13,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/steel_gray</item>
         <!-- Customize your theme here. -->
-<!--        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>-->
+        <!--        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>-->
     </style>
 
     <style name="ThemeOverlay.App.TextInputLayout" parent="">
         <item name="colorPrimary">@color/alabaster</item>
         <item name="colorOnSurface">@color/alabaster</item>
-        <item name="colorError">@color/alabaster</item>
+        <item name="colorError">@android:color/holo_red_dark</item>
     </style>
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">

@@ -23,20 +23,22 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
                 val notContainsDigits = !textInputPassword.text?.contains(Regex("\\d"))!!
                 val notContainsCharacters = !textInputPassword.text?.contains(Regex("[a-zA-Z]+"))!!
 
-                if (lessThanEightSymbols || notContainsDigits || notContainsCharacters) {
-                    textInputPassword.error = resources.getString(R.string.error_message_password)
-                } else {
-                    textInputPassword.error = null
-                }
-
                 if (!textInputEmail.text?.contains(Regex(".+@.+\\..+"))!!) {
-                    textInputEmail.error = resources.getString(R.string.error_message_email)
+                    textInputLayoutEmail.error = resources.getString(R.string.error_message_email)
                 } else {
-                    textInputEmail.error = null
+                    textInputLayoutEmail.error = null
                 }
 
-                val emailError = textInputEmail.error.isNullOrEmpty()
-                val passwordError = textInputPassword.error.isNullOrEmpty()
+                if (lessThanEightSymbols || notContainsDigits || notContainsCharacters) {
+                    textInputLayoutPassword.error =
+                        resources.getString(R.string.error_message_password)
+                } else {
+                    textInputLayoutPassword.error = null
+                }
+
+
+                val emailError = textInputLayoutEmail.error.isNullOrEmpty()
+                val passwordError = textInputLayoutPassword.error.isNullOrEmpty()
 
                 buttonRegister.isEnabled = emailError && passwordError
             }
