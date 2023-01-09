@@ -8,7 +8,6 @@ import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import sdumchykov.task2.R
@@ -42,8 +41,6 @@ class GoogleButton @JvmOverloads constructor(
 
 
     init {
-//        init(attrs)
-
         val shape = GradientDrawable()
         shape.shape = GradientDrawable.RECTANGLE
         shape.setColor(Color.WHITE)
@@ -51,28 +48,13 @@ class GoogleButton @JvmOverloads constructor(
         background = shape
 
         paint.getTextBounds(text, 0, text.lastIndex, rect)
-
-    }
-
-//  TODO handle with inflate and why this has wrong type
-//    private fun init(attrs: AttributeSet?) {
-//        inflate(context, R.layout.custom_button_layout, this)
-//    }
-
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return super.onTouchEvent(event)
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
         if (canvas != null) {
-            val startX = measuredWidth / 2 - (iconSide / 2 + getDPValue(24F) + width / 2)
+            val startX = measuredWidth / 2 - (iconSide / 2 + getDPValue(24F) / 2 + width / 2)
             icon.setBounds(
                 startX.toInt(),
                 (measuredHeight / 2F).toInt() - iconSide / 2,
@@ -84,11 +66,7 @@ class GoogleButton @JvmOverloads constructor(
 
         paint.typeface = fontFamily
         val yPos = (height / 2 - (paint.descent() + paint.ascent()) / 2)
-        canvas?.drawText(text, measuredWidth / 2F, yPos, paint)
-    }
-
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
+        canvas?.drawText(text, measuredWidth / 2F + iconSide / 2 + getDPValue(24F) / 2, yPos, paint)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

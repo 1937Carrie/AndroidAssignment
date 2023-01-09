@@ -108,6 +108,7 @@ class MyContactsActivity :
                     "$name $surname", profession, "https://picsum.photos/200"
                 )
             )
+            dialog.dismiss()
         }
 
     }
