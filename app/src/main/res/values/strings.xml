@@ -30,4 +30,8 @@
     <string name="icon_instagram">Instagram icon</string>
     <string name="contacts">Contacts</string>
     <string name="add_contacts">Add contacts</string>
+    <string name="add_contact">Add contact</string>
+    <string name="dialog_contact_name">Name</string>
+    <string name="dialog_contact_surname">Surname</string>
+    <string name="dialog_contact_profession">Profession</string>
 </resources>

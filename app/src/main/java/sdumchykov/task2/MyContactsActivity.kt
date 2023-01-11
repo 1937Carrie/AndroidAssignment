@@ -7,14 +7,13 @@ import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -31,7 +30,6 @@ import sdumchykov.task2.model.MyViewModelFactory
 class MyContactsActivity :
     BaseActivity<ActivityMyContactsBinding>(ActivityMyContactsBinding::inflate) {
     private val contactsModeTumbler = false
-    private val TAG = "MyContactsActivity"
     private lateinit var viewModel: ContactViewModel
     private lateinit var contactList: ArrayList<Contact>
     private val adapter = ItemAdapter(::deleteContact)
@@ -44,32 +42,13 @@ class MyContactsActivity :
 
         binding.recyclerViewContacts.adapter = adapter
 
-        if (contactsModeTumbler) {
-            contactList = ArrayList()
-
-            viewModel = ViewModelProvider(
-                this, MyViewModelFactory(contactList)
-            )[ContactViewModel::class.java]
-        } else {
-            viewModel = ViewModelProvider(
-                this, MyViewModelFactory(Datasource().get())
-            )[ContactViewModel::class.java]
-        }
-
-        viewModel.contactList.observe(this) {
-            Log.d(TAG, "onCreate: $it")
-            adapter.setContactList(it)
-        }
-
+        contactList = if (contactsModeTumbler) ArrayList() else Datasource().get()
+        viewModel =
+            ViewModelProvider(this, MyViewModelFactory(contactList))[ContactViewModel::class.java]
+        viewModel.contactList.observe(this) { adapter.setContactList(it) }
 
         if (contactsModeTumbler) {
             getContactsListWithDexter()
-        }
-
-        binding.textViewContacts.setOnClickListener {
-            viewModel.updateItem(
-                0, Contact("Changed text", "Photograph", "https://picsum.photos/200")
-            )
         }
 
         val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
@@ -79,38 +58,43 @@ class MyContactsActivity :
 
                 deleteContact(contact!!)
             }
-
         }
-        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
 
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewContacts)
 
         createAddContactDialog()
-        binding.textViewAddContacts.setOnClickListener {
-            dialog.show()
-        }
+
+        binding.textViewAddContacts.setOnClickListener { dialog.show() }
     }
 
-    @SuppressLint("MissingInflatedId")
     private fun createAddContactDialog() {
         val view = layoutInflater.inflate(R.layout.add_contacts_dialog, null)
         dialog = AlertDialog.Builder(this).setView(view).create()
+
         val button: AppCompatButton = view.findViewById(R.id.button_addcontactsdialog_add)
         button.setOnClickListener {
             val name =
-                view.findViewById<TextInputEditText>(R.id.textinputedittext_addcontactsdialog_name).text.toString()
+                view.findViewById<AppCompatEditText>(R.id.textinputedittext_addcontactsdialog_name)
             val surname =
-                view.findViewById<TextInputEditText>(R.id.textinputedittext_addcontactsdialog_surname).text.toString()
+                view.findViewById<AppCompatEditText>(R.id.textinputedittext_addcontactsdialog_surname)
             val profession =
-                view.findViewById<TextInputEditText>(R.id.textinputedittext_addcontactsdialog_profession).text.toString()
+                view.findViewById<AppCompatEditText>(R.id.textinputedittext_addcontactsdialog_profession)
+
             viewModel.addItem(
                 Contact(
-                    "$name $surname", profession, "https://picsum.photos/200"
+                    "${name.text.toString()} ${surname.text.toString()}",
+                    profession.text.toString(),
+                    "https://picsum.photos/200"
                 )
             )
+
+            name.text?.clear()
+            surname.text?.clear()
+            profession.text?.clear()
+
             dialog.dismiss()
         }
-
     }
 
     private fun getContactsListWithDexter() {
@@ -133,23 +117,7 @@ class MyContactsActivity :
                 ) {
                     token.continuePermissionRequest()
                 }
-
             }).check()
-    }
-
-    private fun deleteContact(contact: Contact) {
-        viewModel.removeItem(contact)
-
-        val snackbar =
-            Snackbar.make(binding.recyclerViewContacts, "${contact.name} has been deleted", 5000)
-
-        snackbar.setAction("Undo") {
-            viewModel.addItem(contact)
-            Toast.makeText(
-                applicationContext, "${contact.name} has been restored", Toast.LENGTH_LONG
-            ).show()
-        }
-        snackbar.show()
     }
 
     private val contacts: Unit
@@ -178,5 +146,20 @@ class MyContactsActivity :
         binding.imageButtonArrowBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun deleteContact(contact: Contact) {
+        viewModel.removeItem(contact)
+
+        val snackbar =
+            Snackbar.make(binding.recyclerViewContacts, "${contact.name} has been deleted", 5000)
+
+        snackbar.setAction("Undo") {
+            viewModel.addItem(contact)
+            Toast.makeText(
+                applicationContext, "${contact.name} has been restored", Toast.LENGTH_LONG
+            ).show()
+        }
+        snackbar.show()
     }
 }

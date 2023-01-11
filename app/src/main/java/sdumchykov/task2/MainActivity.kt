@@ -3,8 +3,8 @@ package sdumchykov.task2
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import com.bumptech.glide.Glide
 import sdumchykov.task2.databinding.ActivityMainBinding
+import sdumchykov.task2.extensions.setImage
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
@@ -20,9 +20,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun setMainPicture() {
         val drawableSource = R.drawable.image
-
-        Glide.with(this)
-            .load(drawableSource).circleCrop().into(binding.imageViewPicture)
+        binding.imageViewPicture.setImage(this, drawableSource)
     }
 
     private fun buttonViewMyContactsSetOnClickListener() {

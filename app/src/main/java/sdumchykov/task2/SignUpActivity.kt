@@ -8,7 +8,7 @@ import android.text.TextWatcher
 import android.view.Gravity
 import android.widget.Button
 import android.widget.Toast
-import com.google.android.material.textfield.TextInputEditText
+import androidx.appcompat.widget.AppCompatEditText
 import sdumchykov.task2.databinding.ActivitySignUpBinding
 
 
@@ -83,8 +83,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
 
     private fun buttonRegisterSetOnClickListener(
         buttonRegister: Button,
-        textInputEmail: TextInputEditText,
-        textInputPassword: TextInputEditText
+        textInputEmail: AppCompatEditText,
+        textInputPassword: AppCompatEditText
     ) {
         buttonRegister.setOnClickListener {
             if (binding.checkBoxRememberMe.isChecked) {
@@ -115,7 +115,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
         }
     }
 
-    private fun textInputAddTextChangedListener(textInputEmail: TextInputEditText) {
+    private fun textInputAddTextChangedListener(textInputEmail: AppCompatEditText) {
         textInputEmail.addTextChangedListener(watcher)
     }
 

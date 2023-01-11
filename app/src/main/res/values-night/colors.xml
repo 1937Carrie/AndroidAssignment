@@ -13,4 +13,5 @@
     <color name="half_transparent_gray">#1A808080</color>
     <color name="mine_shaft">#3F3F3F</color>
     <color name="buttonEditProfileTextColor">@color/orange</color>
+    <color name="error">#B00020</color>
 </resources>

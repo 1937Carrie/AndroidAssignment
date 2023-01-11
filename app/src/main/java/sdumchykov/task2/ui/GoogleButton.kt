@@ -12,9 +12,16 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import sdumchykov.task2.R
 
+const val radiusValue = 4F
+const val iconSideValue = 18F   //https://developers.google.com/identity/branding-guidelines#padding
+const val betweenLogoAndText =
+    24F  //https://developers.google.com/identity/branding-guidelines#padding
+
 class GoogleButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+    val text = "GOOGLE"
+    val fontFamily = ResourcesCompat.getFont(context, R.font.roboto_regular)
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -22,30 +29,17 @@ class GoogleButton @JvmOverloads constructor(
         textSize = 50f
         textAlign = Paint.Align.CENTER
     }
-
-    var set = intArrayOf(android.R.attr.text)
-    val text = "GOOGLE"
-
-    val fontFamily = ResourcesCompat.getFont(context, R.font.roboto_regular)
-
-    //        context.obtainStyledAttributes(attrs, set).getText(0).toString()
-    /*attrs?.getAttributeValue(
-    "http://schemas.android.com/apk/res/android",
-    "text"
-)*/
-    val width = paint.measureText(text)
     private val rect = Rect()
-    private var radius = getDPValue(4F)  // Radius of the rounded corner.
+    val radius = floatToDP(radiusValue)  // Radius of the rounded corner.
     private val icon = ResourcesCompat.getDrawable(resources, R.drawable.google_logo, null)!!
-    private val iconSide = getDPValue(18F).toInt()
-
+    private val iconSide = floatToDP(iconSideValue).toInt()
 
     init {
         val shape = GradientDrawable()
         shape.shape = GradientDrawable.RECTANGLE
         shape.setColor(Color.WHITE)
         shape.cornerRadius = radius
-        background = shape
+        background = shape  //background is rounded rectangle
 
         paint.getTextBounds(text, 0, text.lastIndex, rect)
     }
@@ -54,27 +48,33 @@ class GoogleButton @JvmOverloads constructor(
         super.onDraw(canvas)
 
         if (canvas != null) {
-            val startX = measuredWidth / 2 - (iconSide / 2 + getDPValue(24F) / 2 + width / 2)
-            icon.setBounds(
-                startX.toInt(),
-                (measuredHeight / 2F).toInt() - iconSide / 2,
-                (startX + iconSide).toInt(),
-                (measuredHeight / 2F + iconSide / 2).toInt()
-            )
-            icon.draw(canvas)
+            drawLogo(canvas)
+            drawText(canvas)
         }
 
+    }
+
+    private fun drawText(canvas: Canvas) {
         paint.typeface = fontFamily
-        val yPos = (height / 2 - (paint.descent() + paint.ascent()) / 2)
-        canvas?.drawText(text, measuredWidth / 2F + iconSide / 2 + getDPValue(24F) / 2, yPos, paint)
+        val yPos = (height - paint.descent() - paint.ascent()) / 2
+        canvas.drawText(
+            text, (measuredWidth + iconSide + floatToDP(betweenLogoAndText)) / 2, yPos, paint
+        )
+    }
+
+    private fun drawLogo(canvas: Canvas) {
+        val startX = (measuredWidth - iconSide - floatToDP(betweenLogoAndText) - text.width()) / 2
+        icon.setBounds(
+            startX.toInt(),
+            (measuredHeight - iconSide) / 2,
+            (startX + iconSide).toInt(),
+            (measuredHeight + iconSide) / 2
+        )
+        icon.draw(canvas)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val parentViewWidth = MeasureSpec.getSize(widthMeasureSpec)
-        val parentViewHeight = MeasureSpec.getSize(heightMeasureSpec)
-
-        val newWidth = getDPValue(200F).toInt()
-        val newHeight = getDPValue(36F).toInt()
+        val newHeight = floatToDP(36F).toInt()
 
         super.onMeasure(
             widthMeasureSpec, MeasureSpec.makeMeasureSpec(newHeight, MeasureSpec.EXACTLY)
@@ -82,10 +82,14 @@ class GoogleButton @JvmOverloads constructor(
 
     }
 
-    private fun getDPValue(dpValue: Float): Float {
+    private fun floatToDP(dpValue: Float): Float {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, dpValue, context.resources.displayMetrics
         )
+    }
+
+    private fun String.width(): Float {
+        return paint.measureText(this)
     }
 
 }

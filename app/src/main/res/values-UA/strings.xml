@@ -29,5 +29,9 @@
     <string name="icon_linkedin">Іконка Linkedin</string>
     <string name="icon_instagram">Іконка Instagram</string>
     <string name="contacts">Контакти</string>
-    <string name="add_contacts">Додати контакт</string>
+    <string name="add_contacts">Додати контакти</string>
+    <string name="add_contact">Додати контакт</string>
+    <string name="dialog_contact_name">Ім\'я</string>
+    <string name="dialog_contact_surname">Прізвище</string>
+    <string name="dialog_contact_profession">Професія</string>
 </resources>

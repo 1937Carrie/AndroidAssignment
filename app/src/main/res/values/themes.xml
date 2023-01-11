@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.RecyclerView" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.RecyclerView" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="android:navigationBarColor">@color/steel_gray</item>
         <!--        <item name="colorPrimary">@color/purple_500</item>-->
@@ -13,7 +13,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/steel_gray</item>
         <!-- Customize your theme here. -->
-        <!--        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>-->
+        <item name="colorControlNormal">@color/silver</item>
+        <item name="colorControlActivated">@color/silver</item>
+        <item name="colorControlHighlight">@color/silver</item>
     </style>
 
     <style name="ThemeOverlay.App.TextInputLayout" parent="">

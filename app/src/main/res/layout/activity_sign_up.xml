@@ -66,20 +66,23 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dimension_16dp"
 
-        android:theme="@style/ThemeOverlay.App.TextInputLayout"
+        android:backgroundTint="@color/silver"
+        android:hint="@string/email"
+        android:textColorHint="@color/silver"
         app:errorEnabled="true"
+        app:errorTextColor="@color/error"
+        app:expandedHintEnabled="false"
+        app:hintTextColor="@color/silver"
 
         app:layout_constraintBottom_toTopOf="@id/textInputLayoutPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activitySignUp_020">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/textInputEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:hint="@string/email"
 
             android:inputType="textEmailAddress"
             android:textColor="@color/alabaster"
@@ -93,20 +96,22 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dimension_16dp"
 
-        android:theme="@style/ThemeOverlay.App.TextInputLayout"
+        android:hint="@string/password"
+        android:textColorHint="@color/silver"
         app:errorEnabled="true"
+        app:errorTextColor="@color/error"
+        app:expandedHintEnabled="false"
+        app:hintTextColor="@color/silver"
 
         app:layout_constraintBottom_toTopOf="@id/checkBoxRememberMe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textInputLayoutEmail">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/textInputPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:hint="@string/password"
 
             android:inputType="textPassword"
             android:textColor="@color/alabaster"
