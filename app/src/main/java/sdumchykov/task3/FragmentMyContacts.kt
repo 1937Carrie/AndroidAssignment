@@ -7,6 +7,9 @@ import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -22,13 +25,13 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import sdumchykov.task3.adapter.ItemAdapter
 import sdumchykov.task3.data.Datasource
-import sdumchykov.task3.databinding.ActivityMyContactsBinding
+import sdumchykov.task3.databinding.FragmentMyContactsBinding
 import sdumchykov.task3.model.Contact
 import sdumchykov.task3.model.ContactViewModel
 import sdumchykov.task3.model.MyViewModelFactory
 
-class MyContactsActivity :
-    BaseActivity<ActivityMyContactsBinding>(ActivityMyContactsBinding::inflate) {
+class FragmentMyContacts :
+    BaseFragment<FragmentMyContactsBinding>(FragmentMyContactsBinding::inflate) {
     private val contactsModeTumbler = false
     private lateinit var viewModel: ContactViewModel
     private lateinit var contactList: ArrayList<Contact>
@@ -37,40 +40,11 @@ class MyContactsActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        imageButtonArrowBackSetOnClickListener()
-
-        binding.recyclerViewContacts.adapter = adapter
-
-        contactList = if (contactsModeTumbler) ArrayList() else Datasource().get()
-        viewModel =
-            ViewModelProvider(this, MyViewModelFactory(contactList))[ContactViewModel::class.java]
-        viewModel.contactList.observe(this) { adapter.setContactList(it) }
-
-        if (contactsModeTumbler) {
-            getContactsListWithDexter()
-        }
-
-        val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val contact = viewModel.contactList.value?.get(position)
-
-                deleteContact(contact!!)
-            }
-        }
-
-        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
-        itemTouchHelper.attachToRecyclerView(binding.recyclerViewContacts)
-
-        createAddContactDialog()
-
-        binding.textViewAddContacts.setOnClickListener { dialog.show() }
     }
 
     private fun createAddContactDialog() {
         val view = layoutInflater.inflate(R.layout.add_contacts_dialog, null)
-        dialog = AlertDialog.Builder(this).setView(view).create()
+        dialog = AlertDialog.Builder(activity).setView(view).create()
 
         val button: AppCompatButton = view.findViewById(R.id.button_addcontactsdialog_add)
         button.setOnClickListener {
@@ -98,7 +72,7 @@ class MyContactsActivity :
     }
 
     private fun getContactsListWithDexter() {
-        Dexter.withActivity(this).withPermission(Manifest.permission.READ_CONTACTS)
+        Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse) {
                     if (response.permissionName == Manifest.permission.READ_CONTACTS) {
@@ -108,7 +82,7 @@ class MyContactsActivity :
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
                     Toast.makeText(
-                        this@MyContactsActivity, "Permission should be granted!", Toast.LENGTH_SHORT
+                        activity, "Permission should be granted!", Toast.LENGTH_SHORT
                     ).show()
                 }
 
@@ -125,7 +99,7 @@ class MyContactsActivity :
             var phones: Cursor? = null
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                phones = contentResolver.query(
+                phones = activity?.contentResolver?.query(
                     ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null
                 )
             }
@@ -144,7 +118,8 @@ class MyContactsActivity :
 
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageButtonArrowBack.setOnClickListener {
-            finish()
+            //TODO handle back action on arrow click
+            activity?.fragmentManager?.popBackStack()
         }
     }
 
@@ -157,9 +132,50 @@ class MyContactsActivity :
         snackbar.setAction("Undo") {
             viewModel.addItem(contact)
             Toast.makeText(
-                applicationContext, "${contact.name} has been restored", Toast.LENGTH_LONG
+                activity, "${contact.name} has been restored", Toast.LENGTH_LONG
             ).show()
         }
         snackbar.show()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        imageButtonArrowBackSetOnClickListener()
+
+        binding.recyclerViewContacts.adapter = adapter
+
+        contactList = if (contactsModeTumbler) ArrayList() else Datasource().get()
+        viewModel =
+            ViewModelProvider(this, MyViewModelFactory(contactList))[ContactViewModel::class.java]
+        viewModel.contactList.observe(viewLifecycleOwner) { adapter.setContactList(it) }
+
+        if (contactsModeTumbler) {
+            getContactsListWithDexter()
+        }
+
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val contact = viewModel.contactList.value?.get(position)
+
+                deleteContact(contact!!)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewContacts)
+
+        createAddContactDialog()
+
+        binding.textViewAddContacts.setOnClickListener { dialog.show() }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 }

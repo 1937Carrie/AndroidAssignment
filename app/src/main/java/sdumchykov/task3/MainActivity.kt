@@ -3,6 +3,8 @@ package sdumchykov.task3
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.Fragment
 import sdumchykov.task3.databinding.ActivityMainBinding
 import sdumchykov.task3.extensions.setImage
 
@@ -25,8 +27,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun buttonViewMyContactsSetOnClickListener() {
         binding.buttonViewMyContacts.setOnClickListener {
-            val intent = Intent(this, MyContactsActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, MyContactsActivity::class.java)
+//            startActivity(intent)
+
+            val fragmentMyContacts: Fragment = FragmentMyContacts()
+            val fragment: Fragment? =
+                supportFragmentManager.findFragmentByTag(FragmentMyContacts::class.java.simpleName)
+            if (fragment !is FragmentMyContacts) {
+                supportFragmentManager.beginTransaction().add(
+                    R.id.main_activity_constraint_layout,
+                    fragmentMyContacts,
+                    FragmentMyContacts::class.java.simpleName
+                ).commit()
+            }
+            binding.buttonEditProfile.visibility = View.GONE
+            binding.buttonViewMyContacts.visibility = View.GONE
+
         }
     }
 

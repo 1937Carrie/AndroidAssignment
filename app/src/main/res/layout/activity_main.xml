@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -113,7 +114,7 @@
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline_activityMain_065"
         app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_035"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMain_008"
-        tools:src="@drawable/tmp_rounded_image"/>
+        tools:src="@drawable/tmp_rounded_image" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewName"

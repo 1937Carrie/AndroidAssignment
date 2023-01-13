@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_contacts_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyContactsActivity">
+    tools:context=".FragmentMyContacts">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutNord2"
@@ -124,6 +125,6 @@
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@id/viewBottomContainer"
-        tools:listitem="@layout/contact_item"/>
+        tools:listitem="@layout/contact_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
