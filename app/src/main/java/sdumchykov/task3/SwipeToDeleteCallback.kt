@@ -1,4 +1,4 @@
-package sdumchykov.task2
+package sdumchykov.task3
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView

@@ -1,4 +1,4 @@
-package sdumchykov.task2
+package sdumchykov.task3
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.view.Gravity
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
-import sdumchykov.task2.databinding.ActivitySignUpBinding
+import sdumchykov.task3.databinding.ActivitySignUpBinding
 
 
 class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding::inflate) {

@@ -1,4 +1,4 @@
-package sdumchykov.task2.ui
+package sdumchykov.task3.ui
 
 import android.content.Context
 import android.graphics.Canvas
@@ -10,7 +10,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
-import sdumchykov.task2.R
+import sdumchykov.task3.R
 
 const val radiusValue = 4F
 const val iconSideValue = 18F   //https://developers.google.com/identity/branding-guidelines#padding

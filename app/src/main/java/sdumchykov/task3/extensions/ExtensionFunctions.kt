@@ -1,4 +1,4 @@
-package sdumchykov.task2.extensions
+package sdumchykov.task3.extensions
 
 import android.content.Context
 import androidx.appcompat.widget.AppCompatImageView

@@ -1,4 +1,4 @@
-package sdumchykov.task2.model
+package sdumchykov.task3.model
 
 data class Contact(
     var name: String,

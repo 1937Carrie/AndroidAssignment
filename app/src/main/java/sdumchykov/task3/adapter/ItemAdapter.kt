@@ -1,11 +1,11 @@
-package sdumchykov.task2.adapter
+package sdumchykov.task3.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import sdumchykov.task2.databinding.ContactItemBinding
-import sdumchykov.task2.extensions.setImageCacheless
-import sdumchykov.task2.model.Contact
+import sdumchykov.task3.databinding.ContactItemBinding
+import sdumchykov.task3.extensions.setImageCacheless
+import sdumchykov.task3.model.Contact
 
 class ItemAdapter(private val onDeleteCallback: (Contact) -> Unit) :
     RecyclerView.Adapter<ItemAdapter.ViewHolder>() {

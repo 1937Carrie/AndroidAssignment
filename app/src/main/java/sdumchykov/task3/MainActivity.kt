@@ -1,10 +1,10 @@
-package sdumchykov.task2
+package sdumchykov.task3
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import sdumchykov.task2.databinding.ActivityMainBinding
-import sdumchykov.task2.extensions.setImage
+import sdumchykov.task3.databinding.ActivityMainBinding
+import sdumchykov.task3.extensions.setImage
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {

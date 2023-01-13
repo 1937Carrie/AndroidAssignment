@@ -1,4 +1,4 @@
-package sdumchykov.task2.model
+package sdumchykov.task3.model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -1,6 +1,6 @@
-package sdumchykov.task2.data
+package sdumchykov.task3.data
 
-import sdumchykov.task2.model.Contact
+import sdumchykov.task3.model.Contact
 
 class Datasource {
         private var data = arrayListOf(

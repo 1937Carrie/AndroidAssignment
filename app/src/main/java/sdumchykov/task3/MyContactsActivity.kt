@@ -1,4 +1,4 @@
-package sdumchykov.task2
+package sdumchykov.task3
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -20,12 +20,12 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import sdumchykov.task2.adapter.ItemAdapter
-import sdumchykov.task2.data.Datasource
-import sdumchykov.task2.databinding.ActivityMyContactsBinding
-import sdumchykov.task2.model.Contact
-import sdumchykov.task2.model.ContactViewModel
-import sdumchykov.task2.model.MyViewModelFactory
+import sdumchykov.task3.adapter.ItemAdapter
+import sdumchykov.task3.data.Datasource
+import sdumchykov.task3.databinding.ActivityMyContactsBinding
+import sdumchykov.task3.model.Contact
+import sdumchykov.task3.model.ContactViewModel
+import sdumchykov.task3.model.MyViewModelFactory
 
 class MyContactsActivity :
     BaseActivity<ActivityMyContactsBinding>(ActivityMyContactsBinding::inflate) {

@@ -1,6 +1,6 @@
 <resources>
     <!--  App name  -->
-    <string name="app_name">RecyclerView</string>
+    <string name="app_name">Detail view</string>
     <!--  Main activity  -->
     <string name="settings">Налаштування</string>
     <string name="profile_image">Зображення профілю</string>
