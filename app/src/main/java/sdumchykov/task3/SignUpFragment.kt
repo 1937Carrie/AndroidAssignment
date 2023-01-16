@@ -1,18 +1,23 @@
 package sdumchykov.task3
 
-import android.content.Intent
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
-import sdumchykov.task3.databinding.ActivitySignUpBinding
+import androidx.core.os.bundleOf
+import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResult
+import sdumchykov.task3.databinding.FragmentSignUpBinding
 
 
-class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding::inflate) {
+class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate) {
 
     private val watcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -47,8 +52,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
         override fun afterTextChanged(s: Editable?) {}
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         with(binding) {
             buttonRegisterDisable(buttonRegister)
 
@@ -57,7 +62,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
 
             buttonRegisterSetOnClickListener(buttonRegister, textInputEmail, textInputPassword)
 
-            startMainActivity()
+//            startMainActivity()
 
             if (savedInstanceState != null) {
                 textInputEmail.setText(savedInstanceState.getString("email"))
@@ -66,19 +71,33 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
     private fun startMainActivity() {
-        val cachedData = getPreferences(MODE_PRIVATE)
+        val cachedData = this.requireActivity().getPreferences(MODE_PRIVATE)
 
-        if (cachedData.getString("Email", "")?.length!! > 0) {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-
-            intent.putExtra("email", cachedData.getString("Email", ""))
-
-            startActivity(intent)
-            finish()
-        }
+//        if (cachedData.getString("Email", "")?.length!! > 0) {
+//            val intent = Intent(this, MainActivity::class.java)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+//
+//            intent.putExtra("email", cachedData.getString("Email", ""))
+//
+//            startActivity(intent)
+//            finish()
+//        }
     }
 
     private fun buttonRegisterSetOnClickListener(
@@ -88,7 +107,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
     ) {
         buttonRegister.setOnClickListener {
             if (binding.checkBoxRememberMe.isChecked) {
-                val cachedData = getPreferences(MODE_PRIVATE)
+                val cachedData = this.requireActivity().getPreferences(MODE_PRIVATE)
                 val editor = cachedData.edit()
 
                 editor.putString("Email", textInputEmail.text.toString())
@@ -97,7 +116,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
                 editor.apply()
 
                 val toast = Toast.makeText(
-                    applicationContext, "${cachedData.getString("Email", "Not found")}\n" + "${
+                    context, "${cachedData.getString("Email", "Not found")}\n" + "${
                         cachedData.getString("Password", "Not found")
                     }", Toast.LENGTH_LONG
                 )
@@ -105,12 +124,17 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
                 toast.show()
             }
 
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("email", textInputEmail.text.toString())
-            startActivity(intent)
+            val result = textInputEmail.text.toString()
+            setFragmentResult("requestKey", bundleOf("data" to result))
 
             if (binding.checkBoxRememberMe.isChecked) {
-                finish()
+                //TODO не повертатись назад, якщо поставлена галочка
+            }
+
+            requireActivity().supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.fragment_container_view, MyProfileFragment())
+                addToBackStack("")
             }
         }
     }
@@ -123,10 +147,4 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(ActivitySignUpBinding
         buttonRegister.isEnabled = false
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-
-        outState.putString("email", binding.textInputEmail.text.toString())
-        outState.putString("password", binding.textInputPassword.text.toString())
-    }
 }

@@ -34,4 +34,7 @@
     <string name="dialog_contact_name">Name</string>
     <string name="dialog_contact_surname">Surname</string>
     <string name="dialog_contact_profession">Profession</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="profile">Profile</string>
+    <string name="message">Message</string>
 </resources>

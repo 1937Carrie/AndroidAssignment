@@ -30,7 +30,7 @@ import sdumchykov.task3.model.Contact
 import sdumchykov.task3.model.ContactViewModel
 import sdumchykov.task3.model.MyViewModelFactory
 
-class FragmentMyContacts :
+class MyContactsFragment :
     BaseFragment<FragmentMyContactsBinding>(FragmentMyContactsBinding::inflate) {
     private val contactsModeTumbler = false
     private lateinit var viewModel: ContactViewModel
@@ -40,6 +40,40 @@ class FragmentMyContacts :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        imageButtonArrowBackSetOnClickListener()
+
+        binding.recyclerViewContacts.adapter = adapter
+
+        contactList = if (contactsModeTumbler) ArrayList() else Datasource().get()
+        viewModel =
+            ViewModelProvider(this, MyViewModelFactory(contactList))[ContactViewModel::class.java]
+        viewModel.contactList.observe(viewLifecycleOwner) { adapter.setContactList(it) }
+
+        if (contactsModeTumbler) {
+            getContactsListWithDexter()
+        }
+
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val contact = viewModel.contactList.value?.get(position)
+
+                deleteContact(contact!!)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewContacts)
+
+        createAddContactDialog()
+
+        binding.textViewAddContacts.setOnClickListener { dialog.show() }
+
     }
 
     private fun createAddContactDialog() {
@@ -119,7 +153,9 @@ class FragmentMyContacts :
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageButtonArrowBack.setOnClickListener {
             //TODO handle back action on arrow click
-            activity?.fragmentManager?.popBackStack()
+//            activity?.fragmentManager?.popBackStack()
+//            activity?.onBackPressed()
+
         }
     }
 
@@ -136,39 +172,6 @@ class FragmentMyContacts :
             ).show()
         }
         snackbar.show()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        imageButtonArrowBackSetOnClickListener()
-
-        binding.recyclerViewContacts.adapter = adapter
-
-        contactList = if (contactsModeTumbler) ArrayList() else Datasource().get()
-        viewModel =
-            ViewModelProvider(this, MyViewModelFactory(contactList))[ContactViewModel::class.java]
-        viewModel.contactList.observe(viewLifecycleOwner) { adapter.setContactList(it) }
-
-        if (contactsModeTumbler) {
-            getContactsListWithDexter()
-        }
-
-        val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val contact = viewModel.contactList.value?.get(position)
-
-                deleteContact(contact!!)
-            }
-        }
-
-        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
-        itemTouchHelper.attachToRecyclerView(binding.recyclerViewContacts)
-
-        createAddContactDialog()
-
-        binding.textViewAddContacts.setOnClickListener { dialog.show() }
     }
 
     override fun onCreateView(
