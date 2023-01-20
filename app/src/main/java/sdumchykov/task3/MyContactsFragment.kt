@@ -7,9 +7,7 @@ import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -30,6 +28,9 @@ import sdumchykov.task3.model.Contact
 import sdumchykov.task3.model.ContactViewModel
 import sdumchykov.task3.model.MyViewModelFactory
 
+private const val HARDCODED_PHOTO_URL = "https://picsum.photos/200"
+private const val FIVE_SECOND = 5000
+
 class MyContactsFragment :
     BaseFragment<FragmentMyContactsBinding>(FragmentMyContactsBinding::inflate) {
     private val contactsModeTumbler = false
@@ -37,10 +38,6 @@ class MyContactsFragment :
     private lateinit var contactList: ArrayList<Contact>
     private val adapter = ItemAdapter(::deleteContact)
     private lateinit var dialog: AlertDialog
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,7 +90,7 @@ class MyContactsFragment :
                 Contact(
                     "${name.text.toString()} ${surname.text.toString()}",
                     profession.text.toString(),
-                    "https://picsum.photos/200"
+                    HARDCODED_PHOTO_URL
                 )
             )
 
@@ -139,12 +136,14 @@ class MyContactsFragment :
             }
 
             while (phones!!.moveToNext()) {
-                @SuppressLint("Range") val name =
+                @SuppressLint("Range")
+                val name =
                     phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                @SuppressLint("Range") val phoneNumber =
-                    phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
 
-                val contact = Contact(name, phoneNumber, "https://picsum.photos/200")
+                @SuppressLint("Range")
+                val phoneNumber =
+                    phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val contact = Contact(name, phoneNumber, HARDCODED_PHOTO_URL)
                 contactList.add(contact)
             }
 
@@ -152,10 +151,7 @@ class MyContactsFragment :
 
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageButtonArrowBack.setOnClickListener {
-            //TODO handle back action on arrow click
-//            activity?.fragmentManager?.popBackStack()
-//            activity?.onBackPressed()
-
+            activity?.onBackPressed()
         }
     }
 
@@ -163,7 +159,10 @@ class MyContactsFragment :
         viewModel.removeItem(contact)
 
         val snackbar =
-            Snackbar.make(binding.recyclerViewContacts, "${contact.name} has been deleted", 5000)
+            Snackbar.make(
+                binding.recyclerViewContacts, "${contact.name} has been deleted",
+                FIVE_SECOND
+            )
 
         snackbar.setAction("Undo") {
             viewModel.addItem(contact)
@@ -174,11 +173,4 @@ class MyContactsFragment :
         snackbar.show()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
 }
