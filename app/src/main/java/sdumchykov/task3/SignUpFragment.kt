@@ -4,7 +4,6 @@ import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,10 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResult
 import sdumchykov.task3.databinding.FragmentSignUpBinding
 
+private const val EMAIL = "Email"
+private const val PASSWORD = "Password"
+private const val REQUEST_KEY = "requestKey"
+private const val DATA = "data"
 
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate) {
 
@@ -110,22 +113,21 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 val cachedData = this.requireActivity().getPreferences(MODE_PRIVATE)
                 val editor = cachedData.edit()
 
-                editor.putString("Email", textInputEmail.text.toString())
-                editor.putString("Password", textInputPassword.text.toString())
+                editor.putString(EMAIL, textInputEmail.text.toString())
+                editor.putString(PASSWORD, textInputPassword.text.toString())
 
                 editor.apply()
 
                 val toast = Toast.makeText(
-                    context, "${cachedData.getString("Email", "Not found")}\n" + "${
-                        cachedData.getString("Password", "Not found")
+                    context, "${cachedData.getString(EMAIL, "Not found")}\n" + "${
+                        cachedData.getString(PASSWORD, "Not found")
                     }", Toast.LENGTH_LONG
                 )
-                toast.setGravity(Gravity.TOP, 0, 140)
                 toast.show()
             }
 
             val result = textInputEmail.text.toString()
-            setFragmentResult("requestKey", bundleOf("data" to result))
+            setFragmentResult(REQUEST_KEY, bundleOf(DATA to result))
 
             if (binding.checkBoxRememberMe.isChecked) {
                 //TODO не повертатись назад, якщо поставлена галочка

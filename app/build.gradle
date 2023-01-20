@@ -56,4 +56,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 //    Dexter (not Morgan)
     implementation 'com.karumi:dexter:6.0.2'
+//    LeakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+
 }

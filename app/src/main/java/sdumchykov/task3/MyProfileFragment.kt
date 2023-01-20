@@ -11,6 +11,11 @@ import androidx.fragment.app.setFragmentResultListener
 import sdumchykov.task3.databinding.FragmentMyProfileBinding
 import sdumchykov.task3.extensions.setImage
 
+private const val HARDCODED_IMAGE_PATH = "https://www.instagram.com/p/BDdr32ZrvgP/"
+private const val EMAIL = "email"
+private const val SYMBOL_AT = '@'
+private const val PATTERN_NON_CHARACTER = "\\W"
+
 /**
  * A simple [Fragment] subclass.
  * Use the [MyProfileFragment.newInstance] factory method to
@@ -70,7 +75,7 @@ class MyProfileFragment :
 //        binding.imageInstagram.setOnClickListener {
 //            startActivity(
 //                Intent(
-//                    Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/p/BDdr32ZrvgP/")
+//                    Intent.ACTION_VIEW, Uri.parse(HARDCODED_IMAGE_PATH)
 //                )
 //            )
 //        }
@@ -80,7 +85,7 @@ class MyProfileFragment :
         val textViewName: AppCompatTextView? = view?.findViewById(R.id.textViewName)
         setFragmentResultListener("requestKey") { requestKey, bundle ->
             val result = bundle.getString("data")
-            val splitted = result?.substring(0, result.indexOf('@'))?.split(Regex("\\W"))
+            val splitted = result?.substring(0, result.indexOf('@'))?.split(Regex(PATTERN_NON_CHARACTER))
 
             if (splitted?.size!! > 1) {
                 val firstName = splitted[0].replaceFirstChar { it.uppercase() }
@@ -90,7 +95,7 @@ class MyProfileFragment :
                 binding.textViewName.text = textContent
 //                textViewName!!.text = textContent
             } else {
-                binding.textViewName.text = result.substring(0, result.indexOf('@'))
+                binding.textViewName.text = result.substring(0, result.indexOf(SYMBOL_AT))
                 val d = 1
 
 //                textViewName!!.text = result.substring(0, result.indexOf('@'))
