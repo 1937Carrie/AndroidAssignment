@@ -6,21 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutNord"
+    <View
+        android:id="@+id/viewNord"
         android:layout_width="match_parent"
         android:layout_height="0dp"
 
         android:background="@color/steel_gray"
 
-        app:layout_constraintBottom_toTopOf="@id/constraintLayoutSouth"
+        app:layout_constraintBottom_toTopOf="@id/viewSouth"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="0.5" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutSouth"
+    <View
+        android:id="@+id/viewSouth"
         android:layout_width="match_parent"
         android:layout_height="0dp"
 
@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayoutNord"
+        app:layout_constraintTop_toBottomOf="@id/viewNord"
         app:layout_constraintVertical_weight="0.5" />
 
     <androidx.constraintlayout.widget.Guideline

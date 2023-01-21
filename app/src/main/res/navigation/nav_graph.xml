@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signUpFragment">
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="sdumchykov.task3.SignUpFragment"
+        android:label="SignUpFragment"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/action_signUpFragment_to_myProfileFragment"
+            app:destination="@id/myProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="sdumchykov.task3.MyProfileFragment"
+        android:label="MyProfileFragment"
+        tools:layout="@layout/fragment_my_profile">
+        <action
+            android:id="@+id/action_myProfileFragment_to_myContactsFragment"
+            app:destination="@id/myContactsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myContactsFragment"
+        android:name="sdumchykov.task3.MyContactsFragment"
+        android:label="fragment_my_contacts"
+        tools:layout="@layout/fragment_my_contacts" >
+        <action
+            android:id="@+id/action_myContactsFragment_to_contactProfileFragment"
+            app:destination="@id/contactProfileFragment" />
+        <action
+            android:id="@+id/action_myContactsFragment_to_myProfileFragment"
+            app:destination="@id/myProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/contactProfileFragment"
+        android:name="sdumchykov.task3.ContactProfileFragment"
+        android:label="ContactProfileFragment"
+        tools:layout="@layout/fragment_contact_profile">
+        <action
+            android:id="@+id/action_contactProfileFragment_to_myContactsFragment"
+            app:destination="@id/myContactsFragment" />
+    </fragment>
+</navigation>

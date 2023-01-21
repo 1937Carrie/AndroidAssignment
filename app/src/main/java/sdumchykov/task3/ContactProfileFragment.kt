@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import sdumchykov.task3.databinding.FragmentContactProfileBinding
 
 /**
@@ -24,7 +25,14 @@ class ContactProfileFragment : BaseFragment<FragmentContactProfileBinding>(Fragm
     ): View {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_contact_profile, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.imageButtonArrowBack.setOnClickListener {
+            Navigation.findNavController(binding.root).navigate(R.id.action_contactProfileFragment_to_myContactsFragment)
+        }
     }
 
 //    companion object {

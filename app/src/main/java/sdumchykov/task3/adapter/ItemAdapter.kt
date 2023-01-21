@@ -10,13 +10,20 @@ import sdumchykov.task3.model.Contact
 class ItemAdapter(private val onDeleteCallback: (Contact) -> Unit) :
     RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     private var contacts = mutableListOf<Contact>()
+    var onItemClick: ((Contact) -> Unit)? = null
 
     fun setContactList(contacts: List<Contact>) {
         this.contacts = contacts.toMutableList()
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val binding: ContactItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ContactItemBinding) : RecyclerView.ViewHolder(binding.root){
+        init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(contacts[adapterPosition])
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

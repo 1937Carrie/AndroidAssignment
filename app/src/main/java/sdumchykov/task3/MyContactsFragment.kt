@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -45,6 +46,10 @@ class MyContactsFragment :
         imageButtonArrowBackSetOnClickListener()
 
         binding.recyclerViewContacts.adapter = adapter
+
+        adapter.onItemClick = {
+            Navigation.findNavController(binding.root).navigate(R.id.action_myContactsFragment_to_contactProfileFragment)
+        }
 
         contactList = if (contactsModeTumbler) ArrayList() else Datasource().get()
         viewModel =
@@ -151,7 +156,8 @@ class MyContactsFragment :
 
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageButtonArrowBack.setOnClickListener {
-            activity?.onBackPressed()
+//            activity?.onBackPressed() //plain back pressed action
+            Navigation.findNavController(binding.root).navigate(R.id.action_myContactsFragment_to_myProfileFragment)
         }
     }
 

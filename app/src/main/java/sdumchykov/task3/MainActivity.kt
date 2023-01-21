@@ -10,9 +10,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add<SignUpFragment>(R.id.fragment_container_view)
+            if (!FEATURE_FLAG) {
+                supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    add<SignUpFragment>(R.id.fragmentContainerView)
+                }
             }
         }
     }

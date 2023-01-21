@@ -3,9 +3,7 @@ package sdumchykov.task3
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Patterns
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
@@ -13,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.Navigation
 import sdumchykov.task3.databinding.FragmentSignUpBinding
 
 private const val MINIMUM_PASSWORD_LENGTH = 8
@@ -33,15 +32,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             textInputDoOnTextChanged()
             buttonRegisterSetOnClickListener(buttonRegister, textInputEmail, textInputPassword)
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     private fun buttonRegisterSetOnClickListener(
@@ -74,10 +64,14 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                 //TODO не повертатись назад, якщо поставлена галочка
             }
 
-            requireActivity().supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace(R.id.fragment_container_view, MyProfileFragment())
-                addToBackStack("")
+            if (FEATURE_FLAG) {
+                Navigation.findNavController(binding.root).navigate(R.id.action_signUpFragment_to_myProfileFragment)
+            } else {
+                requireActivity().supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace(R.id.fragmentContainerView, MyProfileFragment())
+                    addToBackStack("")
+                }
             }
         }
     }

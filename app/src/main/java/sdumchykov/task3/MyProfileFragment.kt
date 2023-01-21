@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.Navigation
 import sdumchykov.task3.databinding.FragmentMyProfileBinding
 import sdumchykov.task3.extensions.setImage
 
@@ -40,10 +41,15 @@ class MyProfileFragment :
 
     private fun buttonViewMyContactsSetOnClickListener() {
         binding.buttonViewMyContacts.setOnClickListener {
-            requireActivity().supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                replace(R.id.fragment_container_view, MyContactsFragment())
-                addToBackStack("")
+
+            if (FEATURE_FLAG) {
+                Navigation.findNavController(binding.root).navigate(R.id.action_myProfileFragment_to_myContactsFragment)
+            } else {
+                requireActivity().supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    replace(R.id.fragmentContainerView, MyContactsFragment())
+                    addToBackStack("")
+                }
             }
         }
     }
