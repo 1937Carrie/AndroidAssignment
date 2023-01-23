@@ -5,15 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import sdumchykov.task3.databinding.FragmentContactProfileBinding
+import sdumchykov.task3.extensions.setImage
+import sdumchykov.task3.model.ContactProfileViewModel
 
 /**
  * A simple [Fragment] subclass.
  * Use the [ContactProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ContactProfileFragment : BaseFragment<FragmentContactProfileBinding>(FragmentContactProfileBinding::inflate) {
+class ContactProfileFragment :
+    BaseFragment<FragmentContactProfileBinding>(FragmentContactProfileBinding::inflate) {
+    private val viewModelContact: ContactProfileViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +35,19 @@ class ContactProfileFragment : BaseFragment<FragmentContactProfileBinding>(Fragm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.imageButtonArrowBack.setOnClickListener {
-            Navigation.findNavController(binding.root).navigate(R.id.action_contactProfileFragment_to_myContactsFragment)
+        with(binding) {
+            imageButtonArrowBack.setOnClickListener {
+                Navigation.findNavController(root)
+                    .navigate(R.id.action_contactProfileFragment_to_myContactsFragment)
+            }
+            textViewName.text = viewModelContact.contact.value?.name
+            textViewProfession.text = viewModelContact.contact.value?.profession
+            val drawable = R.drawable.image
+            imageViewPicture.setImage(this@ContactProfileFragment,  drawable)
         }
+        val s = 0
+
+
     }
 
 //    companion object {

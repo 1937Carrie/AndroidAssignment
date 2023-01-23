@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -26,6 +27,7 @@ import sdumchykov.task3.adapter.ItemAdapter
 import sdumchykov.task3.data.Datasource
 import sdumchykov.task3.databinding.FragmentMyContactsBinding
 import sdumchykov.task3.model.Contact
+import sdumchykov.task3.model.ContactProfileViewModel
 import sdumchykov.task3.model.ContactViewModel
 import sdumchykov.task3.model.MyViewModelFactory
 
@@ -35,7 +37,8 @@ private const val FIVE_SECOND = 5000
 class MyContactsFragment :
     BaseFragment<FragmentMyContactsBinding>(FragmentMyContactsBinding::inflate) {
     private val contactsModeTumbler = false
-    private lateinit var viewModel: ContactViewModel
+    private lateinit var viewModelRecyclerView: ContactViewModel
+    private val viewModelContact: ContactProfileViewModel by activityViewModels()
     private lateinit var contactList: ArrayList<Contact>
     private val adapter = ItemAdapter(::deleteContact)
     private lateinit var dialog: AlertDialog
@@ -47,14 +50,21 @@ class MyContactsFragment :
 
         binding.recyclerViewContacts.adapter = adapter
 
+
+
         adapter.onItemClick = {
-            Navigation.findNavController(binding.root).navigate(R.id.action_myContactsFragment_to_contactProfileFragment)
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_myContactsFragment_to_contactProfileFragment)
+            viewModelContact.pickContact(it)
+
         }
 
         contactList = if (contactsModeTumbler) ArrayList() else Datasource().get()
-        viewModel =
+        viewModelRecyclerView =
             ViewModelProvider(this, MyViewModelFactory(contactList))[ContactViewModel::class.java]
-        viewModel.contactList.observe(viewLifecycleOwner) { adapter.setContactList(it) }
+        viewModelRecyclerView.contactList.observe(viewLifecycleOwner) { adapter.setContactList(it) }
+
+
 
         if (contactsModeTumbler) {
             getContactsListWithDexter()
@@ -63,7 +73,7 @@ class MyContactsFragment :
         val swipeToDeleteCallback = object : SwipeToDeleteCallback() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val contact = viewModel.contactList.value?.get(position)
+                val contact = viewModelRecyclerView.contactList.value?.get(position)
 
                 deleteContact(contact!!)
             }
@@ -91,7 +101,7 @@ class MyContactsFragment :
             val profession =
                 view.findViewById<AppCompatEditText>(R.id.textinputedittext_addcontactsdialog_profession)
 
-            viewModel.addItem(
+            viewModelRecyclerView.addItem(
                 Contact(
                     "${name.text.toString()} ${surname.text.toString()}",
                     profession.text.toString(),
@@ -157,12 +167,13 @@ class MyContactsFragment :
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageButtonArrowBack.setOnClickListener {
 //            activity?.onBackPressed() //plain back pressed action
-            Navigation.findNavController(binding.root).navigate(R.id.action_myContactsFragment_to_myProfileFragment)
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_myContactsFragment_to_myProfileFragment)
         }
     }
 
     private fun deleteContact(contact: Contact) {
-        viewModel.removeItem(contact)
+        viewModelRecyclerView.removeItem(contact)
 
         val snackbar =
             Snackbar.make(
@@ -171,7 +182,7 @@ class MyContactsFragment :
             )
 
         snackbar.setAction("Undo") {
-            viewModel.addItem(contact)
+            viewModelRecyclerView.addItem(contact)
             Toast.makeText(
                 activity, "${contact.name} has been restored", Toast.LENGTH_LONG
             ).show()
