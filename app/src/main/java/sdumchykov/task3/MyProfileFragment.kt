@@ -61,7 +61,7 @@ class MyProfileFragment :
     }
 
     private fun setMainPicture() {
-        val drawableSource = R.drawable.image
+        val drawableSource = R.drawable.ic_profile_image
 
         binding.imageViewPicture.apply {
             setImage(this@MyProfileFragment, drawableSource)

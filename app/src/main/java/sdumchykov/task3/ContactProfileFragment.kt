@@ -42,12 +42,9 @@ class ContactProfileFragment :
             }
             textViewName.text = viewModelContact.contact.value?.name
             textViewProfession.text = viewModelContact.contact.value?.profession
-            val drawable = R.drawable.image
-            imageViewPicture.setImage(this@ContactProfileFragment,  drawable)
+            val drawable = R.drawable.ic_profile_image
+            imageViewPicture.setImage(this@ContactProfileFragment, drawable)
         }
-        val s = 0
-
-
     }
 
 //    companion object {

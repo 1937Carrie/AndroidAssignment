@@ -125,7 +125,8 @@
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline_activityMain_065"
         app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_035"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMain_008"
-        tools:src="@drawable/tmp_rounded_image" />
+        tools:src="@drawable/tmp_rounded_image"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewName"
@@ -189,7 +190,7 @@
         style="@style/widthHeightIsWrapContent"
 
         android:contentDescription="@string/icon_facebook"
-        android:src="@drawable/fb"
+        android:src="@drawable/ic_facebook"
         tools:ignore="MissingConstraints" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -197,7 +198,7 @@
         style="@style/widthHeightIsWrapContent"
 
         android:contentDescription="@string/icon_linkedin"
-        android:src="@drawable/linkedin"
+        android:src="@drawable/ic_linkedin"
         tools:ignore="MissingConstraints" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -207,7 +208,7 @@
         android:layout_marginStart="@dimen/dimension_32dp"
 
         android:contentDescription="@string/icon_instagram"
-        android:src="@drawable/instagram"
+        android:src="@drawable/ic_instagram"
         tools:ignore="MissingConstraints" />
 
 
@@ -216,7 +217,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:background="@drawable/button_orange"
+        android:background="@drawable/btn_orange"
         android:text="@string/message"
         android:textAllCaps="true"
         android:textAppearance="@style/viewMyContactsTextAppearance"
