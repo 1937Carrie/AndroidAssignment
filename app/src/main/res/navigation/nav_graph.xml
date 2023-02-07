@@ -39,7 +39,9 @@
             app:destination="@id/contactProfileFragment" />
         <action
             android:id="@+id/action_myContactsFragment_to_myProfileFragment"
-            app:destination="@id/myProfileFragment" />
+            app:destination="@id/myProfileFragment"
+            app:popUpTo="@id/myProfileFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/contactProfileFragment"

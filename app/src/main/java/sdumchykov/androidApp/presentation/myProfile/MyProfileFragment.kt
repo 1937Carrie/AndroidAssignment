@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
@@ -14,9 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
 import sdumchykov.androidApp.domain.utils.Constants.EMAIL_KEY
-import sdumchykov.androidApp.domain.utils.Constants.FEATURE_FLAG
 import sdumchykov.androidApp.presentation.base.BaseFragment
-import sdumchykov.androidApp.presentation.contacts.MyContactsFragment
 import sdumchykov.androidApp.presentation.utils.ext.setImage
 
 private const val HARDCODED_IMAGE_PATH = "https://www.instagram.com/p/BDdr32ZrvgP/"
@@ -102,17 +99,9 @@ class MyProfileFragment :
 
     private fun buttonViewMyContactsSetOnClickListener() {
         binding.buttonMainViewMyContacts.setOnClickListener {
-            if (FEATURE_FLAG) {
-                Navigation.findNavController(binding.root)
-                    .navigate(R.id.action_myProfileFragment_to_myContactsFragment)
-            } else {
-                requireActivity().supportFragmentManager.commit {
-                    setReorderingAllowed(true)
-                    replace(R.id.fragmentContainerView, MyContactsFragment())
-                    addToBackStack("")
-                }
-            }
-
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_myProfileFragment_to_myContactsFragment)
         }
     }
+
 }
