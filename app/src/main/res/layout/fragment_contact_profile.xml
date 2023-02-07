@@ -33,11 +33,11 @@
         app:layout_constraintVertical_weight="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontalGuideline_activityMain_002"
+        android:id="@+id/horizontalGuideline_activityMain_003"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.02" />
+        app:layout_constraintGuide_percent="0.03" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontalGuideline_activityMain_008"
@@ -61,11 +61,11 @@
         app:layout_constraintGuide_percent="0.98" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/verticalGuideline_activityMain_002"
+        android:id="@+id/verticalGuideline_activityMain_004"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.02" />
+        app:layout_constraintGuide_percent="0.04" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/verticalGuideline_activityMain_035"
@@ -82,11 +82,11 @@
         app:layout_constraintGuide_percent="0.65" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/verticalGuideline_activityMain_098"
+        android:id="@+id/verticalGuideline_activityMain_096"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.98" />
+        app:layout_constraintGuide_percent="0.96" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/imageButtonArrowBack"
@@ -96,8 +96,8 @@
         android:src="@drawable/ic_baseline_arrow_back_24"
 
         app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline_activityMain_008"
-        app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_002"
-        app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMain_002" />
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_004"
+        app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMain_003" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewSettings"
@@ -112,7 +112,7 @@
         app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline_activityMain_008"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMain_002" />
+        app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMain_003" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewPicture"
@@ -125,8 +125,8 @@
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline_activityMain_065"
         app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_035"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMain_008"
-        tools:src="@drawable/tmp_rounded_image"
-        tools:srcCompat="@tools:sample/avatars" />
+
+        tools:src="@tools:sample/avatars" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewName"
@@ -141,7 +141,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageViewPicture"
-        tools:text="Jenny Walker" />
+        tools:text="@string/name" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewProfession"
@@ -181,8 +181,8 @@
         android:layout_marginTop="@dimen/dimension_62dp"
 
         app:constraint_referenced_ids="imageViewFacebook, imageButtonLinkedIn, imageInstagram"
-        app:layout_constraintEnd_toEndOf="@id/verticalGuideline_activityMain_098"
-        app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_002"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline_activityMain_096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_004"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline_activityMain_050" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -223,6 +223,6 @@
         android:textAppearance="@style/viewMyContactsTextAppearance"
 
         app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline_activityMain_098"
-        app:layout_constraintEnd_toEndOf="@id/verticalGuideline_activityMain_098"
-        app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_002" />
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline_activityMain_096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline_activityMain_004" />
 </androidx.constraintlayout.widget.ConstraintLayout>
