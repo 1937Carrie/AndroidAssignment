@@ -2,17 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/signUpFragment">
-    <fragment
-        android:id="@+id/signUpFragment"
-        android:name="sdumchykov.androidApp.presentation.signUp.SignUpFragment"
-        android:label="SignUpFragment"
-        tools:layout="@layout/fragment_sign_up">
-        <action
-            android:id="@+id/action_signUpFragment_to_myProfileFragment"
-            app:destination="@id/myProfileFragment" />
-    </fragment>
+    android:id="@+id/main_graph"
+    app:startDestination="@id/myProfileFragment">
     <fragment
         android:id="@+id/myProfileFragment"
         android:name="sdumchykov.androidApp.presentation.myProfile.MyProfileFragment"

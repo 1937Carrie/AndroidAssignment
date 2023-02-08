@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.doOnTextChanged
-import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentSignUpBinding
@@ -48,8 +48,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         val savedEmail =
             this.requireActivity().getPreferences(MODE_PRIVATE).getString(EMAIL_KEY, "").toString()
         if (savedEmail.isNotEmpty()) {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_signUpFragment_to_myProfileFragment)
+            binding.root.findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToMyProfileFragment2())
         }
     }
 
@@ -120,10 +119,11 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             }
 
             val action =
-                SignUpFragmentDirections.actionSignUpFragmentToMyProfileFragment(
-                    editTextSignUpEmail.text.toString()
+                SignUpFragmentDirections.actionSignUpFragmentToMyProfileFragment2(
+//                    editTextSignUpEmail.text.toString()
                 )
-            Navigation.findNavController(binding.root).navigate(action)
+//            Navigation.findNavController(binding.root).navigate(action)
+            binding.root.findNavController().navigate(action)
         }
     }
 
