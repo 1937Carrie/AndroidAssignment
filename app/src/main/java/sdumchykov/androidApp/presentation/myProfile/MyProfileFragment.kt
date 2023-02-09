@@ -48,7 +48,8 @@ class MyProfileFragment :
 
     private fun setTextToTextName() {
         var receivedEmail =
-            this.requireActivity().getPreferences(Context.MODE_PRIVATE).getString(EMAIL_KEY, "")
+            requireActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE)
+                .getString(EMAIL_KEY, "")
                 .toString()
 
         if (receivedEmail == "") {
@@ -70,7 +71,8 @@ class MyProfileFragment :
     }
 
     private fun cacheEmailToSharedPreferences() {
-        val cachedData = this.requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val cachedData =
+            this.requireActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE)
         val editor = cachedData.edit()
 
         editor.putString(EMAIL_KEY, args.email)

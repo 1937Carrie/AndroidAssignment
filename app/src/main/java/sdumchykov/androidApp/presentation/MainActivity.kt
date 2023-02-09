@@ -6,7 +6,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
