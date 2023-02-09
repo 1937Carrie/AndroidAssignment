@@ -23,13 +23,14 @@ class ContactProfileFragment :
 
         with(binding) {
             imageButtonArrowBack.setOnClickListener {
-                Navigation.findNavController(root)
-                    .navigate(R.id.action_contactProfileFragment_to_myContactsFragment)
+                val action =
+                    ContactProfileFragmentDirections.actionContactProfileFragmentToMyContactsFragment()
+                Navigation.findNavController(root).navigate(action)
             }
 
             val contactId = args.contactId
 
-            val user = contactListViewModel.userLiveData.value?.get(contactId)
+            val user = contactListViewModel.getContactByPosition(contactId)
             textViewName.text = user?.name
             textViewProfession.text = user?.profession
 

@@ -41,11 +41,11 @@ class MyContactsFragment :
     private val myContactsViewModel: MyContactsViewModel by activityViewModels()
     private val usersAdapter: UsersAdapter by lazy {
         UsersAdapter(usersListener = object : UsersListener {
-            override fun onUserClickAction(userModel: UserModel) {
+            override fun onUserClickAction(userModel: UserModel, adapterPosition: Int) {
                 Log.d("MainActivity", "onUserClickAction: ${userModel.id}")
                 val action =
                     MyContactsFragmentDirections.actionMyContactsFragmentToContactProfileFragment(
-                        userModel.id
+                        adapterPosition
                     )
                 Navigation.findNavController(binding.root).navigate(action)
             }

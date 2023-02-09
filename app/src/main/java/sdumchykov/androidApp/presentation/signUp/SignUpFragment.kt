@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.doOnTextChanged
-import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentSignUpBinding
@@ -46,10 +46,9 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
 
     private fun letNavigateMyProfileFragment() {
         val savedEmail =
-            this.requireActivity().getPreferences(MODE_PRIVATE).getString(EMAIL_KEY, "").toString()
+            requireActivity().getSharedPreferences("credentials",MODE_PRIVATE).getString(EMAIL_KEY, "").toString()
         if (savedEmail.isNotEmpty()) {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_signUpFragment_to_myProfileFragment)
+            findNavController(binding.root).navigate(SignUpFragmentDirections.actionSignUpFragmentToMainActivity(savedEmail))
         }
     }
 
@@ -101,7 +100,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     ) {
         buttonSignUpRegister.setOnClickListener {
             if (binding.checkBoxSignUpRememberMe.isChecked) {
-                val cachedData = this.requireActivity().getPreferences(MODE_PRIVATE)
+                val cachedData = requireActivity().getSharedPreferences("credentials",MODE_PRIVATE)
                 val editor = cachedData.edit()
 
                 editor.putString(EMAIL_KEY, editTextSignUpEmail.text.toString())
@@ -120,10 +119,11 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             }
 
             val action =
-                SignUpFragmentDirections.actionSignUpFragmentToMyProfileFragment(
+                SignUpFragmentDirections.actionSignUpFragmentToMainActivity(
                     editTextSignUpEmail.text.toString()
                 )
-            Navigation.findNavController(binding.root).navigate(action)
+//            Navigation.findNavController(binding.root).navigate(action)
+            findNavController(binding.root).navigate(action)
         }
     }
 

@@ -6,9 +6,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_sign_up)
     }
+
 }

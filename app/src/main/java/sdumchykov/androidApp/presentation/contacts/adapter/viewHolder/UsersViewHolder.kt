@@ -24,7 +24,7 @@ class UsersViewHolder(
 
     private fun setListeners(user: UserModel) {
         binding.root.setOnClickListener {
-            usersListener.onUserClickAction(user)
+            usersListener.onUserClickAction(user, adapterPosition)
         }
         binding.imageButtonDelete.setOnClickListener {
             usersListener.onTrashIconClickAction(user, adapterPosition)
