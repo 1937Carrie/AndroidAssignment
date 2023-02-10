@@ -7,12 +7,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
 import sdumchykov.androidApp.domain.utils.Constants.EMAIL_KEY
+import sdumchykov.androidApp.presentation.MainActivityArgs
+import sdumchykov.androidApp.presentation.ScreenSlidePagerActivity
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.utils.ext.setImage
 
@@ -26,7 +27,7 @@ private const val SHOW_HARDCODED_LIST = "Show hardcoded contact list data"
 class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate) {
     private val viewModel: MyProfileViewModel by viewModels()
-    private val args: MyProfileFragmentArgs by navArgs()
+    private val args: MainActivityArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -101,8 +102,7 @@ class MyProfileFragment :
 
     private fun buttonViewMyContactsSetOnClickListener() {
         binding.buttonMainViewMyContacts.setOnClickListener {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_myProfileFragment_to_myContactsFragment)
+            (parentFragment as ScreenSlidePagerActivity).viewPager.currentItem = 1
         }
     }
 

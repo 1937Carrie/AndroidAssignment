@@ -27,6 +27,8 @@ import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyContactsBinding
 import sdumchykov.androidApp.domain.model.UserModel
 import sdumchykov.androidApp.domain.utils.Constants.HARDCODED_IMAGE_URL
+import sdumchykov.androidApp.presentation.ScreenSlidePagerActivity
+import sdumchykov.androidApp.presentation.ScreenSlidePagerActivityDirections
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.contacts.adapter.UsersAdapter
 import sdumchykov.androidApp.presentation.contacts.adapter.listener.UsersListener
@@ -44,7 +46,7 @@ class MyContactsFragment :
             override fun onUserClickAction(userModel: UserModel, adapterPosition: Int) {
                 Log.d("MainActivity", "onUserClickAction: ${userModel.id}")
                 val action =
-                    MyContactsFragmentDirections.actionMyContactsFragmentToContactProfileFragment(
+                    ScreenSlidePagerActivityDirections.actionScreenSlidePagerActivityToContactProfileFragment(
                         adapterPosition
                     )
                 Navigation.findNavController(binding.root).navigate(action)
@@ -79,8 +81,9 @@ class MyContactsFragment :
 
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageViewMyContactsArrowBack.setOnClickListener {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_myContactsFragment_to_myProfileFragment)
+            binding.imageViewMyContactsArrowBack.setOnClickListener {
+                (parentFragment as ScreenSlidePagerActivity).viewPager.currentItem = 0
+            }
         }
     }
 

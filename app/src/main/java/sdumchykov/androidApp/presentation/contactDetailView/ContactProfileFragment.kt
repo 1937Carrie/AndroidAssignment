@@ -24,7 +24,7 @@ class ContactProfileFragment :
         with(binding) {
             imageButtonArrowBack.setOnClickListener {
                 val action =
-                    ContactProfileFragmentDirections.actionContactProfileFragmentToMyContactsFragment()
+                    ContactProfileFragmentDirections.actionContactProfileFragmentToScreenSlidePagerActivity()
                 Navigation.findNavController(root).navigate(action)
             }
 
