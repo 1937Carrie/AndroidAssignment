@@ -11,6 +11,7 @@ import sdumchykov.androidApp.domain.model.UserModel
 import sdumchykov.androidApp.domain.repository.UsersRepository
 import sdumchykov.androidApp.domain.storage.Storage
 import sdumchykov.androidApp.domain.utils.Constants
+import sdumchykov.androidApp.presentation.utils.ext.Results
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +21,9 @@ class MyContactsViewModel @Inject constructor(
 
     private val _userLiveData = MutableLiveData<List<UserModel>>(listOf())
     val userLiveData: LiveData<List<UserModel>> = _userLiveData
+
+    val selectedEvent = MutableLiveData(false)
+    val loadEvent = MutableLiveData<Results>()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

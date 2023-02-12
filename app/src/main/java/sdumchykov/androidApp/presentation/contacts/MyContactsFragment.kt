@@ -33,6 +33,7 @@ import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.contacts.adapter.UsersAdapter
 import sdumchykov.androidApp.presentation.contacts.adapter.listener.UsersListener
 import sdumchykov.androidApp.presentation.utils.SwipeToDeleteCallback
+import sdumchykov.androidApp.presentation.utils.ext.Results
 
 private const val SNACKBAR_DURATION = 5000
 
@@ -55,8 +56,78 @@ class MyContactsFragment :
             override fun onTrashIconClickAction(userModel: UserModel, userIndex: Int) {
                 deleteContact(userModel, userIndex)
             }
+
+            override fun onContactRemove(userModel: UserModel) {
+                myContactsViewModel.removeItem(userModel)
+            }
+
+            override fun onContactSelected(contact: UserModel) {
+                sharedElementTransitionWithSelectedContact(contact)
+            }
+
+            override fun onMultiselectActivated() {
+                usersAdapter.selectAllContacts()
+                binding.frameLayoutButtonsContainer?.visibility = View.VISIBLE
+                binding.buttonRemoveSelectedContacts?.visibility = View.VISIBLE
+                binding.textViewMyContactsAddContacts.visibility = View.GONE
+                myContactsViewModel.selectedEvent.value = true
+                disableContactSwipe()
+                refreshRecyclerView()
+            }
+
+            override fun onContactSelectedStateChanged() {
+                if (usersAdapter.areAllItemsUnselected()) {
+                    binding.frameLayoutButtonsContainer?.visibility = View.GONE
+                    binding.buttonRemoveSelectedContacts?.visibility = View.GONE
+                    myContactsViewModel.selectedEvent.value = false
+                    binding.textViewMyContactsAddContacts.visibility = View.VISIBLE
+                    enableContactSwipe()
+                    refreshRecyclerView()
+                }
+            }
         })
     }
+
+    private fun enableContactSwipe() {
+        swipeFlags = ItemTouchHelper.END
+    }
+
+    private fun refreshRecyclerView() {
+        binding.recyclerViewMyContactsContactList.apply {
+            adapter = usersAdapter
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+        }
+    }
+
+    private var swipeFlags = ItemTouchHelper.END
+
+    private fun disableContactSwipe() {
+        swipeFlags = 0
+    }
+
+    private fun removeSelectedItemsFromRecyclerView() {
+        myContactsViewModel.loadEvent.value = Results.LOADING
+        usersAdapter.removeSelectedItems()
+        refreshRecyclerView()
+        if (myContactsViewModel.userLiveData.value?.isEmpty() == true) {
+            binding.frameLayoutButtonsContainer?.visibility = View.GONE
+            binding.buttonRemoveSelectedContacts?.visibility = View.GONE
+        }
+        myContactsViewModel.loadEvent.value = Results.OK
+    }
+
+    private fun sharedElementTransitionWithSelectedContact(contact: UserModel) {
+        val action =
+            ScreenSlidePagerActivityDirections.actionScreenSlidePagerActivityToContactProfileFragment(
+                contact.id
+            )
+        Navigation.findNavController(binding.root).navigate(action)
+    }
+
     private lateinit var dialog: AlertDialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,8 +147,11 @@ class MyContactsFragment :
 
     override fun setListeners() {
         imageButtonArrowBackSetOnClickListener()
-    }
 
+        binding.buttonRemoveSelectedContacts?.setOnClickListener {
+            removeSelectedItemsFromRecyclerView()
+        }
+    }
 
     private fun imageButtonArrowBackSetOnClickListener() {
         binding.imageViewMyContactsArrowBack.setOnClickListener {

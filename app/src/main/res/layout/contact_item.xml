@@ -68,6 +68,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkBoxSelectedState"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="gone"
+        android:button="@drawable/cb_multiple_select_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline_contactItem_006"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewPhoto"
         android:layout_width="0dp"
@@ -78,8 +88,7 @@
 
         app:layout_constraintBottom_toBottomOf="@id/imageViewBackground"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="@id/verticalGuideline_contactItem_018"
-        app:layout_constraintStart_toStartOf="@id/verticalGuideline_contactItem_006"
+        app:layout_constraintStart_toEndOf="@id/checkBoxSelectedState"
         app:layout_constraintTop_toTopOf="@id/imageViewBackground"
 
         tools:src="@tools:sample/avatars" />
@@ -89,6 +98,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimension_8dp"
+        android:layout_marginStart="@dimen/dimension_8dp"
         android:layout_marginEnd="16dp"
 
         android:ellipsize="end"
@@ -99,7 +109,7 @@
 
         app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline_contactItem_054"
         app:layout_constraintEnd_toStartOf="@id/imageButtonDelete"
-        app:layout_constraintStart_toEndOf="@id/verticalGuideline_contactItem_020"
+        app:layout_constraintStart_toEndOf="@id/imageViewPhoto"
 
         tools:text="Very long test name AABBCCDDEE" />
 
