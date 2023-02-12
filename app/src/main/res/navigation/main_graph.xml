@@ -14,7 +14,9 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_contactProfileFragment_to_screenSlidePagerActivity"
-            app:destination="@id/screenSlidePagerActivity" />
+            app:destination="@id/screenSlidePagerActivity"
+            app:popUpTo="@id/screenSlidePagerActivity"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/screenSlidePagerActivity"

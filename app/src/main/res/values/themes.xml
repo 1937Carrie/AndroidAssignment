@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Plain" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.Plain" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="android:navigationBarColor">@color/steel_gray</item>
         <!--        <item name="colorPrimary">@color/purple_500</item>-->
@@ -16,6 +16,23 @@
         <item name="colorControlNormal">@color/silver</item>
         <item name="colorControlActivated">@color/silver</item>
         <item name="colorControlHighlight">@color/silver</item>
+        <item name="tabStyle">@style/Widget.App.TabLayout</item>
+    </style>
+
+    <style name="Widget.App.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.TabLayout</item>
+        <item name="tabTextAppearance">@style/TextAppearance.App.Button</item>
+    </style>
+
+    <style name="ThemeOverlay.App.TabLayout" parent="">
+        <item name="colorPrimary">@color/alabaster</item>
+        <item name="colorSurface">@color/steel_gray</item>
+        <item name="colorOnSurface">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/opensans_semi_bold</item>
+        <item name="android:fontFamily">@font/opensans_semi_bold</item>
     </style>
 
     <style name="ThemeOverlay.App.TextInputLayout" parent="">
@@ -23,6 +40,7 @@
         <item name="colorOnSurface">@color/alabaster</item>
         <item name="colorError">@android:color/holo_red_dark</item>
     </style>
+
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@android:anim/slide_out_right</item>

@@ -73,13 +73,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dimension_16dp"
 
-            android:backgroundTint="@color/silver"
             android:hint="@string/email"
             android:textColorHint="@color/silver"
+            android:theme="@style/ThemeOverlay.App.TextInputLayout"
             app:errorEnabled="true"
-            app:errorTextColor="@color/error"
             app:expandedHintEnabled="false"
-            app:hintTextColor="@color/silver"
 
             app:layout_constraintBottom_toTopOf="@id/textInputLayoutSignUpPassword"
             app:layout_constraintEnd_toEndOf="parent"
@@ -90,6 +88,8 @@
                 android:id="@+id/editTextSignUpEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                android:background="@android:color/transparent"
 
                 android:inputType="textEmailAddress"
                 android:textColor="@color/alabaster"
@@ -105,10 +105,9 @@
 
             android:hint="@string/password"
             android:textColorHint="@color/silver"
+            android:theme="@style/ThemeOverlay.App.TextInputLayout"
             app:errorEnabled="true"
-            app:errorTextColor="@color/error"
             app:expandedHintEnabled="false"
-            app:hintTextColor="@color/silver"
 
             app:layout_constraintBottom_toTopOf="@id/checkBoxSignUpRememberMe"
             app:layout_constraintEnd_toEndOf="parent"
@@ -119,6 +118,8 @@
                 android:id="@+id/editTextSignUpPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                android:background="@android:color/transparent"
 
                 android:inputType="textPassword"
                 android:textColor="@color/alabaster"

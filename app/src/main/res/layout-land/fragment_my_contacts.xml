@@ -15,7 +15,7 @@
         app:layout_constraintGuide_percent="0.03" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineHorizontalMyContacts010"
+        android:id="@+id/guidelineHorizontalMyContacts008"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -85,7 +85,7 @@
         android:textSize="@dimen/text_14sp"
         app:layout_constraintBottom_toBottomOf="@id/guidelineHorizontalMyContactsLand020"
         app:layout_constraintStart_toStartOf="@id/guidelineVerticalMyContacts004"
-        app:layout_constraintTop_toTopOf="@id/guidelineHorizontalMyContacts010" />
+        app:layout_constraintTop_toTopOf="@id/guidelineHorizontalMyContacts008" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMyContactsContactList"
