@@ -126,7 +126,7 @@
     <FrameLayout
         android:id="@+id/frameLayoutButtonsContainer"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="@dimen/multiSelectedLayoutSize"
 
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -134,8 +134,8 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonRemoveSelectedContacts"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="@dimen/multiDeleteIconSize"
+            android:layout_height="@dimen/multiDeleteIconSize"
             android:layout_gravity="end"
             android:layout_marginVertical="@dimen/dimension_16dp"
 

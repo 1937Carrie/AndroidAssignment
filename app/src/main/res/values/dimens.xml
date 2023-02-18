@@ -20,4 +20,6 @@
     <dimen name="text_24sp">24sp</dimen>
     <!--  corner radius  -->
     <dimen name="corner_radius">4dp</dimen>
+    <dimen name="multiDeleteIconSize">60dp</dimen>
+    <dimen name="multiSelectedLayoutSize">120dp</dimen>
 </resources>

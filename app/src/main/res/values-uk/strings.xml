@@ -24,6 +24,10 @@
     <string name="by_clicking">Натиснувши «Реєстрація», ви погоджуєтеся з нашими умовами</string>
     <string name="already_have">Вже є аккаунт?</string>
     <string name="sign_in">Увійти</string>
+    <!--  RecyclerView  -->
+    <string name="contactHasBeenDeleted">%1$s був видалений</string>
+    <string name="contactHasBeenRestored">%1$s був відновлений</string>
+    <string name="undo">Відновити</string>
     <!--  contentDescription  -->
     <string name="icon_facebook">Іконка Facebook</string>
     <string name="icon_linkedin">Іконка Linkedin</string>
@@ -36,4 +40,7 @@
     <string name="dialog_contact_profession">Професія</string>
     <string name="profile">Профіль</string>
     <string name="message">Повідомлення</string>
+    <!-- ViewPager -->
+    <string name="tab1">My Profile</string>
+    <string name="tab2">My contacts</string>
 </resources>

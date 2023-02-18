@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentViewPagerBinding
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.viewPager.contacts.MyContactsFragment
@@ -25,21 +26,21 @@ class ViewPagerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewPager = binding.pager
 
-        val fragsList = listOf(MyProfileFragment(), MyContactsFragment())
+        val fragmentsList = listOf(MyProfileFragment(), MyContactsFragment())
 
-        viewPagerAdapter = ViewPagerAdapter(this, fragsList)
+        viewPagerAdapter = ViewPagerAdapter(this, fragmentsList)
 
         viewPager.adapter = viewPagerAdapter
-        viewPager.currentItem = 0 // TODO номер екрану MyProfile, але виконано через зад
+        viewPager.currentItem = Tabs.MYPROFILE.ordinal
 
         myContactsViewModel.userLiveData.observe(viewLifecycleOwner) {
             TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
                 when (position) {
-                    0 -> {
-                        tab.text = "My profile"
+                    Tabs.MYPROFILE.ordinal -> {
+                        tab.text = getString(R.string.tab1)
                     }
-                    1 -> {
-                        tab.text = "My contacts"
+                    Tabs.CONTACTS.ordinal -> {
+                        tab.text = getString(R.string.tab2)
 
                         val badge = tab.orCreateBadge
                         badge.number = it.size
@@ -58,5 +59,10 @@ class ViewPagerFragment :
         override fun createFragment(position: Int): Fragment {
             return fragsListHere[position]
         }
+    }
+
+    enum class Tabs {
+        MYPROFILE,
+        CONTACTS
     }
 }

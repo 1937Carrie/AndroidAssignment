@@ -11,7 +11,7 @@ import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.Us
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.viewHolder.UsersViewHolder
 
 class UsersAdapter(
-    private val usersListener: UsersListener,
+    val usersListener: UsersListener,
     private var multiSelect: Boolean = false
 ) : ListAdapter<UserModel, UsersViewHolder>(UsersDiffCallback()) {
 

@@ -1,32 +1,24 @@
 package sdumchykov.androidApp.presentation.viewPager.myProfile
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.single.PermissionListener
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
-import sdumchykov.androidApp.domain.model.UserModel
-import sdumchykov.androidApp.domain.utils.Constants
 import sdumchykov.androidApp.domain.utils.Constants.EMAIL_KEY
 import sdumchykov.androidApp.presentation.MainActivityArgs
 import sdumchykov.androidApp.presentation.base.BaseFragment
+import sdumchykov.androidApp.presentation.signUp.SignUpViewModel
 import sdumchykov.androidApp.presentation.utils.ext.setImage
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
+import sdumchykov.androidApp.presentation.viewPager.contacts.fetchContacts.FetchContacts
 
 private const val HARDCODED_IMAGE_PATH = "https://www.instagram.com/p/BDdr32ZrvgP/"
 private const val SIGN_AT = '@'
@@ -39,8 +31,9 @@ class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate) {
     private val viewModel: MyProfileViewModel by viewModels()
     private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
-    val parentViewModel by lazy { pagerFragment.myContactsViewModel }
     private val args: MainActivityArgs by navArgs()
+    val parentViewModel by lazy { pagerFragment.myContactsViewModel }
+    val signUpViewModel: SignUpViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,7 +41,7 @@ class MyProfileFragment :
         setMainPicture()
         setTextToTextName()
         setURIToImageInstagram()
-        handleRecyclerViewContent() // TODO якщо прибрати тут або на :115, то працювати не буде
+        handleRecyclerViewContent() // TODO if remove it here or on :121, then it will not work
     }
 
     override fun setListeners() {
@@ -62,12 +55,12 @@ class MyProfileFragment :
     }
 
     private fun setTextToTextName() {
-        var receivedEmail =
-            requireActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE)
-                .getString(EMAIL_KEY, "")
-                .toString()
+        var receivedEmail = signUpViewModel.getEmail()
 
         if (receivedEmail == "") {
+            /*TODO The problem has occurred, I can't get args.email.
+            Maybe I'm passing an argument to MainActivity but I go directly to ViewPager and
+            don't have access to MainActivity. I did a stub on :89 line for like temporary solution*/
             receivedEmail = args.email
 
             cacheEmailToSharedPreferences()
@@ -82,6 +75,10 @@ class MyProfileFragment :
             textContent
         } else {
             receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
+        }
+
+        if (signUpViewModel.getPassword() == "") {
+            signUpViewModel.saveEmail("")
         }
     }
 
@@ -122,63 +119,14 @@ class MyProfileFragment :
     }
 
     private fun getContactsListWithDexter() {
-        Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS)
-            .withListener(object : PermissionListener {
-                override fun onPermissionGranted(response: PermissionGrantedResponse) {
-                    if (response.permissionName == Manifest.permission.READ_CONTACTS) {
-                        contacts
-                    }
-                }
-
-                override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                    Toast.makeText(
-                        activity, "Permission should be granted!", Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permission: PermissionRequest,
-                    token: PermissionToken
-                ) {
-                    token.continuePermissionRequest()
-                }
-            }).check()
+        val fetchContacts = FetchContacts(parentViewModel)
+        fetchContacts.fetchContacts(activity as AppCompatActivity)
     }
-
-    private val contacts: Unit
-        @SuppressLint("Range") get() {
-            val phones = activity?.contentResolver?.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null
-            )
-
-            if (phones != null) {
-                val userModels = ArrayList<UserModel>()
-                while (phones.moveToNext()) {
-                    val name =
-                        phones.getString(
-                            phones.getColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
-                            )
-                        )
-                    val phoneNumber =
-                        phones.getString(
-                            phones.getColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.NUMBER
-                            )
-                        )
-                    val contact =
-                        UserModel(userModels.size, name, phoneNumber, Constants.HARDCODED_IMAGE_URL)
-
-                    userModels.add(contact)
-                }
-                parentViewModel.addData(userModels)
-                phones.close()
-            }
-        }
 
     private fun buttonViewMyContactsSetOnClickListener() {
         binding.buttonMainViewMyContacts.setOnClickListener {
-            (parentFragment as ViewPagerFragment).viewPager.currentItem = 1
+            (parentFragment as ViewPagerFragment).viewPager.currentItem =
+                ViewPagerFragment.Tabs.CONTACTS.ordinal
         }
     }
 }

@@ -1,36 +1,31 @@
 package sdumchykov.androidApp.presentation.viewPager.contacts
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.single.PermissionListener
 import dagger.hilt.android.AndroidEntryPoint
+import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.AddContactsDialogBinding
 import sdumchykov.androidApp.databinding.FragmentMyContactsBinding
 import sdumchykov.androidApp.domain.model.UserModel
-import sdumchykov.androidApp.domain.utils.Constants.HARDCODED_IMAGE_URL
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.utils.SwipeToDeleteCallback
+import sdumchykov.androidApp.presentation.utils.ext.gone
+import sdumchykov.androidApp.presentation.utils.ext.visible
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.UsersAdapter
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.UsersListener
+import sdumchykov.androidApp.presentation.viewPager.contacts.fetchContacts.FetchContacts
 
 private const val SNACKBAR_TIME_LENGTH = 5000
 
@@ -66,7 +61,6 @@ class MyContactsFragment :
                     parentViewModel.selectedEvent.value = true
                     disableContactSwipe()
                     initRecyclerView()
-                    imageViewMyContactsCancelSetOnClickListener()
                 }
 
                 override fun onContactSelectedStateChanged() {
@@ -77,19 +71,12 @@ class MyContactsFragment :
                         initRecyclerView()
                     }
                 }
-
-                // TODO я хочу цю функцію винести безпосередньо у клас, а не тримати її у анонімному об'єкті, але тоді нема доступу до onContactSelectedStateChanged(). Як жити?
-                private fun imageViewMyContactsCancelSetOnClickListener() {
-                    binding.imageViewMyContactsCancel?.setOnClickListener {
-                        usersAdapter.unselectItems()
-                        onContactSelectedStateChanged()
-                    }
-                }
             }
         )
     }
+
     private var swipeFlags = ItemTouchHelper.END
-    private lateinit var dialogAddContact: AlertDialog
+    private var dialogAddContact: AlertDialog? = null
 
     //region Main code
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -110,6 +97,7 @@ class MyContactsFragment :
     override fun setListeners() {
         imageButtonArrowBackSetOnClickListener()
         multiSelectedItemsTrashCanOnClickListener()
+        imageViewMyContactsCancelSetOnClickListener()
     }
 
     private fun imageButtonArrowBackSetOnClickListener() {
@@ -119,8 +107,15 @@ class MyContactsFragment :
     }
 
     private fun multiSelectedItemsTrashCanOnClickListener() {
-        binding.buttonRemoveSelectedContacts?.setOnClickListener {
+        binding.buttonRemoveSelectedContacts.setOnClickListener {
             removeSelectedItemsFromRecyclerView()
+        }
+    }
+
+    private fun imageViewMyContactsCancelSetOnClickListener() {
+        binding.imageViewMyContactsCancel?.setOnClickListener {
+            usersAdapter.unselectItems()
+            usersAdapter.usersListener.onContactSelectedStateChanged()
         }
     }
 
@@ -128,8 +123,8 @@ class MyContactsFragment :
         binding.recyclerViewMyContactsContactList.run {
             adapter = usersAdapter
             layoutManager = LinearLayoutManager(
-                requireContext(), LinearLayoutManager.VERTICAL, false
-            ) // TODO first parameter context or requireContext() https://stackoverflow.com/a/60402600/20937549
+                context, LinearLayoutManager.VERTICAL, false
+            )
         }
     }
 
@@ -153,15 +148,17 @@ class MyContactsFragment :
 
         val snackbar = Snackbar.make(
             binding.recyclerViewMyContactsContactList,
-            "${contact.name} has been deleted",
+            getString(R.string.contactHasBeenDeleted, contact.name),
             SNACKBAR_TIME_LENGTH
         )
 
-        snackbar.setAction("Undo") {
+        snackbar.setAction(getString(R.string.undo)) {
             parentViewModel.addItem(contact, index)
 
             Toast.makeText(
-                activity, "${contact.name} has been restored", Toast.LENGTH_LONG
+                activity,
+                getString(R.string.contactHasBeenRestored, contact.name),
+                Toast.LENGTH_LONG
             ).show()
         }
         snackbar.show()
@@ -175,11 +172,11 @@ class MyContactsFragment :
             val surname = editTextAddContactsDialogSurname
             val profession = editTextAddContactsDialogProfession
 
-            dialogAddContact =
-                AlertDialog.Builder(requireActivity()).setView(addContactsBinding.root)
-                    .setOnCancelListener {
-                        clearFieldsInDialog(name, surname, profession)
-                    }.create()
+            dialogAddContact = activity?.let {
+                AlertDialog.Builder(it).setView(addContactsBinding.root).setOnCancelListener {
+                    clearFieldsInDialog(name, surname, profession)
+                }.create()
+            }
 
             buttonAddContactsDialogAdd.setOnClickListener {
                 parentViewModel.addNewItem(
@@ -187,15 +184,15 @@ class MyContactsFragment :
                 )
 
                 clearFieldsInDialog(name, surname, profession)
-                dialogAddContact.dismiss()
+                dialogAddContact?.dismiss()
             }
 
             buttonAddContactsDialogCancel.setOnClickListener {
                 clearFieldsInDialog(name, surname, profession)
-                dialogAddContact.dismiss()
+                dialogAddContact?.dismiss()
             }
 
-            binding.textViewMyContactsAddContacts.setOnClickListener { dialogAddContact.show() }
+            binding.textViewMyContactsAddContacts.setOnClickListener { dialogAddContact?.show() }
         }
     }
 
@@ -210,73 +207,32 @@ class MyContactsFragment :
     }
 
     private fun handleRecyclerViewContent() {
-        if (parentViewModel.getFetchContactList()) getContactsListWithDexter()
+        if (parentViewModel.getFetchContactList()) fetchPhoneContacts()
     }
 
-    private fun getContactsListWithDexter() {
-        Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS)
-            .withListener(object : PermissionListener {
-                override fun onPermissionGranted(response: PermissionGrantedResponse) {
-                    if (response.permissionName == Manifest.permission.READ_CONTACTS) {
-                        fetchContacts()
-                    }
-                }
-
-                override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                    Toast.makeText(
-                        activity, "Permission should be granted!", Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permission: PermissionRequest,
-                    token: PermissionToken
-                ) {
-                    token.continuePermissionRequest()
-                }
-            }).check()
-    }
-
-    @SuppressLint("Range")
-    private fun fetchContacts() {
-        val phones = activity?.contentResolver?.query(
-            ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null
-        )
-
-        if (phones != null) {
-            val userModels = ArrayList<UserModel>()
-            while (phones.moveToNext()) {
-                val name =
-                    phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                val phoneNumber =
-                    phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                val contact = UserModel(userModels.size, name, phoneNumber, HARDCODED_IMAGE_URL)
-
-                userModels.add(contact)
-            }
-            parentViewModel.addData(userModels)
-            phones.close()
-        }
+    private fun fetchPhoneContacts() {
+        val fetchContacts = FetchContacts(parentViewModel)
+        fetchContacts.fetchContacts(activity as AppCompatActivity)
     }
 
     //endregion
     private fun enableMultiselectViewState() {
         with(binding) {
-            frameLayoutButtonsContainer?.visibility = View.VISIBLE
-            buttonRemoveSelectedContacts?.visibility = View.VISIBLE
-            textViewMyContactsAddContacts.visibility = View.GONE
-            imageViewMyContactsArrowBack.visibility = View.GONE
-            imageViewMyContactsCancel?.visibility = View.VISIBLE
+            frameLayoutButtonsContainer.visible()
+            buttonRemoveSelectedContacts.visible()
+            textViewMyContactsAddContacts.gone()
+            imageViewMyContactsArrowBack.gone()
+            imageViewMyContactsCancel?.visible()
         }
     }
 
     private fun disableMultiselectViewState() {
         with(binding) {
-            frameLayoutButtonsContainer?.visibility = View.GONE
-            buttonRemoveSelectedContacts?.visibility = View.GONE
-            textViewMyContactsAddContacts.visibility = View.VISIBLE
-            imageViewMyContactsArrowBack.visibility = View.VISIBLE
-            imageViewMyContactsCancel?.visibility = View.GONE
+            frameLayoutButtonsContainer.gone()
+            buttonRemoveSelectedContacts.gone()
+            textViewMyContactsAddContacts.visible()
+            imageViewMyContactsArrowBack.visible()
+            imageViewMyContactsCancel?.gone()
         }
     }
 
@@ -292,11 +248,11 @@ class MyContactsFragment :
         usersAdapter.removeSelectedItems(parentViewModel)
         initRecyclerView()
         if (parentViewModel.userLiveData.value?.isEmpty() == true) {
-            binding.frameLayoutButtonsContainer?.visibility = View.GONE
-            binding.buttonRemoveSelectedContacts?.visibility = View.GONE
-            binding.imageViewMyContactsCancel?.visibility = View.GONE
-            binding.imageViewMyContactsArrowBack.visibility = View.VISIBLE
-            binding.textViewMyContactsAddContacts.visibility = View.VISIBLE
+            binding.frameLayoutButtonsContainer.gone()
+            binding.buttonRemoveSelectedContacts.gone()
+            binding.textViewMyContactsAddContacts.visible()
+            binding.imageViewMyContactsArrowBack.visible()
+            binding.imageViewMyContactsCancel?.gone()
         }
     }
 }

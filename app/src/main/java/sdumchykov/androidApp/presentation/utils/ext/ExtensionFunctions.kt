@@ -1,5 +1,6 @@
 package sdumchykov.androidApp.presentation.utils.ext
 
+import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
@@ -12,4 +13,12 @@ fun AppCompatImageView.setImageCacheless(photo: String?) {
 
 fun AppCompatImageView.setImage(resourceId: Int?) {
     Glide.with(this).load(resourceId).circleCrop().into(this)
+}
+
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
+fun View.visible() {
+    this.visibility = View.VISIBLE
 }

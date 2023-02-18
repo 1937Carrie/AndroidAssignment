@@ -16,9 +16,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val findFragmentById = supportFragmentManager.findFragmentById(R.id.mainActivityNavHostFragment) // це типу Fragment?
-//        val mainActivityNavHostFragment = binding.mainActivityNavHostFragment // це типу FragmentContainerView
-//        TODO чому треба через supportFragmentManager виконувати наступну стрічку, а через binding.mainActivityNavHostFragment не можна (пише "я ніколи не приведу тип")?
+//        TODO Why should I do it with supportFragmentManager but not with binding.mainActivityNavHostFragment?
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.mainActivityNavHostFragment) as NavHostFragment
         navController = navHostFragment.navController
