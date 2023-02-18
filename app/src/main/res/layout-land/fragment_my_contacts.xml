@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/steel_gray"
-    tools:context=".presentation.contacts.MyContactsFragment">
+    tools:context=".presentation.viewPager.contacts.MyContactsFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHorizontalMyContacts003"

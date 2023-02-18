@@ -1,4 +1,4 @@
-package sdumchykov.androidApp.presentation.contacts.adapter.viewHolder
+package sdumchykov.androidApp.presentation.viewPager.contacts.adapter.viewHolder
 
 import android.view.View
 import android.view.ViewGroup
@@ -7,9 +7,8 @@ import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.ContactItemBinding
 import sdumchykov.androidApp.domain.model.UserModel
 import sdumchykov.androidApp.domain.utils.Constants.HARDCODED_IMAGE_URL
-import sdumchykov.androidApp.presentation.contacts.adapter.listener.UsersListener
 import sdumchykov.androidApp.presentation.utils.ext.setImageCacheless
-
+import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.UsersListener
 
 class UsersViewHolder(
     private val binding: ContactItemBinding,
@@ -41,14 +40,18 @@ class UsersViewHolder(
                 textViewMainName.text = user.name
                 textViewMainProfession.text = user.profession
                 imageViewPhoto.setImageCacheless(HARDCODED_IMAGE_URL)
-//                imageViewPhoto.setBackgroundResource(R.mipmap.ic_launcher_custom)
-                if (binding.checkBoxSelectedState.visibility == View.VISIBLE) {
-                    val lp = imageViewPhoto.layoutParams as ViewGroup.MarginLayoutParams
-                    val margin =
-                        (imageViewPhoto.context.resources.getDimension(R.dimen.dimension_8dp) / imageViewPhoto.context.resources.displayMetrics.density).toInt()
-                    lp.setMargins(margin, margin, margin, margin)
-                    imageViewPhoto.layoutParams = lp
 
+                if (binding.checkBoxSelectedState.visibility == View.VISIBLE) {
+                    val marginLayoutParams =
+                        imageViewPhoto.layoutParams as ViewGroup.MarginLayoutParams
+                    val imageViewPhotoResources = imageViewPhoto.context.resources
+                    val margin =
+                        (
+                            imageViewPhotoResources.getDimension(R.dimen.dimension_8dp) /
+                                imageViewPhotoResources.displayMetrics.density
+                            ).toInt()
+                    marginLayoutParams.setMargins(margin, margin, margin, margin)
+                    imageViewPhoto.layoutParams = marginLayoutParams
                 }
             }
             setListeners(user)
@@ -56,32 +59,33 @@ class UsersViewHolder(
     }
 
     private fun setListeners(user: UserModel) {
-        binding.imageButtonDelete.setOnClickListener {
-            usersListener.onTrashIconClickAction(user, adapterPosition)
-        }
+        with(binding) {
+            imageButtonDelete.setOnClickListener {
+                usersListener.onTrashIconClickAction(user, adapterPosition)
+            }
 
-        binding.root.setOnClickListener {
-            if (!multiSelect) {
-//                usersListener.onContactSelected(contact) //TODO what is it?
-                usersListener.onUserClickAction(user, adapterPosition)
-            } else {
-                binding.checkBoxSelectedState.isChecked = !binding.checkBoxSelectedState.isChecked
+            root.setOnClickListener {
+                if (!multiSelect) {
+                    usersListener.onUserClickAction(user, adapterPosition)
+                } else {
+                    checkBoxSelectedState.isChecked = !checkBoxSelectedState.isChecked
+                    selectItem(contact)
+                    usersListener.onContactSelectedStateChanged()
+                }
+            }
+
+            checkBoxSelectedState.setOnClickListener {
                 selectItem(contact)
                 usersListener.onContactSelectedStateChanged()
             }
-        }
 
-        binding.checkBoxSelectedState.setOnClickListener {
-            selectItem(contact)
-            usersListener.onContactSelectedStateChanged()
-        }
-
-        binding.root.setOnLongClickListener {
-            if (!multiSelect) {
-                usersListener.onMultiselectActivated()
-                selectItem(contact)
+            root.setOnLongClickListener {
+                if (!multiSelect) {
+                    usersListener.onMultiselectActivated()
+                    selectItem(contact)
+                }
+                return@setOnLongClickListener true
             }
-            return@setOnLongClickListener true
         }
     }
 

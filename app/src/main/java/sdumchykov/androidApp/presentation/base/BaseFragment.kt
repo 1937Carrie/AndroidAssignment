@@ -36,5 +36,4 @@ abstract class BaseFragment<B : ViewBinding>(
 
     protected open fun setObservers() {}
     protected open fun setListeners() {}
-
 }

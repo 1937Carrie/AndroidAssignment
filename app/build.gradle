@@ -5,6 +5,9 @@ plugins {
     id 'com.google.dagger.hilt.android'
     //Safe args
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-parcelize'
+    //ktlint
+    id "org.jlleitschuh.gradle.ktlint" version "11.0.0"
 }
 
 android {
@@ -43,18 +46,33 @@ android {
         main {
             kotlin {
                 srcDirs += 'build/generated/source/navigation-args'
+                java.srcDirs += 'build/generated/data_binding_base_class_source_out'
             }
         }
     }
 }
 
+tasks.getByPath("preBuild").dependsOn("ktlintFormat")
+
+ktlint {
+    android = true
+    ignoreFailures = false
+    disabledRules = ["max-line-length"]
+    reporters {
+        reporter "plain"
+        reporter "checkstyle"
+        reporter "sarif"
+    }
+}
+
 dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1"
     implementation 'androidx.annotation:annotation:1.5.0'
+//    Viewmodel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.1"
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
@@ -68,7 +86,7 @@ dependencies {
 
 //    Glide
     implementation 'com.github.bumptech.glide:glide:4.14.2'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+//    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 //    Dexter (not Morgan)
     implementation 'com.karumi:dexter:6.0.2'
 //    LeakCanary
@@ -77,11 +95,10 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
     // Navigation graph
-    implementation"androidx.navigation:navigation-fragment-ktx:2.5.3"
-    implementation"androidx.navigation:navigation-ui-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
     //ViewPager2 and Material Design
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation 'com.google.android.material:material:1.8.0'
 }
 
 //Allow references to generated code

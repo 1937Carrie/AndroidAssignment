@@ -1,13 +1,14 @@
-package sdumchykov.androidApp.presentation.contacts.adapter
+package sdumchykov.androidApp.presentation.viewPager.contacts.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import sdumchykov.androidApp.databinding.ContactItemBinding
 import sdumchykov.androidApp.domain.model.UserModel
-import sdumchykov.androidApp.presentation.contacts.adapter.diffCallback.UsersDiffCallback
-import sdumchykov.androidApp.presentation.contacts.adapter.listener.UsersListener
-import sdumchykov.androidApp.presentation.contacts.adapter.viewHolder.UsersViewHolder
+import sdumchykov.androidApp.presentation.viewPager.contacts.MyContactsViewModel
+import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.diffCallback.UsersDiffCallback
+import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.UsersListener
+import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.viewHolder.UsersViewHolder
 
 class UsersAdapter(
     private val usersListener: UsersListener,
@@ -29,7 +30,7 @@ class UsersAdapter(
         holder.bindTo(getItem(position))
     }
 
-    fun selectAllContacts() {
+    fun enableMultiselect() {
         multiSelect = true
     }
 
@@ -41,12 +42,18 @@ class UsersAdapter(
         return false
     }
 
-    fun removeSelectedItems() {
+    fun removeSelectedItems(myContactsViewModel: MyContactsViewModel) {
         for (item in selectedItems) {
             usersListener.onContactRemove(item)
         }
         selectedItems.clear()
-        multiSelect = false
+        if (myContactsViewModel.userLiveData.value?.isEmpty() == true) {
+            multiSelect = false
+        }
     }
 
+    fun unselectItems() {
+        selectedItems.clear()
+        multiSelect = false
+    }
 }

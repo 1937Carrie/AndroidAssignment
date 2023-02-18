@@ -6,7 +6,8 @@ import sdumchykov.androidApp.domain.storage.Storage
 import sdumchykov.androidApp.domain.utils.Constants.SHARED_PREFERENCES_KEY
 import javax.inject.Inject
 
-class SharedPreferencesStorage @Inject constructor(@ApplicationContext private val context: Context) :
+class SharedPreferencesStorage @Inject
+constructor(@ApplicationContext private val context: Context) :
     Storage {
 
     override fun save(_key: String, _value: String) {
@@ -17,14 +18,12 @@ class SharedPreferencesStorage @Inject constructor(@ApplicationContext private v
         prefsEdit.apply()
     }
 
-
     override fun save(_key: String, _value: Int) {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         val prefsEdit = prefs.edit()
         prefsEdit.putInt(_key, _value)
         prefsEdit.apply()
     }
-
 
     override fun save(_key: String, _value: Boolean) {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
@@ -34,7 +33,6 @@ class SharedPreferencesStorage @Inject constructor(@ApplicationContext private v
         prefsEdit.apply()
     }
 
-
     override fun save(_key: String, _value: Long) {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         val prefsEdit = prefs.edit()
@@ -42,7 +40,6 @@ class SharedPreferencesStorage @Inject constructor(@ApplicationContext private v
         prefsEdit.putLong(_key, _value)
         prefsEdit.apply()
     }
-
 
     override fun save(_key: String, _value: Double) {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
@@ -52,7 +49,6 @@ class SharedPreferencesStorage @Inject constructor(@ApplicationContext private v
         prefsEdit.apply()
     }
 
-
     override fun save(_key: String, _value: Float) {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         val prefsEdit = prefs.edit()
@@ -61,36 +57,30 @@ class SharedPreferencesStorage @Inject constructor(@ApplicationContext private v
         prefsEdit.apply()
     }
 
-
     override fun getString(_key: String, default: String): String? {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         return prefs.getString(_key, default)
     }
-
 
     override fun getFloat(_key: String): Float {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         return prefs.getFloat(_key, 0f)
     }
 
-
     override fun getBoolean(_key: String): Boolean {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         return prefs.getBoolean(_key, false)
     }
-
 
     override fun getBoolean(_key: String, _def: Boolean): Boolean {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         return prefs.getBoolean(_key, _def)
     }
 
-
     override fun getInt(_key: String): Int {
         val prefs = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         return prefs.getInt(_key, 0)
     }
-
 
     override fun getInt(_key: String, default: Int): Int {
         val prefs = context.getSharedPreferences(

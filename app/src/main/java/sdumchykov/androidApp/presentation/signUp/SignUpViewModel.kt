@@ -26,5 +26,4 @@ class SignUpViewModel @Inject constructor(
     fun getPassword(): String {
         return storage.getString(Constants.PASSWORD_KEY) ?: ""
     }
-
 }
