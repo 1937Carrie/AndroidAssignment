@@ -89,30 +89,34 @@ class MyContactsFragment :
     }
 
     override fun setObservers() {
+        setUserLiveDataObserver()
+    }
+
+    override fun setListeners() {
+        imageButtonArrowBackListener()
+        multiSelectedItemsTrashCanListener()
+        imageViewMyContactsCancelListener()
+    }
+
+    private fun setUserLiveDataObserver() {
         parentViewModel.userLiveData.observe(this) { users ->
             usersAdapter.submitList(users.toMutableList())
         }
     }
 
-    override fun setListeners() {
-        imageButtonArrowBackSetOnClickListener()
-        multiSelectedItemsTrashCanOnClickListener()
-        imageViewMyContactsCancelSetOnClickListener()
-    }
-
-    private fun imageButtonArrowBackSetOnClickListener() {
+    private fun imageButtonArrowBackListener() {
         binding.imageViewMyContactsArrowBack.setOnClickListener {
             (parentFragment as ViewPagerFragment).viewPager.currentItem = 0
         }
     }
 
-    private fun multiSelectedItemsTrashCanOnClickListener() {
+    private fun multiSelectedItemsTrashCanListener() {
         binding.buttonRemoveSelectedContacts.setOnClickListener {
             removeSelectedItemsFromRecyclerView()
         }
     }
 
-    private fun imageViewMyContactsCancelSetOnClickListener() {
+    private fun imageViewMyContactsCancelListener() {
         binding.imageViewMyContactsCancel?.setOnClickListener {
             usersAdapter.unselectItems()
             usersAdapter.usersListener.onContactSelectedStateChanged()
@@ -122,9 +126,7 @@ class MyContactsFragment :
     private fun initRecyclerView() {
         binding.recyclerViewMyContactsContactList.run {
             adapter = usersAdapter
-            layoutManager = LinearLayoutManager(
-                context, LinearLayoutManager.VERTICAL, false
-            )
+            layoutManager = LinearLayoutManager(context)
         }
     }
 
