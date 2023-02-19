@@ -214,7 +214,9 @@ class MyContactsFragment :
 
     private fun fetchPhoneContacts() {
         val fetchContacts = FetchContacts(parentViewModel)
-        fetchContacts.fetchContacts(activity as AppCompatActivity)
+        fetchContacts.fetchContacts(activity as AppCompatActivity) {
+            viewModel.getRealUsers()
+        }
     }
 
     //endregion

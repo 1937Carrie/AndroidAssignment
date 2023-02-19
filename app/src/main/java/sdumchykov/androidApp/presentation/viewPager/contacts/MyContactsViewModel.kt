@@ -27,6 +27,10 @@ class MyContactsViewModel @Inject constructor(
 
     init {
         initContactList()
+        // 1. Create a live data or flow
+        // 2. Get FETCH_CONTACT_LIST_KEY
+        // 3. Store it in the created live data or flow
+        // 4. observe the live data or collect the flow in your fragments
     }
 
     fun initContactList() {
