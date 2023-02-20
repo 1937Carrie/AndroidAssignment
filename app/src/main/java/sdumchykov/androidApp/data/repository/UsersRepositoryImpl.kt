@@ -17,25 +17,26 @@ class UsersRepositoryImpl @Inject constructor(
     override suspend fun getHardcodedUsers() = inMemoryDb.getHardcodedUsers()
 
     @SuppressLint("Range")
-    override suspend fun getRealUsers() {
+    override suspend fun getRealUsers(): List<UserModel> {
         val phones = context.contentResolver?.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null
         )
+        val realUsersList = ArrayList<UserModel>()
 
         if (phones != null) {
-            val userModels = ArrayList<UserModel>()
             while (phones.moveToNext()) {
                 val name =
                     phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
                 val phoneNumber =
                     phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                 val contact =
-                    UserModel(userModels.size, name, phoneNumber, Constants.HARDCODED_IMAGE_URL)
+                    UserModel(realUsersList.size, name, phoneNumber, Constants.HARDCODED_IMAGE_URL)
 
-                userModels.add(contact)
+                realUsersList.add(contact)
             }
-//            parentViewModel.addData(userModels)
             phones.close()
         }
+
+        return realUsersList
     }
 }

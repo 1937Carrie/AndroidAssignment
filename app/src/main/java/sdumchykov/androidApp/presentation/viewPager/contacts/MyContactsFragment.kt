@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -25,7 +24,6 @@ import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.UsersAdapter
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.UsersListener
-import sdumchykov.androidApp.presentation.viewPager.contacts.fetchContacts.FetchContacts
 
 private const val SNACKBAR_TIME_LENGTH = 5000
 
@@ -85,7 +83,7 @@ class MyContactsFragment :
         initRecyclerView()
         setSwipeToDelete()
         createAddContactDialog()
-        handleRecyclerViewContent()
+//        handleRecyclerViewContent()
     }
 
     override fun setObservers() {
@@ -208,17 +206,6 @@ class MyContactsFragment :
         profession?.text?.clear()
     }
 
-    private fun handleRecyclerViewContent() {
-        if (parentViewModel.getFetchContactList()) fetchPhoneContacts()
-    }
-
-    private fun fetchPhoneContacts() {
-        val fetchContacts = FetchContacts(parentViewModel)
-        fetchContacts.fetchContacts(activity as AppCompatActivity) {
-            viewModel.getRealUsers()
-        }
-    }
-
     //endregion
     private fun enableMultiselectViewState() {
         with(binding) {
@@ -252,11 +239,13 @@ class MyContactsFragment :
         usersAdapter.removeSelectedItems(parentViewModel)
         initRecyclerView()
         if (parentViewModel.userLiveData.value?.isEmpty() == true) {
-            binding.frameLayoutButtonsContainer.gone()
-            binding.buttonRemoveSelectedContacts.gone()
-            binding.textViewMyContactsAddContacts.visible()
-            binding.imageViewMyContactsArrowBack.visible()
-            binding.imageViewMyContactsCancel?.gone()
+            with(binding) {
+                frameLayoutButtonsContainer.gone()
+                buttonRemoveSelectedContacts.gone()
+                textViewMyContactsAddContacts.visible()
+                imageViewMyContactsArrowBack.visible()
+                imageViewMyContactsCancel?.gone()
+            }
         }
     }
 }

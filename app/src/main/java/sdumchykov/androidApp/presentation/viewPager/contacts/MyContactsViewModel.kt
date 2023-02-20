@@ -26,20 +26,22 @@ class MyContactsViewModel @Inject constructor(
 //    val loadEvent = MutableLiveData<Results>()
 
     init {
-        initContactList()
+        if (getFetchContactList()) initRealUsersList() else initHardcodedDataList()
         // 1. Create a live data or flow
         // 2. Get FETCH_CONTACT_LIST_KEY
         // 3. Store it in the created live data or flow
         // 4. observe the live data or collect the flow in your fragments
     }
 
-    fun initContactList() {
+    fun initHardcodedDataList() {
         viewModelScope.launch(Dispatchers.IO) {
-            _userLiveData.postValue(
-                usersRepository.getUsers(
-                    getFetchContactList()
-                )
-            )
+            _userLiveData.postValue(usersRepository.getHardcodedUsers())
+        }
+    }
+
+    fun initRealUsersList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _userLiveData.postValue(usersRepository.getRealUsers())
         }
     }
 
@@ -53,12 +55,6 @@ class MyContactsViewModel @Inject constructor(
 
     fun removeItem(contact: UserModel?) {
         _userLiveData.value = userLiveData.value?.toMutableList()?.apply { remove(contact) }
-    }
-
-    fun addData(userModels: ArrayList<UserModel>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _userLiveData.postValue(userModels)
-        }
     }
 
     fun addNewItem(name: String, profession: String) {
