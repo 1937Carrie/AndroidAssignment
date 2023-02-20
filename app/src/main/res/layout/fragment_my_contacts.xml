@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/steel_gray"
-    tools:context=".presentation.contacts.MyContactsFragment">
+    tools:context=".presentation.viewPager.contacts.MyContactsFragment">
 
     <View
         android:layout_width="match_parent"
@@ -62,6 +62,19 @@
         app:layout_constraintTop_toTopOf="@id/guidelineHorizontalMyContacts003" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewMyContactsCancel"
+        style="@style/widthHeightIsWrapContent"
+        android:padding="@dimen/dimension_8dp"
+
+        android:src="@drawable/ic_cancel"
+        android:visibility="gone"
+
+        app:layout_constraintBottom_toBottomOf="@id/guidelineHorizontalMyContacts008"
+        app:layout_constraintStart_toStartOf="@id/guidelineVerticalMyContacts004"
+        app:layout_constraintTop_toTopOf="@id/guidelineHorizontalMyContacts003" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageViewMyContactsSearch"
         style="@style/widthHeightIsWrapContent"
 
@@ -112,22 +125,23 @@
 
     <FrameLayout
         android:id="@+id/frameLayoutButtonsContainer"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginVertical="36dp"
-        android:layout_marginEnd="@dimen/dimension_16dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/multiSelectedLayoutSize"
 
         android:visibility="gone"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonRemoveSelectedContacts"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/multiDeleteIconSize"
+            android:layout_height="@dimen/multiDeleteIconSize"
+            android:layout_gravity="end"
+            android:layout_marginVertical="@dimen/dimension_16dp"
+
+            android:layout_marginEnd="@dimen/dimension_16dp"
+
             android:background="@drawable/ic_multiple_delete"
-            android:contentDescription="@string/edit_profile"
             android:visibility="gone" />
     </FrameLayout>
 

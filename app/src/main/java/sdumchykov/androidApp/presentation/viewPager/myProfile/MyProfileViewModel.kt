@@ -1,4 +1,4 @@
-package sdumchykov.androidApp.presentation.myProfile
+package sdumchykov.androidApp.presentation.viewPager.myProfile
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

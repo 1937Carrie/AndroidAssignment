@@ -1,4 +1,4 @@
-package sdumchykov.androidApp.presentation.contacts.dialogFragment
+package sdumchykov.androidApp.presentation.viewPager.contacts.dialogFragment
 
 import android.app.Dialog
 import android.os.Bundle

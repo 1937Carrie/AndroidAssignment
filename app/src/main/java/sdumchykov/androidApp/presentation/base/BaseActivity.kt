@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
-//TODO no usages found in all places
-abstract class BaseActivity<VBinding : ViewBinding>(private val inflaterMethod: (LayoutInflater) -> VBinding) :
+abstract class BaseActivity<VBinding : ViewBinding>(
+    private val inflaterMethod: (LayoutInflater) -> VBinding
+) :
     AppCompatActivity() {
 
     private var _binding: VBinding? = null

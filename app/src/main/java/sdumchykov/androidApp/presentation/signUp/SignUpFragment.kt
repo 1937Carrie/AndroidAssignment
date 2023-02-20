@@ -1,6 +1,5 @@
 package sdumchykov.androidApp.presentation.signUp
 
-import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -8,12 +7,11 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentSignUpBinding
-import sdumchykov.androidApp.domain.utils.Constants.EMAIL_KEY
-import sdumchykov.androidApp.domain.utils.Constants.PASSWORD_KEY
 import sdumchykov.androidApp.presentation.base.BaseFragment
 
 private const val MINIMUM_PASSWORD_LENGTH = 8
@@ -22,6 +20,9 @@ private const val PATTERN_CHARACTERS = "[a-zA-Z]+"
 
 @AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate) {
+
+    private val signUpViewModel: SignUpViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,18 +38,21 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
 
         with(binding) {
             buttonRegisterSetOnClickListener(
-                buttonSignUpRegister,
-                editTextSignUpEmail,
-                editTextSignUpPassword
+                buttonSignUpRegister, editTextSignUpEmail, editTextSignUpPassword
             )
         }
     }
 
     private fun letNavigateMyProfileFragment() {
-        val savedEmail =
-            requireActivity().getSharedPreferences("credentials",MODE_PRIVATE).getString(EMAIL_KEY, "").toString()
+        val savedEmail = signUpViewModel.getEmail()
+
         if (savedEmail.isNotEmpty()) {
-            findNavController(binding.root).navigate(SignUpFragmentDirections.actionSignUpFragmentToMainActivity(savedEmail))
+            findNavController(binding.root).navigate(
+                SignUpFragmentDirections.actionSignUpFragmentToMainActivity(
+                    savedEmail
+                )
+            )
+            activity?.finish()
         }
     }
 
@@ -61,7 +65,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             editTextSignUpEmail.doOnTextChanged { _, _, _, _ ->
                 textInputLayoutSignUpEmail.error =
                     if (!Patterns.EMAIL_ADDRESS.matcher(editTextSignUpEmail.text.toString())
-                            .matches()
+                        .matches()
                     ) resources.getString(R.string.error_message_email)
                     else null
 
@@ -80,10 +84,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                     !editTextSignUpPassword.text.toString().contains(Regex(PATTERN_CHARACTERS))
 
                 textInputLayoutSignUpPassword.error =
-                    if (lessThanEightSymbols || notContainsDigits || notContainsCharacters)
-                        resources.getString(R.string.error_message_password)
+                    if (lessThanEightSymbols || notContainsDigits || notContainsCharacters) resources.getString(
+                        R.string.error_message_password
+                    )
                     else null
-
 
                 val emailError = textInputLayoutSignUpEmail.error.isNullOrEmpty()
                 val passwordError = textInputLayoutSignUpPassword.error.isNullOrEmpty()
@@ -100,31 +104,25 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     ) {
         buttonSignUpRegister.setOnClickListener {
             if (binding.checkBoxSignUpRememberMe.isChecked) {
-                val cachedData = requireActivity().getSharedPreferences("credentials",MODE_PRIVATE)
-                val editor = cachedData.edit()
 
-                editor.putString(EMAIL_KEY, editTextSignUpEmail.text.toString())
-                editor.putString(PASSWORD_KEY, editTextSignUpPassword.text.toString())
-
-                editor.apply()
+                signUpViewModel.saveEmail(editTextSignUpEmail.text.toString())
+                signUpViewModel.savePassword(editTextSignUpPassword.text.toString())
 
                 val toast = Toast.makeText(
                     activity?.applicationContext,
-                    "${cachedData.getString(EMAIL_KEY, "Not found")}\n" + "${
-                        cachedData.getString(PASSWORD_KEY, "Not found")
-                    }",
+                    "${signUpViewModel.getEmail()}\n" + signUpViewModel.getPassword(),
                     Toast.LENGTH_LONG
                 )
                 toast.show()
+            } else {
+                signUpViewModel.saveEmail(editTextSignUpEmail.text.toString())
             }
 
-            val action =
-                SignUpFragmentDirections.actionSignUpFragmentToMainActivity(
-                    editTextSignUpEmail.text.toString()
-                )
-//            Navigation.findNavController(binding.root).navigate(action)
+            val action = SignUpFragmentDirections.actionSignUpFragmentToMainActivity(
+                editTextSignUpEmail.text.toString()
+            )
             findNavController(binding.root).navigate(action)
+            activity?.finish()
         }
     }
-
 }

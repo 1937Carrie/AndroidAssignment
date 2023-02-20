@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/steel_gray"
-    tools:context=".presentation.contacts.MyContactsFragment">
+    tools:context=".presentation.viewPager.contacts.MyContactsFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHorizontalMyContacts003"
@@ -99,5 +99,27 @@
         app:layout_constraintTop_toTopOf="@id/guidelineHorizontalMyContactsLand020"
 
         tools:listitem="@layout/contact_item"/>
+
+    <FrameLayout
+        android:id="@+id/frameLayoutButtonsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/multiSelectedLayoutSize"
+
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonRemoveSelectedContacts"
+            android:layout_width="@dimen/multiDeleteIconSize"
+            android:layout_height="@dimen/multiDeleteIconSize"
+            android:layout_gravity="end"
+            android:layout_marginVertical="@dimen/dimension_16dp"
+
+            android:layout_marginEnd="@dimen/dimension_16dp"
+
+            android:background="@drawable/ic_multiple_delete"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

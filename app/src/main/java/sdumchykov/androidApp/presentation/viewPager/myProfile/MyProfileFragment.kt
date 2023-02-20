@@ -1,4 +1,4 @@
-package sdumchykov.androidApp.presentation.myProfile
+package sdumchykov.androidApp.presentation.viewPager.myProfile
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,9 +14,11 @@ import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
 import sdumchykov.androidApp.domain.utils.Constants.EMAIL_KEY
 import sdumchykov.androidApp.presentation.MainActivityArgs
-import sdumchykov.androidApp.presentation.ScreenSlidePagerActivity
 import sdumchykov.androidApp.presentation.base.BaseFragment
+import sdumchykov.androidApp.presentation.signUp.SignUpViewModel
 import sdumchykov.androidApp.presentation.utils.ext.setImage
+import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
+import sdumchykov.androidApp.presentation.viewPager.contacts.fetchContacts.FetchContacts
 
 private const val HARDCODED_IMAGE_PATH = "https://www.instagram.com/p/BDdr32ZrvgP/"
 private const val SIGN_AT = '@'
@@ -27,7 +30,10 @@ private const val SHOW_HARDCODED_LIST = "Show hardcoded contact list data"
 class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate) {
     private val viewModel: MyProfileViewModel by viewModels()
+    private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
     private val args: MainActivityArgs by navArgs()
+    val parentViewModel by lazy { pagerFragment.myContactsViewModel }
+    val signUpViewModel: SignUpViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,6 +41,7 @@ class MyProfileFragment :
         setMainPicture()
         setTextToTextName()
         setURIToImageInstagram()
+        handleRecyclerViewContent() // TODO if remove it here or on :121, then it will not work
     }
 
     override fun setListeners() {
@@ -48,12 +55,12 @@ class MyProfileFragment :
     }
 
     private fun setTextToTextName() {
-        var receivedEmail =
-            requireActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE)
-                .getString(EMAIL_KEY, "")
-                .toString()
+        var receivedEmail = signUpViewModel.getEmail()
 
         if (receivedEmail == "") {
+            /*TODO The problem has occurred, I can't get args.email.
+            Maybe I'm passing an argument to MainActivity but I go directly to ViewPager and
+            don't have access to MainActivity. I did a stub on :89 line for like temporary solution*/
             receivedEmail = args.email
 
             cacheEmailToSharedPreferences()
@@ -68,6 +75,10 @@ class MyProfileFragment :
             textContent
         } else {
             receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
+        }
+
+        if (signUpViewModel.getPassword() == "") {
+            signUpViewModel.saveEmail("")
         }
     }
 
@@ -89,7 +100,7 @@ class MyProfileFragment :
 
     private fun imageViewMainProfilePictureSetOnClickListener() {
         binding.imageViewMainProfilePicture.setOnClickListener {
-            activity?.viewModelStore?.clear()
+//            activity?.viewModelStore.clear()
 
             val fetchContactList = !viewModel.getFetchContactList()
             viewModel.setFetchContactList(fetchContactList)
@@ -97,13 +108,25 @@ class MyProfileFragment :
             val toastText = if (fetchContactList) SHOW_CONTACT_LIST
             else SHOW_HARDCODED_LIST
             Toast.makeText(activity, toastText, Toast.LENGTH_SHORT).show()
+
+            handleRecyclerViewContent()
+            if (!parentViewModel.getFetchContactList()) parentViewModel.initContactList()
         }
+    }
+
+    private fun handleRecyclerViewContent() {
+        if (parentViewModel.getFetchContactList()) getContactsListWithDexter()
+    }
+
+    private fun getContactsListWithDexter() {
+        val fetchContacts = FetchContacts(parentViewModel)
+        fetchContacts.fetchContacts(activity as AppCompatActivity)
     }
 
     private fun buttonViewMyContactsSetOnClickListener() {
         binding.buttonMainViewMyContacts.setOnClickListener {
-            (parentFragment as ScreenSlidePagerActivity).viewPager.currentItem = 1
+            (parentFragment as ViewPagerFragment).viewPager.currentItem =
+                ViewPagerFragment.Tabs.CONTACTS.ordinal
         }
     }
-
 }
