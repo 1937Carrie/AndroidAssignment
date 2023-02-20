@@ -45,7 +45,7 @@ class MyContactsViewModel @Inject constructor(
         }
     }
 
-    internal fun getFetchContactList() = storage.getBoolean(Constants.FETCH_CONTACT_LIST_KEY)
+    private fun getFetchContactList() = storage.getBoolean(Constants.FETCH_CONTACT_LIST_KEY)
 
     fun addItem(contact: UserModel, index: Int) {
         _userLiveData.value = userLiveData.value?.toMutableList()?.apply {

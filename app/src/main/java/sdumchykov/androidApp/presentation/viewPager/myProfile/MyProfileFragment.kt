@@ -1,12 +1,15 @@
 package sdumchykov.androidApp.presentation.viewPager.myProfile
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,22 +35,29 @@ class MyProfileFragment :
     private val viewModel: MyProfileViewModel by viewModels()
     private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
     private val args: MainActivityArgs by navArgs()
-    val parentViewModel by lazy { pagerFragment.myContactsViewModel }
-    val signUpViewModel: SignUpViewModel by viewModels()
+    private val parentViewModel by lazy { pagerFragment.myContactsViewModel }
+    private val signUpViewModel: SignUpViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (!isPermissionsGranted()) viewModel.setFetchContactList(false)
+
         setMainPicture()
         setTextToTextName()
         setURIToImageInstagram()
-        handleRecyclerViewContent() // TODO if remove it here or on :121, then it will not work
     }
 
     override fun setListeners() {
         imageViewMainProfilePictureSetOnClickListener()
         buttonViewMyContactsSetOnClickListener()
     }
+
+    private fun isPermissionsGranted(): Boolean =
+        ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
 
     private fun setMainPicture() {
         val drawableSource = R.drawable.ic_profile_image
@@ -100,27 +110,28 @@ class MyProfileFragment :
 
     private fun imageViewMainProfilePictureSetOnClickListener() {
         binding.imageViewMainProfilePicture.setOnClickListener {
-//            activity?.viewModelStore.clear()
-
             val fetchContactList = !viewModel.getFetchContactList()
             viewModel.setFetchContactList(fetchContactList)
+
+            if (fetchContactList && !isPermissionsGranted()) {
+                grantPermission()
+                if (!isPermissionsGranted()) {
+                    parentViewModel.initHardcodedDataList()
+                    viewModel.setFetchContactList(false)
+                } else {
+                    parentViewModel.initRealUsersList()
+                }
+            } else if (fetchContactList) parentViewModel.initRealUsersList()
+            else parentViewModel.initHardcodedDataList()
 
             val toastText = if (fetchContactList) SHOW_CONTACT_LIST
             else SHOW_HARDCODED_LIST
             Toast.makeText(activity, toastText, Toast.LENGTH_SHORT).show()
-
-            handleRecyclerViewContent()
-            if (!parentViewModel.getFetchContactList()) parentViewModel.initContactList()
         }
     }
 
-    private fun handleRecyclerViewContent() {
-        if (parentViewModel.getFetchContactList()) getContactsListWithDexter()
-    }
-
-    private fun getContactsListWithDexter() {
-        val fetchContacts = FetchContacts(parentViewModel)
-        fetchContacts.fetchContacts(activity as AppCompatActivity)
+    private fun grantPermission() {
+        FetchContacts().fetchContacts(activity as AppCompatActivity)
     }
 
     private fun buttonViewMyContactsSetOnClickListener() {
