@@ -38,26 +38,36 @@ class MyProfileFragment :
     private val parentViewModel by lazy { pagerFragment.myContactsViewModel }
     private val signUpViewModel: SignUpViewModel by viewModels()
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!isPermissionsGranted()) viewModel.setFetchContactList(false)
+        checkPrelaunchPermissions()
 
         setMainPicture()
         setTextToTextName()
         setURIToImageInstagram()
     }
 
+
     override fun setListeners() {
         imageViewMainProfilePictureSetOnClickListener()
         buttonViewMyContactsSetOnClickListener()
     }
 
-    private fun isPermissionsGranted(): Boolean =
-        ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_CONTACTS
-        ) == PackageManager.PERMISSION_GRANTED
+    private fun checkPrelaunchPermissions() {
+        if (!isPermissionsGranted()) {
+            viewModel.setFetchContactList(false)
+            parentViewModel.initHardcodedDataList()
+        } else {
+            if (viewModel.getFetchContactList()) parentViewModel.initRealUsersList()
+            else parentViewModel.initHardcodedDataList()
+        }
+    }
+
+    private fun isPermissionsGranted(): Boolean = ContextCompat.checkSelfPermission(
+        requireContext(), Manifest.permission.READ_CONTACTS
+    ) == PackageManager.PERMISSION_GRANTED
 
     private fun setMainPicture() {
         val drawableSource = R.drawable.ic_profile_image
@@ -115,16 +125,12 @@ class MyProfileFragment :
 
             if (fetchContactList) {
                 if (!isPermissionsGranted()) {
-                    FetchContacts().fetchContacts(
-                        activity as AppCompatActivity,
+                    FetchContacts().fetchContacts(activity as AppCompatActivity,
                         { parentViewModel.initRealUsersList() },
-                        { parentViewModel.initHardcodedDataList() }
-                    )
+                        { parentViewModel.initHardcodedDataList() })
+                    if (!isPermissionsGranted()) viewModel.setFetchContactList(false)
                 } else parentViewModel.initRealUsersList()
 
-                if (!isPermissionsGranted()) {
-                    viewModel.setFetchContactList(false)
-                }
             } else parentViewModel.initHardcodedDataList()
 
             val toastText = if (viewModel.getFetchContactList()) SHOW_CONTACT_LIST

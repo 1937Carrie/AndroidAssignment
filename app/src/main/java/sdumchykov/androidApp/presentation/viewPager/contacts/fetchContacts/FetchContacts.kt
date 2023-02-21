@@ -9,34 +9,32 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import sdumchykov.androidApp.R
 
 class FetchContacts {
 
     fun fetchContacts(
-        activity: Activity,
-        functionOK: () -> Unit,
-        functionNotOK: () -> Unit
+        activity: Activity, onSuccess: () -> Unit, onFailure: () -> Unit
     ) {
         Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse) {
                     if (response.permissionName == Manifest.permission.READ_CONTACTS) {
-                        functionOK
+                        onSuccess
                     }
                 }
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                    functionNotOK
+                    onFailure
                     Toast.makeText(
                         activity,
-                        "Permission should be granted!",
+                        activity.getString(R.string.onDeniedPermission),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    permission: PermissionRequest,
-                    token: PermissionToken
+                    permission: PermissionRequest, token: PermissionToken
                 ) {
                     token.continuePermissionRequest()
                 }

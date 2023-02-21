@@ -1,50 +1,26 @@
 package sdumchykov.androidApp.presentation.viewPager.contacts
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sdumchykov.androidApp.domain.model.UserModel
 import sdumchykov.androidApp.domain.repository.UsersRepository
-import sdumchykov.androidApp.domain.storage.Storage
 import sdumchykov.androidApp.domain.utils.Constants
 import javax.inject.Inject
 
 @HiltViewModel
 class MyContactsViewModel @Inject constructor(
-    private val usersRepository: UsersRepository,
-    private val storage: Storage,
-    @ApplicationContext private val context: Context
+    private val usersRepository: UsersRepository
 ) : ViewModel() {
 
     private val _userLiveData = MutableLiveData<List<UserModel>>(listOf())
     val userLiveData: LiveData<List<UserModel>> = _userLiveData
 
     val selectedEvent = MutableLiveData(false)
-//    val loadEvent = MutableLiveData<Results>()
-
-    init {
-        if (getFetchContactList() && isPermissionGranted()) initRealUsersList() else initHardcodedDataList()
-        // 1. Create a live data or flow
-        // 2. Get FETCH_CONTACT_LIST_KEY
-        // 3. Store it in the created live data or flow
-        // 4. observe the live data or collect the flow in your fragments
-    }
-
-    private fun isPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.READ_CONTACTS
-        ) == PackageManager.PERMISSION_GRANTED
-    }
 
     fun initHardcodedDataList() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -57,8 +33,6 @@ class MyContactsViewModel @Inject constructor(
             _userLiveData.postValue(usersRepository.getRealUsers())
         }
     }
-
-    private fun getFetchContactList() = storage.getBoolean(Constants.FETCH_CONTACT_LIST_KEY)
 
     fun addItem(contact: UserModel, index: Int) {
         _userLiveData.value = userLiveData.value?.toMutableList()?.apply {

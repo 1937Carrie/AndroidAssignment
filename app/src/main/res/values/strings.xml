@@ -44,4 +44,5 @@
     <!-- ViewPager -->
     <string name="tab1">My Profile</string>
     <string name="tab2">My contacts</string>
+    <string name="onDeniedPermission">Permission should be granted!</string>
 </resources>

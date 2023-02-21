@@ -1,6 +1,5 @@
 package sdumchykov.androidApp.data.repository
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.ContactsContract
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,7 +15,6 @@ class UsersRepositoryImpl @Inject constructor(
 ) : UsersRepository {
     override suspend fun getHardcodedUsers() = inMemoryDb.getHardcodedUsers()
 
-    @SuppressLint("Range")
     override suspend fun getRealUsers(): List<UserModel> {
         val phones = context.contentResolver?.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null
@@ -25,10 +23,14 @@ class UsersRepositoryImpl @Inject constructor(
 
         if (phones != null) {
             while (phones.moveToNext()) {
-                val name =
-                    phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-                val phoneNumber =
-                    phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val nameIndex =
+                    phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+                val name = if (nameIndex != -1) phones.getString(nameIndex) else "Stub"
+
+                val phoneIndex =
+                    phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                val phoneNumber = if (phoneIndex != -1) phones.getString(phoneIndex) else "Stub"
+
                 val contact =
                     UserModel(realUsersList.size, name, phoneNumber, Constants.HARDCODED_IMAGE_URL)
 
