@@ -1,10 +1,15 @@
 package sdumchykov.androidApp.presentation.viewPager.contacts
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sdumchykov.androidApp.domain.model.UserModel
@@ -16,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MyContactsViewModel @Inject constructor(
     private val usersRepository: UsersRepository,
-    private val storage: Storage
+    private val storage: Storage,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _userLiveData = MutableLiveData<List<UserModel>>(listOf())
@@ -26,11 +32,18 @@ class MyContactsViewModel @Inject constructor(
 //    val loadEvent = MutableLiveData<Results>()
 
     init {
-        if (getFetchContactList()) initRealUsersList() else initHardcodedDataList()
+        if (getFetchContactList() && isPermissionGranted()) initRealUsersList() else initHardcodedDataList()
         // 1. Create a live data or flow
         // 2. Get FETCH_CONTACT_LIST_KEY
         // 3. Store it in the created live data or flow
         // 4. observe the live data or collect the flow in your fragments
+    }
+
+    private fun isPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     fun initHardcodedDataList() {

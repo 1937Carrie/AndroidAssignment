@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,7 +54,7 @@ class MyProfileFragment :
     }
 
     private fun isPermissionsGranted(): Boolean =
-        ActivityCompat.checkSelfPermission(
+        ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.READ_CONTACTS
         ) == PackageManager.PERMISSION_GRANTED
@@ -113,25 +113,24 @@ class MyProfileFragment :
             val fetchContactList = !viewModel.getFetchContactList()
             viewModel.setFetchContactList(fetchContactList)
 
-            if (fetchContactList && !isPermissionsGranted()) {
-                grantPermission()
+            if (fetchContactList) {
                 if (!isPermissionsGranted()) {
-                    parentViewModel.initHardcodedDataList()
-                    viewModel.setFetchContactList(false)
-                } else {
-                    parentViewModel.initRealUsersList()
-                }
-            } else if (fetchContactList) parentViewModel.initRealUsersList()
-            else parentViewModel.initHardcodedDataList()
+                    FetchContacts().fetchContacts(
+                        activity as AppCompatActivity,
+                        { parentViewModel.initRealUsersList() },
+                        { parentViewModel.initHardcodedDataList() }
+                    )
+                } else parentViewModel.initRealUsersList()
 
-            val toastText = if (fetchContactList) SHOW_CONTACT_LIST
+                if (!isPermissionsGranted()) {
+                    viewModel.setFetchContactList(false)
+                }
+            } else parentViewModel.initHardcodedDataList()
+
+            val toastText = if (viewModel.getFetchContactList()) SHOW_CONTACT_LIST
             else SHOW_HARDCODED_LIST
             Toast.makeText(activity, toastText, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun grantPermission() {
-        FetchContacts().fetchContacts(activity as AppCompatActivity)
     }
 
     private fun buttonViewMyContactsSetOnClickListener() {

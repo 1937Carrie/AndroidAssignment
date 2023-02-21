@@ -12,18 +12,25 @@ import com.karumi.dexter.listener.single.PermissionListener
 
 class FetchContacts {
 
-    fun fetchContacts(activity: Activity) {
+    fun fetchContacts(
+        activity: Activity,
+        functionOK: () -> Unit,
+        functionNotOK: () -> Unit
+    ) {
         Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse) {
-//                    if (response.permissionName == Manifest.permission.READ_CONTACTS) {
-//                        onSuccess()
-//                    }
+                    if (response.permissionName == Manifest.permission.READ_CONTACTS) {
+                        functionOK
+                    }
                 }
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                    functionNotOK
                     Toast.makeText(
-                        activity, "Permission should be granted!", Toast.LENGTH_SHORT
+                        activity,
+                        "Permission should be granted!",
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
 
