@@ -62,7 +62,6 @@ class ViewPagerFragment :
     }
 
     enum class Tabs {
-        MYPROFILE,
-        CONTACTS
+        MYPROFILE, CONTACTS
     }
 }

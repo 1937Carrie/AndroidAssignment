@@ -9,37 +9,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import sdumchykov.androidApp.domain.model.UserModel
 import sdumchykov.androidApp.domain.repository.UsersRepository
-import sdumchykov.androidApp.domain.storage.Storage
 import sdumchykov.androidApp.domain.utils.Constants
 import javax.inject.Inject
 
 @HiltViewModel
 class MyContactsViewModel @Inject constructor(
-    private val usersRepository: UsersRepository,
-    private val storage: Storage
+    private val usersRepository: UsersRepository
 ) : ViewModel() {
 
     private val _userLiveData = MutableLiveData<List<UserModel>>(listOf())
     val userLiveData: LiveData<List<UserModel>> = _userLiveData
 
     val selectedEvent = MutableLiveData(false)
-//    val loadEvent = MutableLiveData<Results>()
 
-    init {
-        initContactList()
-    }
-
-    fun initContactList() {
+    fun initHardcodedDataList() {
         viewModelScope.launch(Dispatchers.IO) {
-            _userLiveData.postValue(
-                usersRepository.getUsers(
-                    getFetchContactList()
-                )
-            )
+            _userLiveData.postValue(usersRepository.getHardcodedUsers())
         }
     }
 
-    internal fun getFetchContactList() = storage.getBoolean(Constants.FETCH_CONTACT_LIST_KEY)
+    fun initRealUsersList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _userLiveData.postValue(usersRepository.getRealUsers())
+        }
+    }
 
     fun addItem(contact: UserModel, index: Int) {
         _userLiveData.value = userLiveData.value?.toMutableList()?.apply {
@@ -49,12 +42,6 @@ class MyContactsViewModel @Inject constructor(
 
     fun removeItem(contact: UserModel?) {
         _userLiveData.value = userLiveData.value?.toMutableList()?.apply { remove(contact) }
-    }
-
-    fun addData(userModels: ArrayList<UserModel>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _userLiveData.postValue(userModels)
-        }
     }
 
     fun addNewItem(name: String, profession: String) {

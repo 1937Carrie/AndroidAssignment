@@ -1,12 +1,15 @@
 package sdumchykov.androidApp.presentation.viewPager.myProfile
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,22 +35,39 @@ class MyProfileFragment :
     private val viewModel: MyProfileViewModel by viewModels()
     private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
     private val args: MainActivityArgs by navArgs()
-    val parentViewModel by lazy { pagerFragment.myContactsViewModel }
-    val signUpViewModel: SignUpViewModel by viewModels()
+    private val parentViewModel by lazy { pagerFragment.myContactsViewModel }
+    private val signUpViewModel: SignUpViewModel by viewModels()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkPrelaunchPermissions()
+
         setMainPicture()
         setTextToTextName()
         setURIToImageInstagram()
-        handleRecyclerViewContent() // TODO if remove it here or on :121, then it will not work
     }
+
 
     override fun setListeners() {
         imageViewMainProfilePictureSetOnClickListener()
         buttonViewMyContactsSetOnClickListener()
     }
+
+    private fun checkPrelaunchPermissions() {
+        if (!isPermissionsGranted()) {
+            viewModel.setFetchContactList(false)
+            parentViewModel.initHardcodedDataList()
+        } else {
+            if (viewModel.getFetchContactList()) parentViewModel.initRealUsersList()
+            else parentViewModel.initHardcodedDataList()
+        }
+    }
+
+    private fun isPermissionsGranted(): Boolean = ContextCompat.checkSelfPermission(
+        requireContext(), Manifest.permission.READ_CONTACTS
+    ) == PackageManager.PERMISSION_GRANTED
 
     private fun setMainPicture() {
         val drawableSource = R.drawable.ic_profile_image
@@ -100,27 +120,23 @@ class MyProfileFragment :
 
     private fun imageViewMainProfilePictureSetOnClickListener() {
         binding.imageViewMainProfilePicture.setOnClickListener {
-//            activity?.viewModelStore.clear()
-
             val fetchContactList = !viewModel.getFetchContactList()
             viewModel.setFetchContactList(fetchContactList)
 
-            val toastText = if (fetchContactList) SHOW_CONTACT_LIST
+            if (fetchContactList) {
+                if (!isPermissionsGranted()) {
+                    FetchContacts().fetchContacts(activity as AppCompatActivity,
+                        { parentViewModel.initRealUsersList() },
+                        { parentViewModel.initHardcodedDataList() })
+                    if (!isPermissionsGranted()) viewModel.setFetchContactList(false)
+                } else parentViewModel.initRealUsersList()
+
+            } else parentViewModel.initHardcodedDataList()
+
+            val toastText = if (viewModel.getFetchContactList()) SHOW_CONTACT_LIST
             else SHOW_HARDCODED_LIST
             Toast.makeText(activity, toastText, Toast.LENGTH_SHORT).show()
-
-            handleRecyclerViewContent()
-            if (!parentViewModel.getFetchContactList()) parentViewModel.initContactList()
         }
-    }
-
-    private fun handleRecyclerViewContent() {
-        if (parentViewModel.getFetchContactList()) getContactsListWithDexter()
-    }
-
-    private fun getContactsListWithDexter() {
-        val fetchContacts = FetchContacts(parentViewModel)
-        fetchContacts.fetchContacts(activity as AppCompatActivity)
     }
 
     private fun buttonViewMyContactsSetOnClickListener() {
