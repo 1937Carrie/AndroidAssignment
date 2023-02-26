@@ -1,7 +1,7 @@
 <resources>
     <!--  App name  -->
     <string name="app_name">Detail view</string>
-    <!--  Main activity  -->
+    <!--  My profile  -->
     <string name="settings">Налаштування</string>
     <string name="profile_image">Зображення профілю</string>
     <string name="name">Людмила Альвараденко</string>
@@ -9,9 +9,18 @@
     <string name="address">Соборна 22</string>
     <string name="edit_profile">Редагувати профіль</string>
     <string name="view_my_contacts">Переглянути контакти</string>
+    <!-- Edit profile -->
+    <string name="editProfileEditProfile">Edit profile</string>
     <!-- Main activity service strings  -->
     <string name="error_message_email">Введіть валідний email</string>
     <string name="error_message_password">Мінімум 8 символів. Букви і літери обов\'язково</string>
+    <!--  Log In fragment  -->
+    <string name="hello">Привіт!</string>
+    <string name="enterEmail">Enter your email and password below</string>
+    <string name="forgotPassword">Forgot your password?</string>
+    <string name="signUp">Sign up</string>
+    <string name="dontHaveAccount">Don\'t have account?</string>
+    <string name="login">Login</string>
     <!--  Sign up activity  -->
     <string name="let_s_get_a">Хто будеш?</string>
     <string name="fill_out_the_profile">Заповніть профіль і переходьте до додатку!</string>
@@ -24,6 +33,12 @@
     <string name="by_clicking">Натиснувши «Реєстрація», ви погоджуєтеся з нашими умовами</string>
     <string name="already_have">Вже є аккаунт?</string>
     <string name="sign_in">Увійти</string>
+    <!--  Sign Up Extended-->
+    <string name="yourProfileData">Your profile data</string>
+    <string name="userName">User name</string>
+    <string name="mobilePhone">Mobile phone</string>
+    <string name="cancel">Cancel</string>
+    <string name="forward">Forward</string>
     <!--  RecyclerView  -->
     <string name="contactHasBeenDeleted">%1$s був видалений</string>
     <string name="contactHasBeenRestored">%1$s був відновлений</string>

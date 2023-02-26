@@ -70,7 +70,7 @@ class MyProfileFragment :
     ) == PackageManager.PERMISSION_GRANTED
 
     private fun setMainPicture() {
-        val drawableSource = R.drawable.ic_profile_image
+        val drawableSource = R.drawable.ic_profile_image_girl
         binding.imageViewMainProfilePicture.setImage(drawableSource)
     }
 

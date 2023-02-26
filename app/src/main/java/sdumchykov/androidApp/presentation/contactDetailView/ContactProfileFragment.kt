@@ -30,7 +30,7 @@ class ContactProfileFragment :
             textViewName.text = user.name
             textViewProfession.text = user.profession
 
-            val drawable = R.drawable.ic_profile_image
+            val drawable = R.drawable.ic_profile_image_girl
             imageViewPicture.setImage(drawable)
         }
     }
