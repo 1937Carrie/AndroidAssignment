@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/steel_gray"
-    tools:context=".presentation.SignUpExtendedFragment">
+    tools:context=".presentation.signUpExtended.SignUpExtendedFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHorizontalSignUpExtended015"
@@ -101,6 +101,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
+            android:textColor="@color/silver"
+
             android:background="@android:color/transparent"
 
             android:inputType="textPersonName" />
@@ -123,6 +125,8 @@
             android:id="@+id/textInputEditTextSignUpExtendedMobilePhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:textColor="@color/silver"
 
             android:background="@android:color/transparent"
             android:inputType="phone" />

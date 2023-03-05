@@ -20,12 +20,12 @@ class FetchContacts {
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse) {
                     if (response.permissionName == Manifest.permission.READ_CONTACTS) {
-                        onSuccess
+                        onSuccess()
                     }
                 }
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                    onFailure
+                    onFailure()
                     Toast.makeText(
                         activity,
                         activity.getString(R.string.onDeniedPermission),

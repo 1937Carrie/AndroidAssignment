@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import sdumchykov.androidApp.databinding.ContactItemBinding
-import sdumchykov.androidApp.domain.model.UserModel
-import sdumchykov.androidApp.presentation.viewPager.contacts.MyContactsViewModel
+import sdumchykov.androidApp.domain.model.User
+import sdumchykov.androidApp.presentation.viewPager.contacts.ContactsViewModel
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.diffCallback.UsersDiffCallback
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.UsersListener
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.viewHolder.UsersViewHolder
@@ -13,9 +13,9 @@ import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.viewHolder.
 class UsersAdapter(
     val usersListener: UsersListener,
     private var multiSelect: Boolean = false
-) : ListAdapter<UserModel, UsersViewHolder>(UsersDiffCallback()) {
+) : ListAdapter<User, UsersViewHolder>(UsersDiffCallback()) {
 
-    private val selectedItems = arrayListOf<UserModel>()
+    private val selectedItems = arrayListOf<User>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
         return UsersViewHolder(
@@ -42,18 +42,25 @@ class UsersAdapter(
         return false
     }
 
-    fun removeSelectedItems(myContactsViewModel: MyContactsViewModel) {
+    fun removeSelectedItems(contactsViewModel: ContactsViewModel, fetchContactList: Boolean) {
         for (item in selectedItems) {
             usersListener.onContactRemove(item)
         }
-        selectedItems.clear()
-        if (myContactsViewModel.userLiveData.value?.isEmpty() == true) {
-            multiSelect = false
+
+        if (!fetchContactList) {
+            for (item in selectedItems) {
+                contactsViewModel.apiDeleteContact(item.id)
+            }
         }
+
+        selectedItems.clear()
+
+        if (contactsViewModel.userLiveData.value?.isEmpty() == true) multiSelect = false
     }
 
     fun unselectItems() {
         selectedItems.clear()
         multiSelect = false
     }
+
 }

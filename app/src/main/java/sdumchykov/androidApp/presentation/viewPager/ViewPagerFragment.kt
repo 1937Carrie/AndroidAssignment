@@ -11,8 +11,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentViewPagerBinding
 import sdumchykov.androidApp.presentation.base.BaseFragment
+import sdumchykov.androidApp.presentation.viewPager.contacts.ContactsViewModel
 import sdumchykov.androidApp.presentation.viewPager.contacts.MyContactsFragment
-import sdumchykov.androidApp.presentation.viewPager.contacts.MyContactsViewModel
 import sdumchykov.androidApp.presentation.viewPager.myProfile.MyProfileFragment
 
 @AndroidEntryPoint
@@ -21,7 +21,7 @@ class ViewPagerFragment :
 
     private lateinit var viewPagerAdapter: ViewPagerAdapter
     lateinit var viewPager: ViewPager2
-    val myContactsViewModel: MyContactsViewModel by viewModels()
+    val contactsViewModel: ContactsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewPager = binding.pager
@@ -33,7 +33,7 @@ class ViewPagerFragment :
         viewPager.adapter = viewPagerAdapter
         viewPager.currentItem = Tabs.MYPROFILE.ordinal
 
-        myContactsViewModel.userLiveData.observe(viewLifecycleOwner) {
+        contactsViewModel.userLiveData.observe(viewLifecycleOwner) {
             TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
                 when (position) {
                     Tabs.MYPROFILE.ordinal -> {

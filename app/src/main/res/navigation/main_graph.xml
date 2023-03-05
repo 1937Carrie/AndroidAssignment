@@ -15,8 +15,8 @@
             app:popUpTo="@id/viewPagerFragment"
             app:popUpToInclusive="true" />
         <argument
-            android:name="userModel"
-            app:argType="sdumchykov.androidApp.domain.model.UserModel" />
+            android:name="user"
+            app:argType="sdumchykov.androidApp.domain.model.User" />
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"
@@ -25,5 +25,29 @@
         <action
             android:id="@+id/action_viewPagerFragment_to_contactProfileFragment"
             app:destination="@id/contactProfileFragment" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_addContactFragment"
+            app:destination="@id/addContactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="sdumchykov.androidApp.presentation.editProfile.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile">
+        <action
+            android:id="@+id/action_editProfileFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addContactFragment"
+        android:name="sdumchykov.androidApp.presentation.viewPager.addContacts.AddContactFragment"
+        android:label="fragment_add_contact"
+        tools:layout="@layout/fragment_add_contact">
+        <action
+            android:id="@+id/action_addContactFragment_to_viewPagerFragment"
+            app:destination="@id/viewPagerFragment" />
     </fragment>
 </navigation>

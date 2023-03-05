@@ -3,9 +3,6 @@ package sdumchykov.androidApp.presentation.signUp
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
-import android.widget.Button
-import android.widget.Toast
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
@@ -21,43 +18,24 @@ private const val PATTERN_CHARACTERS = "[a-zA-Z]+"
 @AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate) {
 
-    private val signUpViewModel: SignUpViewModel by viewModels()
+    private val credentialsViewModel: CredentialsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(binding) {
-            letNavigateMyProfileFragment()
-            buttonRegisterDisable(buttonSignUpRegister)
-            textInputDoOnTextChanged()
-        }
+        buttonRegisterDisable()
+        textInputDoOnTextChanged()
     }
 
     override fun setListeners() {
         super.setListeners()
 
-        with(binding) {
-            buttonRegisterSetOnClickListener(
-                buttonSignUpRegister, editTextSignUpEmail, editTextSignUpPassword
-            )
-        }
+        buttonRegisterSetListener()
+        signInSetListener()
     }
 
-    private fun letNavigateMyProfileFragment() {
-        val savedEmail = signUpViewModel.getEmail()
-
-        if (savedEmail.isNotEmpty()) {
-            findNavController(binding.root).navigate(
-                SignUpFragmentDirections.actionSignUpFragmentToMainActivity(
-                    savedEmail
-                )
-            )
-            activity?.finish()
-        }
-    }
-
-    private fun buttonRegisterDisable(buttonSignUpRegister: Button) {
-        buttonSignUpRegister.isEnabled = false
+    private fun buttonRegisterDisable() {
+        binding.buttonSignUpRegister.isEnabled = false
     }
 
     private fun textInputDoOnTextChanged() {
@@ -65,7 +43,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             editTextSignUpEmail.doOnTextChanged { _, _, _, _ ->
                 textInputLayoutSignUpEmail.error =
                     if (!Patterns.EMAIL_ADDRESS.matcher(editTextSignUpEmail.text.toString())
-                        .matches()
+                            .matches()
                     ) resources.getString(R.string.error_message_email)
                     else null
 
@@ -97,32 +75,22 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         }
     }
 
-    private fun buttonRegisterSetOnClickListener(
-        buttonSignUpRegister: Button,
-        editTextSignUpEmail: AppCompatEditText,
-        editTextSignUpPassword: AppCompatEditText
-    ) {
-        buttonSignUpRegister.setOnClickListener {
-            if (binding.checkBoxSignUpRememberMe.isChecked) {
+    private fun buttonRegisterSetListener() {
+        binding.buttonSignUpRegister.setOnClickListener {
+            val email = binding.textInputLayoutSignUpEmail.editText?.text.toString()
+            val password = binding.textInputLayoutSignUpPassword.editText?.text.toString()
 
-                signUpViewModel.saveEmail(editTextSignUpEmail.text.toString())
-                signUpViewModel.savePassword(editTextSignUpPassword.text.toString())
+            credentialsViewModel.register(email, password)
 
-                val toast = Toast.makeText(
-                    activity?.applicationContext,
-                    "${signUpViewModel.getEmail()}\n" + signUpViewModel.getPassword(),
-                    Toast.LENGTH_LONG
-                )
-                toast.show()
-            } else {
-                signUpViewModel.saveEmail(editTextSignUpEmail.text.toString())
-            }
-
-            val action = SignUpFragmentDirections.actionSignUpFragmentToMainActivity(
-                editTextSignUpEmail.text.toString()
-            )
+            val action = SignUpFragmentDirections.actionSignUpFragmentToSignUpExtendedFragment()
             findNavController(binding.root).navigate(action)
-            activity?.finish()
+        }
+    }
+
+    private fun signInSetListener() {
+        binding.textViewSignUpSignIn.setOnClickListener {
+            val action = SignUpFragmentDirections.actionSignUpFragmentToLogInFragment()
+            findNavController(binding.root).navigate(action)
         }
     }
 }

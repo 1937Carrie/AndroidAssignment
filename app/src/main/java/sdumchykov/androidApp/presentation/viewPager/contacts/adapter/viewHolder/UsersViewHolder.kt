@@ -5,8 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.ContactItemBinding
-import sdumchykov.androidApp.domain.model.UserModel
-import sdumchykov.androidApp.domain.utils.Constants.HARDCODED_IMAGE_URL
+import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.presentation.utils.ext.setImageCacheless
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.UsersListener
 
@@ -14,13 +13,11 @@ class UsersViewHolder(
     private val binding: ContactItemBinding,
     private val usersListener: UsersListener,
     private val multiSelect: Boolean,
-    private val selectedItems: ArrayList<UserModel>
-
+    private val selectedItems: ArrayList<User>
 ) : RecyclerView.ViewHolder(binding.root) {
+    private lateinit var contact: User
 
-    private lateinit var contact: UserModel
-
-    fun bindTo(user: UserModel) {
+    fun bindTo(user: User) {
         contact = user
 
         contact.apply {
@@ -38,8 +35,8 @@ class UsersViewHolder(
                 }
 
                 textViewMainName.text = user.name
-                textViewMainProfession.text = user.profession
-                imageViewPhoto.setImageCacheless(HARDCODED_IMAGE_URL)
+                textViewMainProfession.text = user.career
+                imageViewPhoto.setImageCacheless(user.image)
 
                 if (binding.checkBoxSelectedState.visibility == View.VISIBLE) {
                     val marginLayoutParams =
@@ -47,9 +44,9 @@ class UsersViewHolder(
                     val imageViewPhotoResources = imageViewPhoto.context.resources
                     val margin =
                         (
-                            imageViewPhotoResources.getDimension(R.dimen.dimension_8dp) /
-                                imageViewPhotoResources.displayMetrics.density
-                            ).toInt()
+                                imageViewPhotoResources.getDimension(R.dimen.dimension_8dp) /
+                                        imageViewPhotoResources.displayMetrics.density
+                                ).toInt()
                     marginLayoutParams.setMargins(margin, margin, margin, margin)
                     imageViewPhoto.layoutParams = marginLayoutParams
                 }
@@ -58,10 +55,10 @@ class UsersViewHolder(
         }
     }
 
-    private fun setListeners(user: UserModel) {
+    private fun setListeners(user: User) {
         with(binding) {
             imageButtonDelete.setOnClickListener {
-                usersListener.onTrashIconClickAction(user, adapterPosition)
+                usersListener.onContactRemove(user)
             }
 
             root.setOnClickListener {
@@ -90,12 +87,12 @@ class UsersViewHolder(
     }
 
     // helper function that adds/removes an item to the list depending on the app's state
-    private fun selectItem(userModel: UserModel) {
-        if (selectedItems.contains(userModel)) {
-            selectedItems.remove(userModel)
+    private fun selectItem(user: User) {
+        if (selectedItems.contains(user)) {
+            selectedItems.remove(user)
             binding.checkBoxSelectedState.isChecked = false
         } else {
-            selectedItems.add(userModel)
+            selectedItems.add(user)
             binding.checkBoxSelectedState.isChecked = true
         }
     }

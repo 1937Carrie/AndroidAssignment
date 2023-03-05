@@ -1,8 +1,8 @@
 package sdumchykov.androidApp.domain.repository
 
-import sdumchykov.androidApp.domain.model.UserModel
+import sdumchykov.androidApp.domain.model.User
 
 interface UsersRepository {
-    suspend fun getHardcodedUsers(): List<UserModel>
-    suspend fun getRealUsers(): List<UserModel>
+    suspend fun getHardcodedUsers(): List<User>
+    suspend fun getRealUsers(): List<User>
 }

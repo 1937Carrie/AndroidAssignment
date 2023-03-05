@@ -1,7 +1,6 @@
 package sdumchykov.androidApp.presentation.viewPager.myProfile
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,16 +10,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.Navigation
+import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
-import sdumchykov.androidApp.domain.utils.Constants.EMAIL_KEY
-import sdumchykov.androidApp.presentation.MainActivityArgs
+import sdumchykov.androidApp.domain.local.AppDatabase
+import sdumchykov.androidApp.domain.local.User
 import sdumchykov.androidApp.presentation.base.BaseFragment
-import sdumchykov.androidApp.presentation.signUp.SignUpViewModel
 import sdumchykov.androidApp.presentation.utils.ext.setImage
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
+import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
 import sdumchykov.androidApp.presentation.viewPager.contacts.fetchContacts.FetchContacts
 
 private const val HARDCODED_IMAGE_PATH = "https://www.instagram.com/p/BDdr32ZrvgP/"
@@ -32,42 +32,67 @@ private const val SHOW_HARDCODED_LIST = "Show hardcoded contact list data"
 @AndroidEntryPoint
 class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate) {
-    private val viewModel: MyProfileViewModel by viewModels()
-    private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
-    private val args: MainActivityArgs by navArgs()
-    private val parentViewModel by lazy { pagerFragment.myContactsViewModel }
-    private val signUpViewModel: SignUpViewModel by viewModels()
+    private lateinit var credentials: User
 
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
+    private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
+    private val parentViewModel by lazy { pagerFragment.contactsViewModel }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        lifecycleScope.launch {
+        suspendFun()
+//        }
+
+//        myProfileViewModel.getCred()
+//        credentials = myProfileViewModel.userLiveData.value!!
         checkPrelaunchPermissions()
 
         setMainPicture()
         setTextToTextName()
         setURIToImageInstagram()
+//        getUsers()
     }
 
 
     override fun setListeners() {
         imageViewMainProfilePictureSetOnClickListener()
+        editProfileSetListener()
         buttonViewMyContactsSetOnClickListener()
     }
 
-    private fun checkPrelaunchPermissions() {
-        if (!isPermissionsGranted()) {
-            viewModel.setFetchContactList(false)
-            parentViewModel.initHardcodedDataList()
-        } else {
-            if (viewModel.getFetchContactList()) parentViewModel.initRealUsersList()
-            else parentViewModel.initHardcodedDataList()
+    override fun setObservers() {
+        myProfileViewModel.userLiveData.observe(this) {
+            credentials = it
         }
+    }
+
+    private fun checkPrelaunchPermissions() {
+        if (parentViewModel.userLiveData.value?.isEmpty() == true)
+            if (!isPermissionsGranted()) {
+                myProfileViewModel.setFetchContactList(false)
+                parentViewModel.apiGetUserContacts()
+            } else {
+                if (myProfileViewModel.getFetchContactList()) parentViewModel.initRealUsersList()
+                else parentViewModel.apiGetUserContacts()
+            }
     }
 
     private fun isPermissionsGranted(): Boolean = ContextCompat.checkSelfPermission(
         requireContext(), Manifest.permission.READ_CONTACTS
     ) == PackageManager.PERMISSION_GRANTED
+
+    private fun suspendFun() {
+//        lifecycleScope.launch {
+        val db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "database-name"
+        ).allowMainThreadQueries().build()
+        val userDao = db.userDao()
+        credentials = userDao.getAll()[0]
+//        }
+    }
 
     private fun setMainPicture() {
         val drawableSource = R.drawable.ic_profile_image_girl
@@ -75,16 +100,9 @@ class MyProfileFragment :
     }
 
     private fun setTextToTextName() {
-        var receivedEmail = signUpViewModel.getEmail()
+//        var receivedEmail = credentialsViewModel.credentialsLiveData.value?.email ?: ""
 
-        if (receivedEmail == "") {
-            /*TODO The problem has occurred, I can't get args.email.
-            Maybe I'm passing an argument to MainActivity but I go directly to ViewPager and
-            don't have access to MainActivity. I did a stub on :89 line for like temporary solution*/
-            receivedEmail = args.email
-
-            cacheEmailToSharedPreferences()
-        }
+        val receivedEmail = credentials.email ?: ""
 
         val splittedEmail = receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
             .split(Regex(PATTERN_NON_CHARACTER))
@@ -97,19 +115,9 @@ class MyProfileFragment :
             receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
         }
 
-        if (signUpViewModel.getPassword() == "") {
-            signUpViewModel.saveEmail("")
-        }
-    }
-
-    private fun cacheEmailToSharedPreferences() {
-        val cachedData =
-            this.requireActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE)
-        val editor = cachedData.edit()
-
-        editor.putString(EMAIL_KEY, args.email)
-
-        editor.apply()
+//        if (signUpViewModel.getPassword() == "") {
+//            signUpViewModel.saveEmail("")
+//        }
     }
 
     private fun setURIToImageInstagram() {
@@ -120,22 +128,31 @@ class MyProfileFragment :
 
     private fun imageViewMainProfilePictureSetOnClickListener() {
         binding.imageViewMainProfilePicture.setOnClickListener {
-            val fetchContactList = !viewModel.getFetchContactList()
-            viewModel.setFetchContactList(fetchContactList)
+            val fetchContactList = !myProfileViewModel.getFetchContactList()
+            myProfileViewModel.setFetchContactList(fetchContactList)
 
             if (fetchContactList) {
                 if (!isPermissionsGranted()) {
                     FetchContacts().fetchContacts(activity as AppCompatActivity,
                         { parentViewModel.initRealUsersList() },
-                        { parentViewModel.initHardcodedDataList() })
-                    if (!isPermissionsGranted()) viewModel.setFetchContactList(false)
+                        {
+                            parentViewModel.apiGetUserContacts()
+                        })
+                    if (!isPermissionsGranted()) myProfileViewModel.setFetchContactList(false)
                 } else parentViewModel.initRealUsersList()
 
-            } else parentViewModel.initHardcodedDataList()
+            } else parentViewModel.apiGetUserContacts()
 
-            val toastText = if (viewModel.getFetchContactList()) SHOW_CONTACT_LIST
+            val toastText = if (myProfileViewModel.getFetchContactList()) SHOW_CONTACT_LIST
             else SHOW_HARDCODED_LIST
             Toast.makeText(activity, toastText, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun editProfileSetListener() {
+        binding.buttonMainEditProfile.setOnClickListener {
+            val action = ViewPagerFragmentDirections.actionViewPagerFragmentToEditProfileFragment()
+            Navigation.findNavController(binding.root).navigate(action)
         }
     }
 

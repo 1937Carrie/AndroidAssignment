@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/steel_gray"
-    tools:context=".presentation.LogInFragment">
+    tools:context=".presentation.logIn.LogInFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHorizontalLogIn010"
@@ -34,6 +34,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
+
+    <ProgressBar
+        android:id="@+id/progressBarLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textViewLogInGetAcquainted"
@@ -147,8 +157,24 @@
         app:layout_constraintEnd_toEndOf="@id/textInputLayoutLogInPassword"
         app:layout_constraintTop_toBottomOf="@id/textInputLayoutLogInPassword" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewLogInAuthorizeResponseText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimension_16dp"
+
+        android:textAlignment="center"
+        android:textColor="@color/bombay"
+        android:textSize="@dimen/text_24sp"
+        android:visibility="gone"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalLogIn060"
+        tools:text="Account with these credentials doesn't exist" />
+
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonLogInRegister"
+        android:id="@+id/buttonLogInLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dimension_16dp"
