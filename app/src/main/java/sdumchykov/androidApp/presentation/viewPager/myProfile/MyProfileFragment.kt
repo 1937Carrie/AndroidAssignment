@@ -41,23 +41,18 @@ class MyProfileFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        lifecycleScope.launch {
-        suspendFun()
-//        }
+        initCredentials()
 
-//        myProfileViewModel.getCred()
-//        credentials = myProfileViewModel.userLiveData.value!!
         checkPrelaunchPermissions()
 
         setMainPicture()
         setTextToTextName()
         setURIToImageInstagram()
-//        getUsers()
     }
 
 
     override fun setListeners() {
-        imageViewMainProfilePictureSetOnClickListener()
+        imageViewMainProfilePictureSetListener()
         editProfileSetListener()
         buttonViewMyContactsSetOnClickListener()
     }
@@ -83,15 +78,13 @@ class MyProfileFragment :
         requireContext(), Manifest.permission.READ_CONTACTS
     ) == PackageManager.PERMISSION_GRANTED
 
-    private fun suspendFun() {
-//        lifecycleScope.launch {
+    private fun initCredentials() {
         val db = Room.databaseBuilder(
             requireContext(),
             AppDatabase::class.java, "database-name"
         ).allowMainThreadQueries().build()
         val userDao = db.userDao()
-        credentials = userDao.getAll()[0]
-//        }
+        credentials = userDao.getUser()
     }
 
     private fun setMainPicture() {
@@ -126,7 +119,7 @@ class MyProfileFragment :
         }
     }
 
-    private fun imageViewMainProfilePictureSetOnClickListener() {
+    private fun imageViewMainProfilePictureSetListener() {
         binding.imageViewMainProfilePicture.setOnClickListener {
             val fetchContactList = !myProfileViewModel.getFetchContactList()
             myProfileViewModel.setFetchContactList(fetchContactList)
@@ -135,9 +128,7 @@ class MyProfileFragment :
                 if (!isPermissionsGranted()) {
                     FetchContacts().fetchContacts(activity as AppCompatActivity,
                         { parentViewModel.initRealUsersList() },
-                        {
-                            parentViewModel.apiGetUserContacts()
-                        })
+                        { parentViewModel.apiGetUserContacts() })
                     if (!isPermissionsGranted()) myProfileViewModel.setFetchContactList(false)
                 } else parentViewModel.initRealUsersList()
 

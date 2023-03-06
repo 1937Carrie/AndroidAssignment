@@ -55,7 +55,7 @@ class ContactsViewModel @Inject constructor(
                 AppDatabase::class.java, "database-name"
             ).allowMainThreadQueries().build()
             val userDao = db.userDao()
-            val userId = userDao.getAll()[0].id
+            val userId = userDao.getUser().id
 
             val response = try {
                 serverApi.getAccountUsers(userId, Constants.BEARER_TOKEN + getAccessToken())
@@ -79,7 +79,7 @@ class ContactsViewModel @Inject constructor(
                 context, AppDatabase::class.java, "database-name"
             ).build()
             val userDao = db.userDao()
-            val userId = userDao.getAll()[0].id
+            val userId = userDao.getUser().id
 
             try {
                 serverApi.addContact(
@@ -116,7 +116,7 @@ class ContactsViewModel @Inject constructor(
                 AppDatabase::class.java, "database-name"
             ).allowMainThreadQueries().build()
             val userDao = db.userDao()
-            val userId = userDao.getAll()[0].id
+            val userId = userDao.getUser().id
 
             try {
                 serverApi.deleteContact(
@@ -138,7 +138,7 @@ class ContactsViewModel @Inject constructor(
                 context, AppDatabase::class.java, "database-name"
             ).build()
             val userDao = db.userDao()
-            val userId = userDao.getAll()[0].id
+            val userId = userDao.getUser().id
 
             try {
                 serverApi.editUser(

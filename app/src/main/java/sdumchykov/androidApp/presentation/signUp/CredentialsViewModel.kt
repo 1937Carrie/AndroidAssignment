@@ -50,11 +50,7 @@ class CredentialsViewModel @Inject constructor(
                         AppDatabase::class.java, "database-name"
                     ).build()
                     val userDao = db.userDao()
-                    val allUsersInDb = userDao.getAll()
-
-                    for (userDb in allUsersInDb) {
-                        userDao.delete(userDb)
-                    }
+                    userDao.delete(userDao.getUser())
 
                     userDao.insert(
                         sdumchykov.androidApp.domain.local.User(
@@ -102,11 +98,8 @@ class CredentialsViewModel @Inject constructor(
                     AppDatabase::class.java, "database-name"
                 ).build()
                 val userDao = db.userDao()
-                val allUsersInDb = userDao.getAll()
+                userDao.delete(userDao.getUser())
 
-                for (userDb in allUsersInDb) {
-                    userDao.delete(userDb)
-                }
 
                 userDao.insert(
                     sdumchykov.androidApp.domain.local.User(

@@ -30,6 +30,7 @@ private const val SNACKBAR_TIME_LENGTH = 5000
 class MyContactsFragment :
     BaseFragment<FragmentMyContactsBinding>(FragmentMyContactsBinding::inflate) {
 
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
     private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
     private val parentViewModel by lazy { pagerFragment.contactsViewModel }
     private val usersAdapter: UsersAdapter by lazy {
@@ -79,7 +80,7 @@ class MyContactsFragment :
 
     override fun onResume() {
         super.onResume()
-        parentViewModel.apiGetUserContacts()
+        if (!myProfileViewModel.getFetchContactList()) parentViewModel.apiGetUserContacts()
     }
 
     override fun setObservers() {
@@ -280,8 +281,6 @@ class MyContactsFragment :
     }
 
     private fun removeSelectedItemsFromRecyclerView() {
-        val myProfileViewModel: MyProfileViewModel by viewModels()
-
         usersAdapter.removeSelectedItems(parentViewModel, myProfileViewModel.getFetchContactList())
 
         if (parentViewModel.userLiveData.value?.isEmpty() == true) {

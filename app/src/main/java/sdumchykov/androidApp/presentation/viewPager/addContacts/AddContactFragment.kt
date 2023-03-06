@@ -23,6 +23,7 @@ class AddContactFragment :
             usersListener = object : UsersListener {
                 override fun onUserClickAction(user: User, adapterPosition: Int) {
                     contactsViewModel.apiAddContact(user.id)
+                    contactsViewModel.apiGetUserContacts()
                 }
             }
         )
