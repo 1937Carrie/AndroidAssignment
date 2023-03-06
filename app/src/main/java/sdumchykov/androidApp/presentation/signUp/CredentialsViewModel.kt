@@ -50,7 +50,7 @@ class CredentialsViewModel @Inject constructor(
                         AppDatabase::class.java, "database-name"
                     ).build()
                     val userDao = db.userDao()
-                    userDao.delete(userDao.getUser())
+                    if (userDao.getUser() != null) userDao.delete(userDao.getUser())
 
                     userDao.insert(
                         sdumchykov.androidApp.domain.local.User(

@@ -32,8 +32,10 @@ class UsersRepositoryImpl @Inject constructor(
 
                 val contactImageIndex =
                     phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI)
+//                Log.i("imageIndex", contactImageIndex.toString())
                 val contactImage =
                     if (contactImageIndex != -1) phones.getString(contactImageIndex) else "Stub"
+//                Log.i("imagePath", contactImage ?: "null")
 
                 val contact = User(
                     id = realUsersList.size,

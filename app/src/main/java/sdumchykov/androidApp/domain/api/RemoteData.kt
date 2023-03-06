@@ -9,7 +9,7 @@ import sdumchykov.androidApp.domain.model.contacts.Contacts
 import sdumchykov.androidApp.domain.model.register.RegisterData
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
-import sdumchykov.androidApp.domain.model.requestModels.EditProfileModel
+import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 import javax.inject.Inject
 
 class RemoteData @Inject constructor(private val serverApi: ServerApi) {
@@ -23,7 +23,7 @@ class RemoteData @Inject constructor(private val serverApi: ServerApi) {
     suspend fun editUser(
         userId: Int,
         token: String,
-        body: EditProfileModel
+        body: EditProfileUser
     ): Response<ServerResponse<User>> =
         serverApi.editUser(userId, token, body)
 

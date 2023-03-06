@@ -10,7 +10,7 @@ import sdumchykov.androidApp.domain.model.contacts.Contacts
 import sdumchykov.androidApp.domain.model.register.RegisterData
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
-import sdumchykov.androidApp.domain.model.requestModels.EditProfileModel
+import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 
 interface ServerApi {
     @POST("users")
@@ -21,11 +21,11 @@ interface ServerApi {
     ): Response<ServerResponse<RegisterData>>
 
     @PUT("users/{userID}")
-    @Headers("Content-type: multipart/form-data")
+    @Headers("Content-type: application/json")
     suspend fun editUser(
         @Path("userID") userId: Int,
         @Header("Authorization") token: String,
-        @Body body: EditProfileModel
+        @Body body: EditProfileUser
     ): Response<ServerResponse<User>>
 
     @POST("login")

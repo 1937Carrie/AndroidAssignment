@@ -10,7 +10,7 @@ import sdumchykov.androidApp.domain.model.contacts.Contacts
 import sdumchykov.androidApp.domain.model.register.RegisterData
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
-import sdumchykov.androidApp.domain.model.requestModels.EditProfileModel
+import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 import sdumchykov.androidApp.domain.repository.ServerApiRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,7 +30,7 @@ class ServerApiRepositoryImpl @Inject constructor(
     override suspend fun editUser(
         userId: Int,
         token: String,
-        body: EditProfileModel
+        body: EditProfileUser
     ): Response<ServerResponse<User>> =
         remoteData.editUser(userId, token, body)
 

@@ -15,7 +15,6 @@ import sdumchykov.androidApp.data.repository.ServerApiRepositoryImpl
 import sdumchykov.androidApp.domain.local.AppDatabase
 import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
-import sdumchykov.androidApp.domain.model.requestModels.EditProfileModel
 import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 import sdumchykov.androidApp.domain.repository.UsersRepository
 import sdumchykov.androidApp.domain.storage.Storage
@@ -132,7 +131,7 @@ class ContactsViewModel @Inject constructor(
         }
     }
 
-    fun apiEditProfile(name: String, phone: String, address: String, career: String) {
+    fun apiEditProfile(name: String, phone: String, address: String, career: String, DOB: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val db = Room.databaseBuilder(
                 context, AppDatabase::class.java, "database-name"
@@ -144,13 +143,12 @@ class ContactsViewModel @Inject constructor(
                 serverApi.editUser(
                     userId,
                     Constants.BEARER_TOKEN + getAccessToken(),
-                    EditProfileModel(
-                        EditProfileUser(
-                            name = name,
-                            phone = phone,
-                            address = address,
-                            career = career
-                        )
+                    EditProfileUser(
+                        name = name,
+                        phone = phone,
+                        address = address,
+                        career = career,
+                        birthday = DOB
                     )
                 )
             } catch (e: IOException) {

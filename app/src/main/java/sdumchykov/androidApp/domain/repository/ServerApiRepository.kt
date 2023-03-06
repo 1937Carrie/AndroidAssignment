@@ -9,7 +9,7 @@ import sdumchykov.androidApp.domain.model.contacts.Contacts
 import sdumchykov.androidApp.domain.model.register.RegisterData
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
-import sdumchykov.androidApp.domain.model.requestModels.EditProfileModel
+import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 
 interface ServerApiRepository {
 
@@ -21,7 +21,7 @@ interface ServerApiRepository {
     suspend fun editUser(
         userId: Int,
         token: String,
-        body: EditProfileModel
+        body: EditProfileUser
     ): Response<ServerResponse<User>>
 
     suspend fun authorizeUser(body: AuthorizeModel): Response<ServerResponse<AuthorizationData>>

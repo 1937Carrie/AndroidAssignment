@@ -150,7 +150,9 @@
             android:id="@+id/textInputEditTextEditProfileUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -168,7 +170,9 @@
             android:id="@+id/textInputEditTextEditProfileCareer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -186,7 +190,9 @@
             android:id="@+id/textInputEditTextEditProfileEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -204,7 +210,9 @@
             android:id="@+id/textInputEditTextEditProfilePhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -222,7 +230,9 @@
             android:id="@+id/textInputEditTextEditProfileAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -240,7 +250,10 @@
             android:id="@+id/textInputEditTextEditProfileDateOfBirth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:inputType="date"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
