@@ -109,6 +109,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalAddContact014"
 
-        tools:listitem="@layout/add_contacts_item" />
+        tools:listitem="@layout/item_add_contacts" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,7 @@ package sdumchykov.androidApp.presentation.viewPager.contacts.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import sdumchykov.androidApp.databinding.ContactItemBinding
+import sdumchykov.androidApp.databinding.ItemContactBinding
 import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.presentation.viewPager.contacts.ContactsViewModel
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.diffCallback.UsersDiffCallback
@@ -19,7 +19,7 @@ class UsersAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
         return UsersViewHolder(
-            ContactItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             usersListener,
             multiSelect,
             selectedItems

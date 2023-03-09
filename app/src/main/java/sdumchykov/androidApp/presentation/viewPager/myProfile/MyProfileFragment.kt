@@ -93,8 +93,6 @@ class MyProfileFragment :
     }
 
     private fun setTextToTextName() {
-//        var receivedEmail = credentialsViewModel.credentialsLiveData.value?.email ?: ""
-
         val receivedEmail = credentials.email ?: ""
 
         val splittedEmail = receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))

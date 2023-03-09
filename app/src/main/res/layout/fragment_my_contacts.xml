@@ -168,7 +168,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalMyContacts014"
 
-        tools:listitem="@layout/contact_item" />
+        tools:listitem="@layout/item_contact" />
 
     <FrameLayout
         android:id="@+id/frameLayoutButtonsContainer"

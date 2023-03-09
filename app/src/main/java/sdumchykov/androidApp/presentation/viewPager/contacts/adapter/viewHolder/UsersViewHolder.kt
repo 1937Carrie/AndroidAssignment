@@ -4,13 +4,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sdumchykov.androidApp.R
-import sdumchykov.androidApp.databinding.ContactItemBinding
+import sdumchykov.androidApp.databinding.ItemContactBinding
 import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.presentation.utils.ext.setImageCacheless
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.UsersListener
 
 class UsersViewHolder(
-    private val binding: ContactItemBinding,
+    private val binding: ItemContactBinding,
     private val usersListener: UsersListener,
     private val multiSelect: Boolean,
     private val selectedItems: ArrayList<User>
@@ -43,10 +43,7 @@ class UsersViewHolder(
                         imageViewPhoto.layoutParams as ViewGroup.MarginLayoutParams
                     val imageViewPhotoResources = imageViewPhoto.context.resources
                     val margin =
-                        (
-                                imageViewPhotoResources.getDimension(R.dimen.dimension_8dp) /
-                                        imageViewPhotoResources.displayMetrics.density
-                                ).toInt()
+                        (imageViewPhotoResources.getDimension(R.dimen.dimension_8dp) / imageViewPhotoResources.displayMetrics.density).toInt()
                     marginLayoutParams.setMargins(margin, margin, margin, margin)
                     imageViewPhoto.layoutParams = marginLayoutParams
                 }

@@ -44,7 +44,6 @@ class CredentialsViewModel @Inject constructor(
                 }
 
                 if (response.isSuccessful && response.body() != null) {
-
                     val db = Room.databaseBuilder(
                         context,
                         AppDatabase::class.java, "database-name"
