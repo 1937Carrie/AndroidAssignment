@@ -9,7 +9,7 @@ import sdumchykov.androidApp.databinding.FragmentAddContactBinding
 import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
-import sdumchykov.androidApp.presentation.utils.ext.createToast
+import sdumchykov.androidApp.presentation.utils.ext.showToast
 import sdumchykov.androidApp.presentation.viewPager.addContacts.adapter.UsersAdapter
 import sdumchykov.androidApp.presentation.viewPager.addContacts.adapter.listener.UsersListener
 import sdumchykov.androidApp.presentation.viewPager.contacts.ContactsViewModel
@@ -63,7 +63,7 @@ class AddContactFragment :
 
                     }
                     Status.ERROR -> {
-                        createToast(requireContext(), "Failed to pull users")
+                        showToast(requireContext(), "Failed to pull users")
                     }
                     Status.LOADING -> {
 

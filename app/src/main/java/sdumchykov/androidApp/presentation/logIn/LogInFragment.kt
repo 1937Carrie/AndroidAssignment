@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentLogInBinding
+import sdumchykov.androidApp.domain.local.AppDatabase
+import sdumchykov.androidApp.domain.local.User
 import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.signUp.CredentialsViewModel
@@ -15,12 +18,16 @@ import sdumchykov.androidApp.presentation.utils.ext.visible
 
 @AndroidEntryPoint
 class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::inflate) {
+
     private val credentialsViewModel: CredentialsViewModel by activityViewModels()
+    private var credentials: User? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setTestData()
+        initCredentials()
+
+        handleRememberMer()
     }
 
     override fun setObservers() {
@@ -50,10 +57,31 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
         }
     }
 
-    private fun setTestData() {
+    private fun initCredentials() {
+        val db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "database-name"
+        ).allowMainThreadQueries().build()
+        val userDao = db.userDao()
+        credentials = userDao.getUser()
+    }
+
+    private fun handleRememberMer() {
         with(binding) {
-            textInputLayoutLogInEmail.editText?.setText("")
-            textInputLayoutLogInPassword.editText?.setText("")
+            if (checkBoxLogInRememberMe.isChecked && credentials != null) {
+                textInputLayoutLogInEmail.editText?.setText(credentials?.email)
+                textInputLayoutLogInPassword.editText?.setText(credentialsViewModel.getPassword())
+                authorizeAccount()
+            }
+        }
+
+    }
+
+    private fun saveRememberMe() {
+        with(binding) {
+            if (checkBoxLogInRememberMe.isChecked) {
+                credentialsViewModel.savePassword(textInputLayoutLogInPassword.editText?.text.toString())
+            }
         }
     }
 
@@ -65,12 +93,17 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
     private fun buttonLoginSetListener() {
         with(binding) {
             buttonLogInLogin.setOnClickListener {
-                val email = textInputLayoutLogInEmail.editText?.text.toString()
-                val password = textInputLayoutLogInPassword.editText?.text.toString()
-
-                credentialsViewModel.authorizeUser(email, password)
+                saveRememberMe()
+                authorizeAccount()
             }
         }
+    }
+
+    private fun FragmentLogInBinding.authorizeAccount() {
+        val email = textInputLayoutLogInEmail.editText?.text.toString()
+        val password = textInputLayoutLogInPassword.editText?.text.toString()
+
+        credentialsViewModel.authorizeUser(email, password)
     }
 
     private fun textViewLogInSignInSetListener() {

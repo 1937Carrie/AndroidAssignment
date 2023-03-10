@@ -22,6 +22,8 @@ import sdumchykov.androidApp.domain.utils.Status
 import java.io.IOException
 import javax.inject.Inject
 
+private const val PASSWORD = "PASSWORD"
+
 @HiltViewModel
 class CredentialsViewModel @Inject constructor(
     private val sharedPreferencesStorage: Storage,
@@ -141,5 +143,10 @@ class CredentialsViewModel @Inject constructor(
     private fun setErrorStatus(messageResourceId: Int) {
         _status.postValue(Response.error(messageResourceId, null))
     }
+
+    fun savePassword(password: String) = sharedPreferencesStorage.save(PASSWORD, password)
+
+
+    fun getPassword(): String = sharedPreferencesStorage.getString(PASSWORD) ?: ""
 
 }

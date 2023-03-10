@@ -3,7 +3,6 @@ package sdumchykov.androidApp.presentation.viewPager.contacts
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -17,8 +16,8 @@ import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.utils.SwipeToDeleteCallback
-import sdumchykov.androidApp.presentation.utils.ext.createToast
 import sdumchykov.androidApp.presentation.utils.ext.gone
+import sdumchykov.androidApp.presentation.utils.ext.showToast
 import sdumchykov.androidApp.presentation.utils.ext.visible
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
@@ -113,7 +112,7 @@ class MyContactsFragment :
 
                     }
                     Status.ERROR -> {
-                        createToast(requireContext(), "Failed to pull users")
+                        showToast(requireContext(), "Failed to pull users")
                     }
                     Status.LOADING -> {
                     }
@@ -260,11 +259,7 @@ class MyContactsFragment :
             parentViewModel.apiAddContact(user.id)
             parentViewModel.apiGetUserContacts()
 
-            Toast.makeText(
-                activity,
-                getString(R.string.contactHasBeenRestored, user.name),
-                Toast.LENGTH_LONG
-            ).show()
+            showToast(requireContext(), getString(R.string.contactHasBeenRestored, user.name))
         }
         snackbar.show()
 

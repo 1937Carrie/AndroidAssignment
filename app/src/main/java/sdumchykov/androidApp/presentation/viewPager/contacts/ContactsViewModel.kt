@@ -144,7 +144,13 @@ class ContactsViewModel @Inject constructor(
         }
     }
 
-    fun apiEditProfile(name: String, phone: String, address: String, career: String, DOB: String) {
+    fun apiEditProfile(
+        name: String,
+        phone: String,
+        address: String,
+        career: String,
+        DOB: String
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             val db = Room.databaseBuilder(
                 context, AppDatabase::class.java, "database-name"
@@ -152,7 +158,9 @@ class ContactsViewModel @Inject constructor(
             val userDao = db.userDao()
             val userId = userDao.getUser().id
 
-            try {
+            setLoadingStatus()
+
+            val response = try {
                 serverApi.editUser(
                     userId,
                     Constants.BEARER_TOKEN + getAccessToken(),
@@ -161,13 +169,20 @@ class ContactsViewModel @Inject constructor(
                         phone = phone,
                         address = address,
                         career = career,
-                        birthday = DOB
+                        birthday = DOB,
                     )
                 )
             } catch (e: IOException) {
+                setErrorStatus(R.string.messageIOException)
                 return@launch
             } catch (e: HttpException) {
+                setErrorStatus(R.string.messageHTTPException)
                 return@launch
+            }
+            if (response.isSuccessful) {
+                setSuccessStatus(Status.SUCCESS)
+            } else {
+                setErrorStatus(R.string.messageUnexpectedState)
             }
         }
     }

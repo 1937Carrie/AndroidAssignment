@@ -1,33 +1,79 @@
 package sdumchykov.androidApp.presentation.editProfile
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.databinding.FragmentEditProfileBinding
 import sdumchykov.androidApp.domain.local.AppDatabase
+import sdumchykov.androidApp.domain.utils.Constants
+import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
+import sdumchykov.androidApp.presentation.utils.ext.setImage
+import sdumchykov.androidApp.presentation.utils.ext.showToast
 import sdumchykov.androidApp.presentation.viewPager.contacts.ContactsViewModel
 
 @AndroidEntryPoint
 class EditProfileFragment :
     BaseFragment<FragmentEditProfileBinding>(FragmentEditProfileBinding::inflate) {
+
     private val contactsViewModel: ContactsViewModel by viewModels()
+
+    private var pathToLoadedImageFromGallery: String = Constants.STUB_IMAGE_URI
+    private var imageLoaderLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val imageView: AppCompatImageView =
+                binding.imageViewSignUpExtendedChooseProfileImageFromGallery
+            if (result.resultCode == Activity.RESULT_OK && result.data?.data != null) {
+                val imageData = result.data?.data ?: return@registerForActivityResult
+                pathToLoadedImageFromGallery = imageData.toString()
+                imageView.setImage(imageData)
+            }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        inflateFields()
+        fillInFields()
     }
 
     override fun setListeners() {
         arrowSetListener()
+        setImageViewSetListener()
         buttonSaveSetListener()
     }
 
-    private fun inflateFields() {
+    override fun setObservers() {
+        setStatusObserver()
+    }
+
+    private fun setStatusObserver() {
+        contactsViewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
+            with(binding) {
+                when (response.status) {
+                    Status.SUCCESS -> {
+                        val action =
+                            EditProfileFragmentDirections.actionEditProfileFragmentToViewPagerFragment()
+                        Navigation.findNavController(binding.root).navigate(action)
+                    }
+                    Status.ERROR -> {
+                        showToast(requireContext(), "Failed to pull account contact list")
+                    }
+                    Status.LOADING -> {}
+                }
+            }
+        }
+    }
+
+    private fun fillInFields() {
         with(binding) {
             val db = Room.databaseBuilder(
                 requireContext(),
@@ -36,12 +82,14 @@ class EditProfileFragment :
             val userDao = db.userDao()
             val user = userDao.getUser()
 
+            val image = user.image ?: Constants.STUB_IMAGE_URI
+            imageViewEditProfilePicture.setImage(Uri.parse(image))
+
             textInputLayoutEditProfileUsername.editText?.setText(user.name)
             textInputLayoutEditProfileAddress.editText?.setText(user.address)
             textInputLayoutEditProfileCareer.editText?.setText(user.career)
             textInputLayoutEditProfilePhone.editText?.setText(user.phone)
             textInputLayoutEditProfileDateOfBirth.editText?.setText(user.birthday)
-
         }
     }
 
@@ -53,6 +101,16 @@ class EditProfileFragment :
         }
     }
 
+    private fun setImageViewSetListener() {
+        binding.imageViewSignUpExtendedChooseProfileImageFromGallery.setOnClickListener {
+            val gallery = Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI
+            )
+            imageLoaderLauncher.launch(gallery)
+        }
+    }
+
     private fun buttonSaveSetListener() {
         with(binding) {
             buttonEditProfileSave.setOnClickListener {
@@ -61,14 +119,12 @@ class EditProfileFragment :
                 val address = textInputLayoutEditProfileAddress.editText?.text.toString()
                 val career = textInputLayoutEditProfileCareer.editText?.text.toString()
                 val DOB = textInputLayoutEditProfileDateOfBirth.editText?.text.toString()
+//                val image = pathToLoadedImageFromGallery
 
                 contactsViewModel.apiEditProfile(name, phone, address, career, DOB)
-
-                val action =
-                    EditProfileFragmentDirections.actionEditProfileFragmentToViewPagerFragment()
-                Navigation.findNavController(binding.root).navigate(action)
             }
         }
     }
+
 }
 

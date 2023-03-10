@@ -6,21 +6,20 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
-import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
 import sdumchykov.androidApp.domain.local.AppDatabase
 import sdumchykov.androidApp.domain.local.User
+import sdumchykov.androidApp.domain.utils.Constants
 import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
-import sdumchykov.androidApp.presentation.utils.ext.createToast
 import sdumchykov.androidApp.presentation.utils.ext.setImage
+import sdumchykov.androidApp.presentation.utils.ext.showToast
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
 import sdumchykov.androidApp.presentation.viewPager.contacts.fetchContacts.FetchContacts
@@ -48,9 +47,7 @@ class MyProfileFragment :
 
         checkPrelaunchPermissions()
 
-        setMainPicture()
-        setTextToTextName()
-        setURIToImageInstagram()
+        fillOutProfile()
     }
 
 
@@ -77,12 +74,21 @@ class MyProfileFragment :
                 when (response.status) {
                     Status.SUCCESS -> {}
                     Status.ERROR -> {
-                        createToast(requireContext(), "Failed to pull account contact list")
+                        showToast(requireContext(), "Failed to pull account contact list")
                     }
                     Status.LOADING -> {}
                 }
             }
         }
+    }
+
+    private fun initCredentials() {
+        val db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "database-name"
+        ).allowMainThreadQueries().build()
+        val userDao = db.userDao()
+        credentials = userDao.getUser()
     }
 
     private fun checkPrelaunchPermissions() {
@@ -100,38 +106,53 @@ class MyProfileFragment :
         requireContext(), Manifest.permission.READ_CONTACTS
     ) == PackageManager.PERMISSION_GRANTED
 
-    private fun initCredentials() {
-        val db = Room.databaseBuilder(
-            requireContext(),
-            AppDatabase::class.java, "database-name"
-        ).allowMainThreadQueries().build()
-        val userDao = db.userDao()
-        credentials = userDao.getUser()
+    private fun fillOutProfile() {
+        setMainPicture()
+        setTextToName()
+        setTextToProfession()
+        setTextToAddress()
+        setLinksToSocialNetworks()
     }
 
     private fun setMainPicture() {
-        val drawableSource = R.drawable.ic_profile_image_girl
-        binding.imageViewMainProfilePicture.setImage(drawableSource)
+        val image = credentials.image ?: Constants.STUB_IMAGE_URI
+
+        binding.imageViewMainProfilePicture.setImage(Uri.parse(image))
     }
 
-    private fun setTextToTextName() {
-        val receivedEmail = credentials.email ?: ""
+    private fun setTextToName() {
+        binding.textViewMainName.text = credentials.name
+    }
 
-        val splittedEmail = receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
-            .split(Regex(PATTERN_NON_CHARACTER))
-        binding.textViewMainName.text = if (splittedEmail.size > 1) {
-            val firstName = splittedEmail[0].replaceFirstChar { it.uppercase() }
-            val secondName = splittedEmail[1].replaceFirstChar { it.uppercase() }
-            val textContent = "$firstName $secondName"
-            textContent
-        } else {
-            receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
+    private fun setTextToProfession() {
+        binding.textViewMainProfession.text = credentials.career
+    }
+
+    private fun setTextToAddress() {
+        binding.textViewMainAddress.text = credentials.address
+    }
+
+    private fun setLinksToSocialNetworks() {
+        setLinkToFacebook()
+        setLinkToLinkedIn()
+        setLinkToInstagram()
+    }
+
+    private fun setLinkToFacebook() {
+        binding.imageViewMainFacebook.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(credentials.facebook)))
         }
     }
 
-    private fun setURIToImageInstagram() {
+    private fun setLinkToLinkedIn() {
+        binding.imageViewMainLinkedIn.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(credentials.linkedin)))
+        }
+    }
+
+    private fun setLinkToInstagram() {
         binding.imageViewMainInstagram.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(HARDCODED_IMAGE_PATH)))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(credentials.instagram)))
         }
     }
 
@@ -152,7 +173,8 @@ class MyProfileFragment :
 
             val toastText = if (myProfileViewModel.getFetchContactList()) SHOW_CONTACT_LIST
             else SHOW_HARDCODED_LIST
-            Toast.makeText(activity, toastText, Toast.LENGTH_SHORT).show()
+
+            showToast(requireContext(), toastText)
         }
     }
 
