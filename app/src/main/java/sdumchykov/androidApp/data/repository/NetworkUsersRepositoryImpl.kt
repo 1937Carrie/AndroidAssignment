@@ -11,14 +11,14 @@ import sdumchykov.androidApp.domain.model.register.RegisterData
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
 import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
-import sdumchykov.androidApp.domain.repository.ServerApiRepository
+import sdumchykov.androidApp.domain.repository.NetworkUsersRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ServerApiRepositoryImpl @Inject constructor(
+class NetworkUsersRepositoryImpl @Inject constructor(
     private val remoteData: RemoteData
-) : ServerApiRepository {
+) : NetworkUsersRepository {
 
     override suspend fun registerUser(
         email: String,

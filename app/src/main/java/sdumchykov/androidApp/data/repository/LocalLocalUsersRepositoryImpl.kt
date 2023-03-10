@@ -5,13 +5,13 @@ import android.provider.ContactsContract
 import dagger.hilt.android.qualifiers.ApplicationContext
 import sdumchykov.androidApp.data.db.InMemoryDb
 import sdumchykov.androidApp.domain.model.User
-import sdumchykov.androidApp.domain.repository.UsersRepository
+import sdumchykov.androidApp.domain.repository.LocalUsersRepository
 import javax.inject.Inject
 
-class UsersRepositoryImpl @Inject constructor(
+class LocalLocalUsersRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val inMemoryDb: InMemoryDb
-) : UsersRepository {
+) : LocalUsersRepository {
     override suspend fun getHardcodedUsers() = inMemoryDb.getHardcodedUsers()
 
     override suspend fun getRealUsers(): List<User> {

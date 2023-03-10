@@ -17,7 +17,9 @@ import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
 import sdumchykov.androidApp.domain.local.AppDatabase
 import sdumchykov.androidApp.domain.local.User
+import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
+import sdumchykov.androidApp.presentation.utils.ext.createToast
 import sdumchykov.androidApp.presentation.utils.ext.setImage
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
@@ -32,6 +34,7 @@ private const val SHOW_HARDCODED_LIST = "Show hardcoded contact list data"
 @AndroidEntryPoint
 class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate) {
+
     private lateinit var credentials: User
 
     private val myProfileViewModel: MyProfileViewModel by viewModels()
@@ -58,13 +61,32 @@ class MyProfileFragment :
     }
 
     override fun setObservers() {
-        myProfileViewModel.userLiveData.observe(this) {
+        setUsersObserver()
+        setStatusObserver()
+    }
+
+    private fun setUsersObserver() {
+        myProfileViewModel.userLiveData.observe(viewLifecycleOwner) {
             credentials = it
         }
     }
 
+    private fun setStatusObserver() {
+        parentViewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
+            with(binding) {
+                when (response.status) {
+                    Status.SUCCESS -> {}
+                    Status.ERROR -> {
+                        createToast(requireContext(), "Failed to pull account contact list")
+                    }
+                    Status.LOADING -> {}
+                }
+            }
+        }
+    }
+
     private fun checkPrelaunchPermissions() {
-        if (parentViewModel.userLiveData.value?.isEmpty() == true)
+        if (parentViewModel.userContacts.value?.isEmpty() == true)
             if (!isPermissionsGranted()) {
                 myProfileViewModel.setFetchContactList(false)
                 parentViewModel.apiGetUserContacts()
@@ -105,10 +127,6 @@ class MyProfileFragment :
         } else {
             receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
         }
-
-//        if (signUpViewModel.getPassword() == "") {
-//            signUpViewModel.saveEmail("")
-//        }
     }
 
     private fun setURIToImageInstagram() {
@@ -151,4 +169,5 @@ class MyProfileFragment :
                 ViewPagerFragment.Tabs.CONTACTS.ordinal
         }
     }
+
 }

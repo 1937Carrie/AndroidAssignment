@@ -33,7 +33,7 @@ class ViewPagerFragment :
         viewPager.adapter = viewPagerAdapter
         viewPager.currentItem = Tabs.MYPROFILE.ordinal
 
-        contactsViewModel.userLiveData.observe(viewLifecycleOwner) {
+        contactsViewModel.userContacts.observe(viewLifecycleOwner) {
             TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
                 when (position) {
                     Tabs.MYPROFILE.ordinal -> {

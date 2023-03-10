@@ -55,7 +55,7 @@ class UsersAdapter(
 
         selectedItems.clear()
 
-        if (contactsViewModel.userLiveData.value?.isEmpty() == true) multiSelect = false
+        if (contactsViewModel.userContacts.value?.isEmpty() == true) multiSelect = false
     }
 
     fun unselectItems() {

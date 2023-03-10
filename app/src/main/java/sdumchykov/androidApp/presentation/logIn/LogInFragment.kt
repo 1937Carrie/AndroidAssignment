@@ -2,13 +2,16 @@ package sdumchykov.androidApp.presentation.logIn
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
+import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentLogInBinding
+import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.signUp.CredentialsViewModel
+import sdumchykov.androidApp.presentation.utils.ext.gone
+import sdumchykov.androidApp.presentation.utils.ext.visible
 
 @AndroidEntryPoint
 class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::inflate) {
@@ -18,6 +21,33 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
         super.onViewCreated(view, savedInstanceState)
 
         setTestData()
+    }
+
+    override fun setObservers() {
+        credentialsViewModel.status.observe(viewLifecycleOwner) { response ->
+            with(binding) {
+                when (response.status) {
+                    Status.SUCCESS -> {
+                        textViewLogInAuthorizeResponseText.gone()
+                        progressBarLogIn.gone()
+
+                        val action = LogInFragmentDirections.actionLogInFragmentToMainActivity()
+                        Navigation.findNavController(binding.root).navigate(action)
+                        activity?.finish()
+                    }
+                    Status.ERROR -> {
+                        progressBarLogIn.gone()
+                        textViewLogInAuthorizeResponseText.visible()
+                        textViewLogInAuthorizeResponseText.text =
+                            getString(credentialsViewModel.status.value?.message ?: R.string.oops)
+                    }
+                    Status.LOADING -> {
+                        textViewLogInAuthorizeResponseText.gone()
+                        progressBarLogIn.visible()
+                    }
+                }
+            }
+        }
     }
 
     private fun setTestData() {
@@ -38,13 +68,7 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
                 val email = textInputLayoutLogInEmail.editText?.text.toString()
                 val password = textInputLayoutLogInPassword.editText?.text.toString()
 
-                progressBarLogIn.isVisible = true
-                credentialsViewModel.authorizeUser(binding, email, password)
-                progressBarLogIn.isVisible = false
-
-                val action = LogInFragmentDirections.actionLogInFragmentToMainActivity()
-                Navigation.findNavController(binding.root).navigate(action)
-                activity?.finish()
+                credentialsViewModel.authorizeUser(email, password)
             }
         }
     }

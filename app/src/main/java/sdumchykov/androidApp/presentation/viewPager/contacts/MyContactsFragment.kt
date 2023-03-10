@@ -14,8 +14,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyContactsBinding
 import sdumchykov.androidApp.domain.model.User
+import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.utils.SwipeToDeleteCallback
+import sdumchykov.androidApp.presentation.utils.ext.createToast
 import sdumchykov.androidApp.presentation.utils.ext.gone
 import sdumchykov.androidApp.presentation.utils.ext.visible
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
@@ -85,6 +87,7 @@ class MyContactsFragment :
 
     override fun setObservers() {
         setUserLiveDataObserver()
+        setResponseStatusObserver()
     }
 
     override fun setListeners() {
@@ -97,8 +100,25 @@ class MyContactsFragment :
     }
 
     private fun setUserLiveDataObserver() {
-        parentViewModel.userLiveData.observe(this) { users ->
+        parentViewModel.userContacts.observe(viewLifecycleOwner) { users ->
             usersAdapter.submitList(users.toMutableList())
+        }
+    }
+
+    private fun setResponseStatusObserver() {
+        parentViewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
+            with(binding) {
+                when (response.status) {
+                    Status.SUCCESS -> {
+
+                    }
+                    Status.ERROR -> {
+                        createToast(requireContext(), "Failed to pull users")
+                    }
+                    Status.LOADING -> {
+                    }
+                }
+            }
         }
     }
 
@@ -130,7 +150,7 @@ class MyContactsFragment :
                     imageViewMyContactsSearch.visible()
 
                     searchViewMyContacts?.gone()
-                    usersAdapter.submitList(parentViewModel.userLiveData.value?.toMutableList())
+                    usersAdapter.submitList(parentViewModel.userContacts.value?.toMutableList())
                 }
 
                 return true
@@ -154,7 +174,7 @@ class MyContactsFragment :
         if (text != null) {
             val filteredList = arrayListOf<User>()
 
-            parentViewModel.userLiveData.value.let {
+            parentViewModel.userContacts.value.let {
                 if (it != null) {
                     for (item in it) {
                         if (item.name?.lowercase()?.contains(text.lowercase()) == true) {
@@ -283,7 +303,7 @@ class MyContactsFragment :
     private fun removeSelectedItemsFromRecyclerView() {
         usersAdapter.removeSelectedItems(parentViewModel, myProfileViewModel.getFetchContactList())
 
-        if (parentViewModel.userLiveData.value?.isEmpty() == true) {
+        if (parentViewModel.userContacts.value?.isEmpty() == true) {
             with(binding) {
                 frameLayoutButtonsContainer.gone()
                 buttonRemoveSelectedContacts.gone()

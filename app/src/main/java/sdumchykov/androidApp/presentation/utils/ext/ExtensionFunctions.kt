@@ -1,6 +1,8 @@
 package sdumchykov.androidApp.presentation.utils.ext
 
+import android.content.Context
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import sdumchykov.androidApp.R
@@ -34,4 +36,12 @@ fun View.gone() {
 
 fun View.visible() {
     this.visibility = View.VISIBLE
+}
+
+fun createToast(context: Context, message: String) {
+    Toast.makeText(
+        context,
+        message,
+        Toast.LENGTH_LONG
+    ).show()
 }

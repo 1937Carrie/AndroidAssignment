@@ -74,4 +74,12 @@
     <string name="tab1">My Profile</string>
     <string name="tab2">My contacts</string>
     <string name="onDeniedPermission">Permission should be granted!</string>
+    <string name="code400">Invalid request</string>
+    <string name="code401">Unauthorized</string>
+    <string name="code403">Access denied</string>
+    <string name="code404">Not found</string>
+    <string name="messageIOException">Broken response</string>
+    <string name="messageHTTPException">Http exception</string>
+    <string name="messageUnexpectedState">Something gone wrong</string>
+    <string name="oops">Oops</string>
 </resources>

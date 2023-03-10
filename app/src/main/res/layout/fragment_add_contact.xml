@@ -97,18 +97,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/guidelineHorizontalAddContact003" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewAddContactContactList"
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
-        android:background="@color/white"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalAddContact014"
+        app:layout_constraintTop_toTopOf="@id/guidelineHorizontalAddContact014">
 
-        tools:listitem="@layout/item_add_contacts" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAddContactContactList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:background="@color/white"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalAddContact014"
+
+            tools:listitem="@layout/item_add_contacts" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

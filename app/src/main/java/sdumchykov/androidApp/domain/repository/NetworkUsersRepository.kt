@@ -11,7 +11,7 @@ import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
 import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 
-interface ServerApiRepository {
+interface NetworkUsersRepository {
 
     suspend fun registerUser(
         email: String,

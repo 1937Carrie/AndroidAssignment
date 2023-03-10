@@ -23,22 +23,22 @@ class UsersViewHolder(
         contact.apply {
             with(binding) {
                 if (multiSelect) {
-                    binding.checkBoxSelectedState.visibility = View.VISIBLE
-                    binding.imageButtonDelete.visibility = View.INVISIBLE
+                    checkBoxSelectedState.visibility = View.VISIBLE
+                    imageButtonDelete.visibility = View.INVISIBLE
                 } else {
-                    binding.checkBoxSelectedState.visibility = View.GONE
-                    binding.imageButtonDelete.visibility = View.VISIBLE
+                    checkBoxSelectedState.visibility = View.GONE
+                    imageButtonDelete.visibility = View.VISIBLE
                 }
 
                 if (selectedItems.contains(contact)) {
-                    binding.checkBoxSelectedState.isChecked = true
+                    checkBoxSelectedState.isChecked = true
                 }
 
                 textViewMainName.text = user.name
                 textViewMainProfession.text = user.career
                 imageViewPhoto.setImageCacheless(user.image)
 
-                if (binding.checkBoxSelectedState.visibility == View.VISIBLE) {
+                if (checkBoxSelectedState.visibility == View.VISIBLE) {
                     val marginLayoutParams =
                         imageViewPhoto.layoutParams as ViewGroup.MarginLayoutParams
                     val imageViewPhotoResources = imageViewPhoto.context.resources
