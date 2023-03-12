@@ -27,10 +27,7 @@ class FetchContacts {
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
                     onFailure()
-                    showToast(
-                        activity,
-                        Resources.getSystem().getString(R.string.onDeniedPermission)
-                    )
+                    activity.showToast(Resources.getSystem().getString(R.string.onDeniedPermission))
                 }
 
                 override fun onPermissionRationaleShouldBeShown(

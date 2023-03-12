@@ -10,11 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
-import sdumchykov.androidApp.domain.local.AppDatabase
-import sdumchykov.androidApp.domain.local.User
 import sdumchykov.androidApp.domain.utils.Constants
 import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
@@ -24,17 +21,12 @@ import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
 import sdumchykov.androidApp.presentation.viewPager.contacts.fetchContacts.FetchContacts
 
-private const val HARDCODED_IMAGE_PATH = "https://www.instagram.com/p/BDdr32ZrvgP/"
-private const val SIGN_AT = '@'
-private const val PATTERN_NON_CHARACTER = "\\W"
 private const val SHOW_CONTACT_LIST = "Fetch contact list"
 private const val SHOW_HARDCODED_LIST = "Show hardcoded contact list data"
 
 @AndroidEntryPoint
 class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate) {
-
-    private lateinit var credentials: User
 
     private val myProfileViewModel: MyProfileViewModel by viewModels()
     private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
@@ -43,13 +35,9 @@ class MyProfileFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initCredentials()
-
+        myProfileViewModel.getDB()
         checkPrelaunchPermissions()
-
-        fillOutProfile()
     }
-
 
     override fun setListeners() {
         imageViewMainProfilePictureSetListener()
@@ -58,37 +46,30 @@ class MyProfileFragment :
     }
 
     override fun setObservers() {
-        setUsersObserver()
         setStatusObserver()
     }
 
-    private fun setUsersObserver() {
-        myProfileViewModel.userLiveData.observe(viewLifecycleOwner) {
-            credentials = it
-        }
+    private fun setStatusObserver() {
+        setResponseStatusObserver()
+        setUserObserver()
     }
 
-    private fun setStatusObserver() {
+    private fun setResponseStatusObserver() {
         parentViewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
-            with(binding) {
-                when (response.status) {
-                    Status.SUCCESS -> {}
-                    Status.ERROR -> {
-                        showToast(requireContext(), "Failed to pull account contact list")
-                    }
-                    Status.LOADING -> {}
+            when (response.status) {
+                Status.SUCCESS -> {}
+                Status.ERROR -> {
+                    context?.showToast("Failed to pull account contact list")
                 }
+                Status.LOADING -> {}
             }
         }
     }
 
-    private fun initCredentials() {
-        val db = Room.databaseBuilder(
-            requireContext(),
-            AppDatabase::class.java, "database-name"
-        ).allowMainThreadQueries().build()
-        val userDao = db.userDao()
-        credentials = userDao.getUser()
+    private fun setUserObserver() {
+        myProfileViewModel.user.observe(viewLifecycleOwner) {
+            fillInProfile()
+        }
     }
 
     private fun checkPrelaunchPermissions() {
@@ -106,7 +87,7 @@ class MyProfileFragment :
         requireContext(), Manifest.permission.READ_CONTACTS
     ) == PackageManager.PERMISSION_GRANTED
 
-    private fun fillOutProfile() {
+    private fun fillInProfile() {
         setMainPicture()
         setTextToName()
         setTextToProfession()
@@ -115,21 +96,21 @@ class MyProfileFragment :
     }
 
     private fun setMainPicture() {
-        val image = credentials.image ?: Constants.STUB_IMAGE_URI
+        val image = myProfileViewModel.user.value?.image ?: Constants.STUB_IMAGE_URI
 
         binding.imageViewMainProfilePicture.setImage(Uri.parse(image))
     }
 
     private fun setTextToName() {
-        binding.textViewMainName.text = credentials.name
+        binding.textViewMainName.text = myProfileViewModel.user.value?.name
     }
 
     private fun setTextToProfession() {
-        binding.textViewMainProfession.text = credentials.career
+        binding.textViewMainProfession.text = myProfileViewModel.user.value?.career
     }
 
     private fun setTextToAddress() {
-        binding.textViewMainAddress.text = credentials.address
+        binding.textViewMainAddress.text = myProfileViewModel.user.value?.address
     }
 
     private fun setLinksToSocialNetworks() {
@@ -140,19 +121,34 @@ class MyProfileFragment :
 
     private fun setLinkToFacebook() {
         binding.imageViewMainFacebook.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(credentials.facebook)))
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(myProfileViewModel.user.value?.facebook)
+                )
+            )
         }
     }
 
     private fun setLinkToLinkedIn() {
         binding.imageViewMainLinkedIn.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(credentials.linkedin)))
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(myProfileViewModel.user.value?.linkedin)
+                )
+            )
         }
     }
 
     private fun setLinkToInstagram() {
         binding.imageViewMainInstagram.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(credentials.instagram)))
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(myProfileViewModel.user.value?.instagram)
+                )
+            )
         }
     }
 
@@ -174,7 +170,7 @@ class MyProfileFragment :
             val toastText = if (myProfileViewModel.getFetchContactList()) SHOW_CONTACT_LIST
             else SHOW_HARDCODED_LIST
 
-            showToast(requireContext(), toastText)
+            context?.showToast(toastText)
         }
     }
 

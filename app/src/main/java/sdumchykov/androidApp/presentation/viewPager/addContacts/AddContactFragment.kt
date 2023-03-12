@@ -63,7 +63,7 @@ class AddContactFragment :
 
                     }
                     Status.ERROR -> {
-                        showToast(requireContext(), "Failed to pull users")
+                        context?.showToast("Failed to pull users")
                     }
                     Status.LOADING -> {
 

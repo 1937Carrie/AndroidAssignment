@@ -71,7 +71,6 @@ class MyContactsFragment :
 
     private var swipeFlags = ItemTouchHelper.END
 
-    //region Main code
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -106,17 +105,12 @@ class MyContactsFragment :
 
     private fun setResponseStatusObserver() {
         parentViewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
-            with(binding) {
-                when (response.status) {
-                    Status.SUCCESS -> {
-
-                    }
-                    Status.ERROR -> {
-                        showToast(requireContext(), "Failed to pull users")
-                    }
-                    Status.LOADING -> {
-                    }
+            when (response.status) {
+                Status.SUCCESS -> {}
+                Status.ERROR -> {
+                    context?.showToast("Failed to pull users")
                 }
+                Status.LOADING -> {}
             }
         }
     }
@@ -259,7 +253,7 @@ class MyContactsFragment :
             parentViewModel.apiAddContact(user.id)
             parentViewModel.apiGetUserContacts()
 
-            showToast(requireContext(), getString(R.string.contactHasBeenRestored, user.name))
+            context?.showToast(getString(R.string.contactHasBeenRestored, user.name))
         }
         snackbar.show()
 

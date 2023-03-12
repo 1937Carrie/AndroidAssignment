@@ -10,22 +10,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.databinding.FragmentEditProfileBinding
-import sdumchykov.androidApp.domain.local.AppDatabase
 import sdumchykov.androidApp.domain.utils.Constants
 import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.utils.ext.setImage
 import sdumchykov.androidApp.presentation.utils.ext.showToast
-import sdumchykov.androidApp.presentation.viewPager.contacts.ContactsViewModel
 
 @AndroidEntryPoint
 class EditProfileFragment :
     BaseFragment<FragmentEditProfileBinding>(FragmentEditProfileBinding::inflate) {
 
-    private val contactsViewModel: ContactsViewModel by viewModels()
+    private val viewModel: EditProfileViewModel by viewModels()
 
     private var pathToLoadedImageFromGallery: String = Constants.STUB_IMAGE_URI
     private var imageLoaderLauncher =
@@ -42,7 +39,7 @@ class EditProfileFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fillInFields()
+//        fillInFields()
     }
 
     override fun setListeners() {
@@ -56,40 +53,36 @@ class EditProfileFragment :
     }
 
     private fun setStatusObserver() {
-        contactsViewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
-            with(binding) {
-                when (response.status) {
-                    Status.SUCCESS -> {
-                        val action =
-                            EditProfileFragmentDirections.actionEditProfileFragmentToViewPagerFragment()
-                        Navigation.findNavController(binding.root).navigate(action)
-                    }
-                    Status.ERROR -> {
-                        showToast(requireContext(), "Failed to pull account contact list")
-                    }
-                    Status.LOADING -> {}
+        viewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+                Status.SUCCESS -> {
+                    val action =
+                        EditProfileFragmentDirections.actionEditProfileFragmentToViewPagerFragment()
+                    Navigation.findNavController(binding.root).navigate(action)
                 }
+                Status.ERROR -> {
+                    context?.showToast("Failed to edit profile")
+                }
+                Status.LOADING -> {}
             }
+        }
+        viewModel.user.observe(viewLifecycleOwner) {
+            fillInFields()
         }
     }
 
     private fun fillInFields() {
         with(binding) {
-            val db = Room.databaseBuilder(
-                requireContext(),
-                AppDatabase::class.java, "database-name"
-            ).allowMainThreadQueries().build()
-            val userDao = db.userDao()
-            val user = userDao.getUser()
+            val user = viewModel.user.value
 
-            val image = user.image ?: Constants.STUB_IMAGE_URI
+            val image = user?.image ?: Constants.STUB_IMAGE_URI
             imageViewEditProfilePicture.setImage(Uri.parse(image))
 
-            textInputLayoutEditProfileUsername.editText?.setText(user.name)
-            textInputLayoutEditProfileAddress.editText?.setText(user.address)
-            textInputLayoutEditProfileCareer.editText?.setText(user.career)
-            textInputLayoutEditProfilePhone.editText?.setText(user.phone)
-            textInputLayoutEditProfileDateOfBirth.editText?.setText(user.birthday)
+            textInputLayoutEditProfileUsername.editText?.setText(user?.name)
+            textInputLayoutEditProfileAddress.editText?.setText(user?.address)
+            textInputLayoutEditProfileCareer.editText?.setText(user?.career)
+            textInputLayoutEditProfilePhone.editText?.setText(user?.phone)
+            textInputLayoutEditProfileDateOfBirth.editText?.setText(user?.birthday)
         }
     }
 
@@ -121,7 +114,7 @@ class EditProfileFragment :
                 val DOB = textInputLayoutEditProfileDateOfBirth.editText?.text.toString()
 //                val image = pathToLoadedImageFromGallery
 
-                contactsViewModel.apiEditProfile(name, phone, address, career, DOB)
+                viewModel.apiEditProfile(name, phone, address, career, DOB)
             }
         }
     }

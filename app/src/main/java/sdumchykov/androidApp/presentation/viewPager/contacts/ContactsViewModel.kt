@@ -1,23 +1,19 @@
 package sdumchykov.androidApp.presentation.viewPager.contacts
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.Room
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import sdumchykov.androidApp.R
-import sdumchykov.androidApp.data.repository.NetworkUsersRepositoryImpl
 import sdumchykov.androidApp.domain.local.AppDatabase
 import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
-import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 import sdumchykov.androidApp.domain.repository.LocalUsersRepository
+import sdumchykov.androidApp.domain.repository.NetworkUsersRepository
 import sdumchykov.androidApp.domain.storage.Storage
 import sdumchykov.androidApp.domain.utils.Constants
 import sdumchykov.androidApp.domain.utils.Response
@@ -27,10 +23,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContactsViewModel @Inject constructor(
+    private val db: AppDatabase,
     private val sharedPreferencesStorage: Storage,
     private val localUsersRepository: LocalUsersRepository,
-    private val serverApi: NetworkUsersRepositoryImpl,
-    @ApplicationContext private val context: Context
+    private val serverApi: NetworkUsersRepository
 ) : ViewModel() {
 
     private val _userContacts = MutableLiveData<List<User>>(listOf())
@@ -41,12 +37,6 @@ class ContactsViewModel @Inject constructor(
 
     val selectedEvent = MutableLiveData(false)
 
-    fun initHardcodedDataList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _userContacts.postValue(localUsersRepository.getHardcodedUsers())
-        }
-    }
-
     fun initRealUsersList() {
         viewModelScope.launch(Dispatchers.IO) {
             _userContacts.postValue(localUsersRepository.getRealUsers())
@@ -55,10 +45,6 @@ class ContactsViewModel @Inject constructor(
 
     fun apiGetUserContacts() {
         viewModelScope.launch(Dispatchers.IO) {
-            val db = Room.databaseBuilder(
-                context,
-                AppDatabase::class.java, "database-name"
-            ).allowMainThreadQueries().build()
             val userDao = db.userDao()
             val userId = userDao.getUser().id
 
@@ -78,7 +64,7 @@ class ContactsViewModel @Inject constructor(
                 response.body()?.let {
                     _userContacts.postValue(it.data.contacts)
                 }
-                setSuccessStatus(Status.SUCCESS)
+                setSuccessStatus()
             } else {
                 setErrorStatus(R.string.messageUnexpectedState)
             }
@@ -87,9 +73,6 @@ class ContactsViewModel @Inject constructor(
 
     fun apiAddContact(contactId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val db = Room.databaseBuilder(
-                context, AppDatabase::class.java, "database-name"
-            ).build()
             val userDao = db.userDao()
             val userId = userDao.getUser().id
 
@@ -111,22 +94,9 @@ class ContactsViewModel @Inject constructor(
         return sharedPreferencesStorage.getString(Constants.ACCESS_TOKEN) ?: ""
     }
 
-    fun addItem(contact: User, index: Int) {
-        _userContacts.value = userContacts.value?.toMutableList()?.apply {
-            add(index, contact)
-        }
-    }
-
-    fun removeItem(contact: User?) {
-        _userContacts.value = userContacts.value?.toMutableList()?.apply { remove(contact) }
-    }
-
     fun apiDeleteContact(contactId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val db = Room.databaseBuilder(
-                context,
-                AppDatabase::class.java, "database-name"
-            ).allowMainThreadQueries().build()
+            setLoadingStatus()
             val userDao = db.userDao()
             val userId = userDao.getUser().id
 
@@ -137,66 +107,14 @@ class ContactsViewModel @Inject constructor(
                     Constants.BEARER_TOKEN + getAccessToken()
                 )
             } catch (e: IOException) {
-                return@launch
-            } catch (e: HttpException) {
-                return@launch
-            }
-        }
-    }
-
-    fun apiEditProfile(
-        name: String,
-        phone: String,
-        address: String,
-        career: String,
-        DOB: String
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val db = Room.databaseBuilder(
-                context, AppDatabase::class.java, "database-name"
-            ).build()
-            val userDao = db.userDao()
-            val userId = userDao.getUser().id
-
-            setLoadingStatus()
-
-            val response = try {
-                serverApi.editUser(
-                    userId,
-                    Constants.BEARER_TOKEN + getAccessToken(),
-                    EditProfileUser(
-                        name = name,
-                        phone = phone,
-                        address = address,
-                        career = career,
-                        birthday = DOB,
-                    )
-                )
-            } catch (e: IOException) {
                 setErrorStatus(R.string.messageIOException)
                 return@launch
             } catch (e: HttpException) {
                 setErrorStatus(R.string.messageHTTPException)
                 return@launch
             }
-            if (response.isSuccessful) {
-                setSuccessStatus(Status.SUCCESS)
-            } else {
-                setErrorStatus(R.string.messageUnexpectedState)
-            }
-        }
-    }
-
-    fun addNewContactManually(name: String, profession: String) {
-        _userContacts.value = userContacts.value?.toMutableList()?.apply {
-            add(
-                User(
-                    id = userContacts.value?.size ?: 0,
-                    name = name,
-                    career = profession,
-                    image = Constants.HARDCODED_IMAGE_URL
-                )
-            )
+            setSuccessStatus()
+            apiGetUserContacts()
         }
     }
 
@@ -204,8 +122,8 @@ class ContactsViewModel @Inject constructor(
         return userContacts.value?.get(position)
     }
 
-    private fun setSuccessStatus(status: Status) {
-        _statusUserContacts.postValue(Response.success(status))
+    private fun setSuccessStatus() {
+        _statusUserContacts.postValue(Response.success(Status.SUCCESS))
     }
 
     private fun setLoadingStatus() {

@@ -2,14 +2,11 @@ package sdumchykov.androidApp.presentation.logIn
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import androidx.room.Room
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentLogInBinding
-import sdumchykov.androidApp.domain.local.AppDatabase
-import sdumchykov.androidApp.domain.local.User
 import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.signUp.CredentialsViewModel
@@ -19,18 +16,20 @@ import sdumchykov.androidApp.presentation.utils.ext.visible
 @AndroidEntryPoint
 class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::inflate) {
 
-    private val credentialsViewModel: CredentialsViewModel by activityViewModels()
-    private var credentials: User? = null
+    private val credentialsViewModel: CredentialsViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initCredentials()
 
         handleRememberMer()
     }
 
     override fun setObservers() {
+        setStatusObserver()
+        setUserObserver()
+    }
+
+    private fun setStatusObserver() {
         credentialsViewModel.status.observe(viewLifecycleOwner) { response ->
             with(binding) {
                 when (response.status) {
@@ -57,24 +56,22 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
         }
     }
 
-    private fun initCredentials() {
-        val db = Room.databaseBuilder(
-            requireContext(),
-            AppDatabase::class.java, "database-name"
-        ).allowMainThreadQueries().build()
-        val userDao = db.userDao()
-        credentials = userDao.getUser()
+    private fun setUserObserver() {
+        credentialsViewModel.user.observe(viewLifecycleOwner) {
+            with(binding) {
+                val user = it
+
+                if (checkBoxLogInRememberMe.isChecked && user != null) {
+                    textInputLayoutLogInEmail.editText?.setText(user.email)
+                    textInputLayoutLogInPassword.editText?.setText(credentialsViewModel.getPassword())
+                    authorizeAccount()
+                }
+            }
+        }
     }
 
     private fun handleRememberMer() {
-        with(binding) {
-            if (checkBoxLogInRememberMe.isChecked && credentials != null) {
-                textInputLayoutLogInEmail.editText?.setText(credentials?.email)
-                textInputLayoutLogInPassword.editText?.setText(credentialsViewModel.getPassword())
-                authorizeAccount()
-            }
-        }
-
+        credentialsViewModel.getUser()
     }
 
     private fun saveRememberMe() {
@@ -99,11 +96,13 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
         }
     }
 
-    private fun FragmentLogInBinding.authorizeAccount() {
-        val email = textInputLayoutLogInEmail.editText?.text.toString()
-        val password = textInputLayoutLogInPassword.editText?.text.toString()
+    private fun authorizeAccount() {
+        with(binding) {
+            val email = textInputLayoutLogInEmail.editText?.text.toString()
+            val password = textInputLayoutLogInPassword.editText?.text.toString()
 
-        credentialsViewModel.authorizeUser(email, password)
+            credentialsViewModel.authorizeUser(email, password)
+        }
     }
 
     private fun textViewLogInSignInSetListener() {

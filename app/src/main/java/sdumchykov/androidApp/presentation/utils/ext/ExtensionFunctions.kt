@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import sdumchykov.androidApp.R
 
-// TODO optimize the installation of images so that there is not so much garbage in memory
 fun AppCompatImageView.setImageCacheless(photo: String?) {
     if (photo != null) {
 //        Glide.with(this).load(photo).signature(ObjectKey(System.currentTimeMillis().toString()))
@@ -39,9 +38,9 @@ fun View.visible() {
     this.visibility = View.VISIBLE
 }
 
-fun showToast(context: Context, message: String) {
+fun Context.showToast(message: String) {
     Toast.makeText(
-        context,
+        this,
         message,
         Toast.LENGTH_LONG
     ).show()
