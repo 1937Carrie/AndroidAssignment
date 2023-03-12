@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/steel_gray"
+    tools:context=".presentation.signUpExtended.SignUpExtendedFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontalSignUpExtended015"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontalSignUpExtended03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontalSignUpExtended04"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontalSignUpExtended06"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewSignUpExtendedProfileImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:src="@drawable/ic_profile_image"
+
+        app:layout_constraintBottom_toTopOf="@id/guidelineHorizontalSignUpExtended03"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalSignUpExtended015" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewSignUpExtendedChooseProfileImageFromGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimension_16dp"
+        android:src="@drawable/ic_image_from_camera"
+        app:layout_constraintBottom_toTopOf="@id/guidelineHorizontalSignUpExtended03"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toEndOf="@id/imageViewSignUpExtendedProfileImage"
+        app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalSignUpExtended015" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewSignUpExtendedYourProfileData"
+        style="@style/widthHeightIsWrapContent"
+
+        android:text="@string/yourProfileData"
+        android:textAppearance="@style/textViewLetsGetAcquaintedTextAppearance"
+
+        app:layout_constraintBottom_toTopOf="@id/textViewSignUpExtendedFillOutProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalSignUpExtended03" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewSignUpExtendedFillOutProfile"
+        style="@style/widthHeightIsWrapContent"
+
+        android:text="@string/fill_out_the_profile"
+        android:textAppearance="@style/textViewLFillOutTextAppearance"
+
+        app:layout_constraintBottom_toTopOf="@id/guidelineHorizontalSignUpExtended04"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewSignUpExtendedYourProfileData" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSignUpExtendedUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimension_16dp"
+
+        android:hint="@string/userName"
+        android:theme="@style/ThemeOverlay.App.TextInputLayout"
+        app:expandedHintEnabled="false"
+
+        app:layout_constraintBottom_toTopOf="@id/textInputLayoutSignUpExtendedMobilePhone"
+        app:layout_constraintTop_toBottomOf="@id/guidelineHorizontalSignUpExtended04">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextSignUpExtendedUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textColor="@color/silver"
+
+            android:background="@android:color/transparent"
+
+            android:inputType="textPersonName" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSignUpExtendedMobilePhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimension_16dp"
+
+        android:hint="@string/mobilePhone"
+        android:theme="@style/ThemeOverlay.App.TextInputLayout"
+        app:expandedHintEnabled="false"
+
+        app:layout_constraintBottom_toTopOf="@id/guidelineHorizontalSignUpExtended06"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutSignUpExtendedUserName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextSignUpExtendedMobilePhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textColor="@color/silver"
+
+            android:background="@android:color/transparent"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonSignUpExtendedCancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimension_16dp"
+        android:layout_marginBottom="@dimen/dimension_8dp"
+
+        android:background="@drawable/button_selector_sign_up_extended_cancel"
+        android:text="@string/cancel"
+        android:textAppearance="@style/buttonEditProfileTextAppearance"
+        android:textColor="@color/silver"
+
+        app:layout_constraintBottom_toTopOf="@id/buttonSignUpExtendedForward"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonSignUpExtendedForward"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dimension_52dp"
+        android:layout_marginHorizontal="@dimen/dimension_16dp"
+        android:layout_marginBottom="@dimen/dimension_16dp"
+
+        android:background="@drawable/btn_orange"
+        android:text="@string/forward"
+        android:textAllCaps="true"
+        android:textAppearance="@style/viewMyContactsTextAppearance"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

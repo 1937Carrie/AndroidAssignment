@@ -1,141 +1,183 @@
 package sdumchykov.androidApp.presentation.viewPager.myProfile
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
-import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentMyProfileBinding
-import sdumchykov.androidApp.domain.utils.Constants.EMAIL_KEY
-import sdumchykov.androidApp.presentation.MainActivityArgs
+import sdumchykov.androidApp.domain.utils.Constants
+import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
-import sdumchykov.androidApp.presentation.signUp.SignUpViewModel
 import sdumchykov.androidApp.presentation.utils.ext.setImage
+import sdumchykov.androidApp.presentation.utils.ext.showToast
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
+import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
 import sdumchykov.androidApp.presentation.viewPager.contacts.fetchContacts.FetchContacts
 
-private const val HARDCODED_IMAGE_PATH = "https://www.instagram.com/p/BDdr32ZrvgP/"
-private const val SIGN_AT = '@'
-private const val PATTERN_NON_CHARACTER = "\\W"
 private const val SHOW_CONTACT_LIST = "Fetch contact list"
 private const val SHOW_HARDCODED_LIST = "Show hardcoded contact list data"
 
 @AndroidEntryPoint
 class MyProfileFragment :
     BaseFragment<FragmentMyProfileBinding>(FragmentMyProfileBinding::inflate) {
-    private val viewModel: MyProfileViewModel by viewModels()
-    private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
-    private val args: MainActivityArgs by navArgs()
-    private val parentViewModel by lazy { pagerFragment.myContactsViewModel }
-    private val signUpViewModel: SignUpViewModel by viewModels()
 
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
+    private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
+    private val parentViewModel by lazy { pagerFragment.contactsViewModel }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        myProfileViewModel.getDB()
         checkPrelaunchPermissions()
-
-        setMainPicture()
-        setTextToTextName()
-        setURIToImageInstagram()
     }
 
-
     override fun setListeners() {
-        imageViewMainProfilePictureSetOnClickListener()
+        imageViewMainProfilePictureSetListener()
+        editProfileSetListener()
         buttonViewMyContactsSetOnClickListener()
     }
 
-    private fun checkPrelaunchPermissions() {
-        if (!isPermissionsGranted()) {
-            viewModel.setFetchContactList(false)
-            parentViewModel.initHardcodedDataList()
-        } else {
-            if (viewModel.getFetchContactList()) parentViewModel.initRealUsersList()
-            else parentViewModel.initHardcodedDataList()
+    override fun setObservers() {
+        setStatusObserver()
+    }
+
+    private fun setStatusObserver() {
+        setResponseStatusObserver()
+        setUserObserver()
+    }
+
+    private fun setResponseStatusObserver() {
+        parentViewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+                Status.SUCCESS -> {}
+                Status.ERROR -> {
+                    context?.showToast("Failed to pull account contact list")
+                }
+                Status.LOADING -> {}
+            }
         }
+    }
+
+    private fun setUserObserver() {
+        myProfileViewModel.user.observe(viewLifecycleOwner) {
+            fillInProfile()
+        }
+    }
+
+    private fun checkPrelaunchPermissions() {
+        if (parentViewModel.userContacts.value?.isEmpty() == true)
+            if (!isPermissionsGranted()) {
+                myProfileViewModel.setFetchContactList(false)
+                parentViewModel.apiGetUserContacts()
+            } else {
+                if (myProfileViewModel.getFetchContactList()) parentViewModel.initRealUsersList()
+                else parentViewModel.apiGetUserContacts()
+            }
     }
 
     private fun isPermissionsGranted(): Boolean = ContextCompat.checkSelfPermission(
         requireContext(), Manifest.permission.READ_CONTACTS
     ) == PackageManager.PERMISSION_GRANTED
 
+    private fun fillInProfile() {
+        setMainPicture()
+        setTextToName()
+        setTextToProfession()
+        setTextToAddress()
+        setLinksToSocialNetworks()
+    }
+
     private fun setMainPicture() {
-        val drawableSource = R.drawable.ic_profile_image
-        binding.imageViewMainProfilePicture.setImage(drawableSource)
+        val image = myProfileViewModel.user.value?.image ?: Constants.STUB_IMAGE_URI
+
+        binding.imageViewMainProfilePicture.setImage(Uri.parse(image))
     }
 
-    private fun setTextToTextName() {
-        var receivedEmail = signUpViewModel.getEmail()
+    private fun setTextToName() {
+        binding.textViewMainName.text = myProfileViewModel.user.value?.name
+    }
 
-        if (receivedEmail == "") {
-            /*TODO The problem has occurred, I can't get args.email.
-            Maybe I'm passing an argument to MainActivity but I go directly to ViewPager and
-            don't have access to MainActivity. I did a stub on :89 line for like temporary solution*/
-            receivedEmail = args.email
+    private fun setTextToProfession() {
+        binding.textViewMainProfession.text = myProfileViewModel.user.value?.career
+    }
 
-            cacheEmailToSharedPreferences()
-        }
+    private fun setTextToAddress() {
+        binding.textViewMainAddress.text = myProfileViewModel.user.value?.address
+    }
 
-        val splittedEmail = receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
-            .split(Regex(PATTERN_NON_CHARACTER))
-        binding.textViewMainName.text = if (splittedEmail.size > 1) {
-            val firstName = splittedEmail[0].replaceFirstChar { it.uppercase() }
-            val secondName = splittedEmail[1].replaceFirstChar { it.uppercase() }
-            val textContent = "$firstName $secondName"
-            textContent
-        } else {
-            receivedEmail.substring(0, receivedEmail.indexOf(SIGN_AT))
-        }
+    private fun setLinksToSocialNetworks() {
+        setLinkToFacebook()
+        setLinkToLinkedIn()
+        setLinkToInstagram()
+    }
 
-        if (signUpViewModel.getPassword() == "") {
-            signUpViewModel.saveEmail("")
+    private fun setLinkToFacebook() {
+        binding.imageViewMainFacebook.setOnClickListener {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(myProfileViewModel.user.value?.facebook)
+                )
+            )
         }
     }
 
-    private fun cacheEmailToSharedPreferences() {
-        val cachedData =
-            this.requireActivity().getSharedPreferences("credentials", Context.MODE_PRIVATE)
-        val editor = cachedData.edit()
-
-        editor.putString(EMAIL_KEY, args.email)
-
-        editor.apply()
+    private fun setLinkToLinkedIn() {
+        binding.imageViewMainLinkedIn.setOnClickListener {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(myProfileViewModel.user.value?.linkedin)
+                )
+            )
+        }
     }
 
-    private fun setURIToImageInstagram() {
+    private fun setLinkToInstagram() {
         binding.imageViewMainInstagram.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(HARDCODED_IMAGE_PATH)))
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(myProfileViewModel.user.value?.instagram)
+                )
+            )
         }
     }
 
-    private fun imageViewMainProfilePictureSetOnClickListener() {
+    private fun imageViewMainProfilePictureSetListener() {
         binding.imageViewMainProfilePicture.setOnClickListener {
-            val fetchContactList = !viewModel.getFetchContactList()
-            viewModel.setFetchContactList(fetchContactList)
+            val fetchContactList = !myProfileViewModel.getFetchContactList()
+            myProfileViewModel.setFetchContactList(fetchContactList)
 
             if (fetchContactList) {
                 if (!isPermissionsGranted()) {
                     FetchContacts().fetchContacts(activity as AppCompatActivity,
                         { parentViewModel.initRealUsersList() },
-                        { parentViewModel.initHardcodedDataList() })
-                    if (!isPermissionsGranted()) viewModel.setFetchContactList(false)
+                        { parentViewModel.apiGetUserContacts() })
+                    if (!isPermissionsGranted()) myProfileViewModel.setFetchContactList(false)
                 } else parentViewModel.initRealUsersList()
 
-            } else parentViewModel.initHardcodedDataList()
+            } else parentViewModel.apiGetUserContacts()
 
-            val toastText = if (viewModel.getFetchContactList()) SHOW_CONTACT_LIST
+            val toastText = if (myProfileViewModel.getFetchContactList()) SHOW_CONTACT_LIST
             else SHOW_HARDCODED_LIST
-            Toast.makeText(activity, toastText, Toast.LENGTH_SHORT).show()
+
+            context?.showToast(toastText)
+        }
+    }
+
+    private fun editProfileSetListener() {
+        binding.buttonMainEditProfile.setOnClickListener {
+            val action = ViewPagerFragmentDirections.actionViewPagerFragmentToEditProfileFragment()
+            Navigation.findNavController(binding.root).navigate(action)
         }
     }
 
@@ -145,4 +187,5 @@ class MyProfileFragment :
                 ViewPagerFragment.Tabs.CONTACTS.ordinal
         }
     }
+
 }

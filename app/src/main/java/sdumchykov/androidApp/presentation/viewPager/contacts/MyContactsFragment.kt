@@ -1,11 +1,9 @@
 package sdumchykov.androidApp.presentation.viewPager.contacts
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatEditText
+import android.widget.SearchView
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,17 +11,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
-import sdumchykov.androidApp.databinding.AddContactsDialogBinding
 import sdumchykov.androidApp.databinding.FragmentMyContactsBinding
-import sdumchykov.androidApp.domain.model.UserModel
+import sdumchykov.androidApp.domain.model.User
+import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.utils.SwipeToDeleteCallback
 import sdumchykov.androidApp.presentation.utils.ext.gone
+import sdumchykov.androidApp.presentation.utils.ext.showToast
 import sdumchykov.androidApp.presentation.utils.ext.visible
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragment
 import sdumchykov.androidApp.presentation.viewPager.ViewPagerFragmentDirections
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.UsersAdapter
 import sdumchykov.androidApp.presentation.viewPager.contacts.adapter.listener.UsersListener
+import sdumchykov.androidApp.presentation.viewPager.myProfile.MyProfileViewModel
 
 private const val SNACKBAR_TIME_LENGTH = 5000
 
@@ -31,26 +31,22 @@ private const val SNACKBAR_TIME_LENGTH = 5000
 class MyContactsFragment :
     BaseFragment<FragmentMyContactsBinding>(FragmentMyContactsBinding::inflate) {
 
+    private val myProfileViewModel: MyProfileViewModel by viewModels()
     private val pagerFragment by lazy { parentFragment as ViewPagerFragment }
-    private val parentViewModel by lazy { pagerFragment.myContactsViewModel }
+    private val parentViewModel by lazy { pagerFragment.contactsViewModel }
     private val usersAdapter: UsersAdapter by lazy {
         UsersAdapter(
             usersListener = object : UsersListener {
-                override fun onUserClickAction(userModel: UserModel, adapterPosition: Int) {
-                    Log.d("MainActivity", "onUserClickAction: ${userModel.id}")
+                override fun onUserClickAction(user: User, adapterPosition: Int) {
                     val action =
                         ViewPagerFragmentDirections.actionViewPagerFragmentToContactProfileFragment(
-                            userModel
+                            user
                         )
                     Navigation.findNavController(binding.root).navigate(action)
                 }
 
-                override fun onTrashIconClickAction(userModel: UserModel, userIndex: Int) {
-                    deleteContact(userModel, userIndex)
-                }
-
-                override fun onContactRemove(userModel: UserModel) {
-                    parentViewModel.removeItem(userModel)
+                override fun onContactRemove(user: User) {
+                    deleteContact(user)
                 }
 
                 override fun onMultiselectActivated() {
@@ -74,50 +70,151 @@ class MyContactsFragment :
     }
 
     private var swipeFlags = ItemTouchHelper.END
-    private var dialogAddContact: AlertDialog? = null
 
-    //region Main code
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
         setSwipeToDelete()
-        createAddContactDialog()
-//        handleRecyclerViewContent()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!myProfileViewModel.getFetchContactList()) parentViewModel.apiGetUserContacts()
     }
 
     override fun setObservers() {
         setUserLiveDataObserver()
+        setResponseStatusObserver()
     }
 
     override fun setListeners() {
-        imageButtonArrowBackListener()
-        multiSelectedItemsTrashCanListener()
-        imageViewMyContactsCancelListener()
+        imageButtonArrowBackSetListener()
+        searchViewSetListener()
+        iconSearchSetListener()
+        multiSelectedItemsTrashCanSetListener()
+        imageViewMyContactsCancelSetListener()
+        textViewAddContactsSetListener()
     }
 
     private fun setUserLiveDataObserver() {
-        parentViewModel.userLiveData.observe(this) { users ->
+        parentViewModel.userContacts.observe(viewLifecycleOwner) { users ->
             usersAdapter.submitList(users.toMutableList())
         }
     }
 
-    private fun imageButtonArrowBackListener() {
+    private fun setResponseStatusObserver() {
+        parentViewModel.statusUserContacts.observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+                Status.SUCCESS -> {}
+                Status.ERROR -> {
+                    context?.showToast("Failed to pull users")
+                }
+                Status.LOADING -> {}
+            }
+        }
+    }
+
+    private fun imageButtonArrowBackSetListener() {
         binding.imageViewMyContactsArrowBack.setOnClickListener {
             (parentFragment as ViewPagerFragment).viewPager.currentItem = 0
         }
     }
 
-    private fun multiSelectedItemsTrashCanListener() {
+    private fun searchViewSetListener() {
+        binding.searchViewMyContacts?.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
+            }
+        })
+        binding.searchViewMyContacts?.setOnCloseListener(object : SearchView.OnCloseListener,
+            androidx.appcompat.widget.SearchView.OnCloseListener {
+            override fun onClose(): Boolean {
+                with(binding) {
+                    imageViewMyContactsArrowBack.visible()
+                    textViewMyContactsContacts.visible()
+                    imageViewMyContactsSearch.visible()
+
+                    searchViewMyContacts?.gone()
+                    usersAdapter.submitList(parentViewModel.userContacts.value?.toMutableList())
+                }
+
+                return true
+            }
+        })
+    }
+
+    private fun iconSearchSetListener() {
+        binding.imageViewMyContactsSearch.setOnClickListener {
+            with(binding) {
+                imageViewMyContactsArrowBack.gone()
+                textViewMyContactsContacts.gone()
+                imageViewMyContactsSearch.gone()
+
+                searchViewMyContacts?.visible()
+            }
+        }
+    }
+
+    private fun filterList(text: String?) {
+        if (text != null) {
+            val filteredList = arrayListOf<User>()
+
+            parentViewModel.userContacts.value.let {
+                if (it != null) {
+                    for (item in it) {
+                        if (item.name?.lowercase()?.contains(text.lowercase()) == true) {
+                            filteredList.add(item)
+                        }
+                    }
+                }
+            }
+
+            if (filteredList.isEmpty()) {
+                with(binding) {
+                    recyclerViewMyContactsContactList.gone()
+                    textViewMyContactsTopText?.visible()
+                    textViewMyContactsBottomText?.visible()
+                }
+
+            } else {
+                with(binding) {
+                    recyclerViewMyContactsContactList.visible()
+                    textViewMyContactsTopText?.gone()
+                    textViewMyContactsBottomText?.gone()
+                }
+                usersAdapter.submitList(filteredList.toMutableList())
+            }
+        }
+    }
+
+    private fun multiSelectedItemsTrashCanSetListener() {
         binding.buttonRemoveSelectedContacts.setOnClickListener {
             removeSelectedItemsFromRecyclerView()
         }
     }
 
-    private fun imageViewMyContactsCancelListener() {
+    private fun imageViewMyContactsCancelSetListener() {
         binding.imageViewMyContactsCancel?.setOnClickListener {
             usersAdapter.unselectItems()
             usersAdapter.usersListener.onContactSelectedStateChanged()
+        }
+    }
+
+    private fun textViewAddContactsSetListener() {
+        with(binding) {
+            textViewMyContactsAddContacts.setOnClickListener {
+                val action =
+                    ViewPagerFragmentDirections.actionViewPagerFragmentToAddContactFragment()
+                Navigation.findNavController(binding.root).navigate(action)
+            }
         }
     }
 
@@ -134,7 +231,7 @@ class MyContactsFragment :
                 val position = viewHolder.adapterPosition
                 val contact = parentViewModel.getContactByPosition(position)
                 contact?.let {
-                    deleteContact(it, position)
+                    deleteContact(it)
                 }
             }
         }
@@ -143,67 +240,24 @@ class MyContactsFragment :
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewMyContactsContactList)
     }
 
-    fun deleteContact(contact: UserModel, index: Int) {
-        parentViewModel.removeItem(contact)
+    fun deleteContact(user: User) {
+        parentViewModel.apiDeleteContact(user.id)
 
         val snackbar = Snackbar.make(
             binding.recyclerViewMyContactsContactList,
-            getString(R.string.contactHasBeenDeleted, contact.name),
+            getString(R.string.contactHasBeenDeleted, user.name),
             SNACKBAR_TIME_LENGTH
         )
 
         snackbar.setAction(getString(R.string.undo)) {
-            parentViewModel.addItem(contact, index)
+            parentViewModel.apiAddContact(user.id)
+            parentViewModel.apiGetUserContacts()
 
-            Toast.makeText(
-                activity,
-                getString(R.string.contactHasBeenRestored, contact.name),
-                Toast.LENGTH_LONG
-            ).show()
+            context?.showToast(getString(R.string.contactHasBeenRestored, user.name))
         }
         snackbar.show()
-    }
 
-    private fun createAddContactDialog() {
-        val addContactsBinding = AddContactsDialogBinding.inflate(layoutInflater)
-
-        with(addContactsBinding) {
-            val name = editTextAddContactsDialogName
-            val surname = editTextAddContactsDialogSurname
-            val profession = editTextAddContactsDialogProfession
-
-            dialogAddContact = activity?.let {
-                AlertDialog.Builder(it).setView(addContactsBinding.root).setOnCancelListener {
-                    clearFieldsInDialog(name, surname, profession)
-                }.create()
-            }
-
-            buttonAddContactsDialogAdd.setOnClickListener {
-                parentViewModel.addNewItem(
-                    name = "${name.text} ${surname.text}", profession = profession.text.toString()
-                )
-
-                clearFieldsInDialog(name, surname, profession)
-                dialogAddContact?.dismiss()
-            }
-
-            buttonAddContactsDialogCancel.setOnClickListener {
-                clearFieldsInDialog(name, surname, profession)
-                dialogAddContact?.dismiss()
-            }
-
-            binding.textViewMyContactsAddContacts.setOnClickListener { dialogAddContact?.show() }
-        }
-    }
-
-    private fun clearFieldsInDialog(
-        name: AppCompatEditText?,
-        surname: AppCompatEditText?,
-        profession: AppCompatEditText?
-    ) {
-        name?.text?.clear()
-        surname?.text?.clear()
-        profession?.text?.clear()
+        parentViewModel.apiGetUserContacts()
     }
 
     //endregion
@@ -236,9 +290,9 @@ class MyContactsFragment :
     }
 
     private fun removeSelectedItemsFromRecyclerView() {
-        usersAdapter.removeSelectedItems(parentViewModel)
-        initRecyclerView()
-        if (parentViewModel.userLiveData.value?.isEmpty() == true) {
+        usersAdapter.removeSelectedItems(parentViewModel, myProfileViewModel.getFetchContactList())
+
+        if (parentViewModel.userContacts.value?.isEmpty() == true) {
             with(binding) {
                 frameLayoutButtonsContainer.gone()
                 buttonRemoveSelectedContacts.gone()

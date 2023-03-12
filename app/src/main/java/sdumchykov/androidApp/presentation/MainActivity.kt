@@ -16,7 +16,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        TODO Why should I do it with supportFragmentManager but not with binding.mainActivityNavHostFragment?
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.mainActivityNavHostFragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -25,4 +24,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
 }

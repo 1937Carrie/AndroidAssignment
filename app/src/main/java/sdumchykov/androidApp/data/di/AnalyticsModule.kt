@@ -4,9 +4,11 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import sdumchykov.androidApp.data.repository.UsersRepositoryImpl
+import sdumchykov.androidApp.data.repository.LocalLocalUsersRepositoryImpl
+import sdumchykov.androidApp.data.repository.NetworkUsersRepositoryImpl
 import sdumchykov.androidApp.data.storage.SharedPreferencesStorage
-import sdumchykov.androidApp.domain.repository.UsersRepository
+import sdumchykov.androidApp.domain.repository.LocalUsersRepository
+import sdumchykov.androidApp.domain.repository.NetworkUsersRepository
 import sdumchykov.androidApp.domain.storage.Storage
 import javax.inject.Singleton
 
@@ -17,12 +19,18 @@ abstract class AnalyticsModule {
     @Binds
     @Singleton
     abstract fun bindUserRepository(
-        usersRepository: UsersRepositoryImpl
-    ): UsersRepository
+        usersRepository: LocalLocalUsersRepositoryImpl
+    ): LocalUsersRepository
 
     @Binds
     @Singleton
     abstract fun bindSharedPreferencesStorage(
         storage: SharedPreferencesStorage
     ): Storage
+
+    @Binds
+    @Singleton
+    abstract fun bindNetworkRepository(
+        networkUsersRepository: NetworkUsersRepositoryImpl
+    ): NetworkUsersRepository
 }
