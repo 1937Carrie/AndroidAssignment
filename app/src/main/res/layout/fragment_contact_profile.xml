@@ -174,6 +174,18 @@
         app:layout_constraintTop_toBottomOf="@id/textViewProfession"
         tools:text="775 Westminster Avenue APT D5 Brooklyn, NY, 11230" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewContactDetailViewNumber"
+        style="@style/widthHeightIsWrapContent"
+
+        android:textAppearance="@style/additionalTextAppearance"
+
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuideline_activityMain_050"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewAddress"
+        tools:text="Test number" />
+
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flow"
         android:layout_width="0dp"

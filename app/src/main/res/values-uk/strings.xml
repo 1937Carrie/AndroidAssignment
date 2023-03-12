@@ -1,17 +1,15 @@
 <resources>
     <!--  App name  -->
-    <string name="app_name">Detail view</string>
-    <!--  Main activity  -->
-    <string name="settings">Налаштування</string>
-    <string name="profile_image">Зображення профілю</string>
-    <string name="name">Людмила Альвараденко</string>
-    <string name="profession">Графічний дизайнер</string>
-    <string name="address">Соборна 22</string>
-    <string name="edit_profile">Редагувати профіль</string>
-    <string name="view_my_contacts">Переглянути контакти</string>
-    <!-- Main activity service strings  -->
-    <string name="error_message_email">Введіть валідний email</string>
-    <string name="error_message_password">Мінімум 8 символів. Букви і літери обов\'язково</string>
+    <string name="app_name">Task-5. WebInteraction</string>
+    <!--  Authorization activity  -->
+    <!--  Log In fragment  -->
+    <string name="hello">Привіт!</string>
+    <string name="enterEmail">Enter your email and password below</string>
+    <string name="forgotPassword">Forgot your password?</string>
+    <string name="signUp">Sign up</string>
+    <string name="dontHaveAccount">Don\'t have account?</string>
+    <string name="login">Login</string>
+    <string name="emailAuthErrorMessage">Account with these credentials doesn\'t exist</string>
     <!--  Sign up activity  -->
     <string name="let_s_get_a">Хто будеш?</string>
     <string name="fill_out_the_profile">Заповніть профіль і переходьте до додатку!</string>
@@ -24,15 +22,46 @@
     <string name="by_clicking">Натиснувши «Реєстрація», ви погоджуєтеся з нашими умовами</string>
     <string name="already_have">Вже є аккаунт?</string>
     <string name="sign_in">Увійти</string>
+    <!--  Sign Up Extended-->
+    <string name="yourProfileData">Your profile data</string>
+    <string name="userName">User name</string>
+    <string name="mobilePhone">Mobile phone</string>
+    <string name="cancel">Cancel</string>
+    <string name="forward">Forward</string>
+
+    <!--  Main activity-->
+    <!--  My profile fragment  -->
+    <string name="settings">Налаштування</string>
+    <string name="profile_image">Зображення профілю</string>
+    <string name="name">Людмила Альвараденко</string>
+    <string name="profession">Графічний дизайнер</string>
+    <string name="address">Соборна 22</string>
+    <string name="edit_profile">Редагувати профіль</string>
+    <string name="view_my_contacts">Переглянути контакти</string>
+    <!-- Edit profile -->
+    <string name="editProfileEditProfile">Edit profile</string>
+    <string name="editProfileUsername">Username</string>
+    <string name="editProfileCareer">Career</string>
+    <string name="editProfileEmail">Email</string>
+    <string name="editProfilePhone">Phone</string>
+    <string name="editProfileAddress">Address</string>
+    <string name="editProfileDOB">Date of birth</string>
+    <string name="editProfileSave">Save</string>
+    <!-- Main activity service strings  -->
+    <string name="error_message_email">Введіть валідний email</string>
+    <string name="error_message_password">Мінімум 8 символів. Букви і літери обов\'язково</string>
     <!--  RecyclerView  -->
     <string name="contactHasBeenDeleted">%1$s був видалений</string>
     <string name="contactHasBeenRestored">%1$s був відновлений</string>
     <string name="undo">Відновити</string>
+    <string name="fragmentMyContactsRecyclerTopText">No results found</string>
+    <string name="fragmentMyContactsRecyclerBottomText">You can see more contacts in the recommendation</string>
     <!--  contentDescription  -->
     <string name="icon_facebook">Іконка Facebook</string>
     <string name="icon_linkedin">Іконка Linkedin</string>
     <string name="icon_instagram">Іконка Instagram</string>
     <string name="contacts">Контакти</string>
+    <string name="users">Users</string>
     <string name="add_contacts">Додати контакти</string>
     <string name="add_contact">Додати контакт</string>
     <string name="dialog_contact_name">Ім\'я</string>
@@ -44,4 +73,12 @@
     <string name="tab1">My Profile</string>
     <string name="tab2">My contacts</string>
     <string name="onDeniedPermission">\"Permission should be granted!\"</string>
+    <string name="code400">Invalid request</string>
+    <string name="code401">Unauthorized</string>
+    <string name="code403">Access denied</string>
+    <string name="code404">Not found</string>
+    <string name="messageIOException">Broken response</string>
+    <string name="messageHTTPException">Http exception</string>
+    <string name="messageUnexpectedState">Something gone wrong</string>
+    <string name="oops">Oops</string>
 </resources>

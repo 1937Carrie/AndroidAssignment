@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.editProfile.EditProfileFragment">
+
+    <View
+        android:id="@+id/viewEditProfilePrimary"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:background="@color/steel_gray"
+
+        app:layout_constraintBottom_toTopOf="@id/viewEditProfileSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="0.3" />
+
+    <View
+        android:id="@+id/viewEditProfileSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:background="@color/mine_shaft"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewEditProfilePrimary"
+        app:layout_constraintVertical_weight="0.7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuidelineEditProfile003"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.03" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuidelineEditProfile008"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuidelineEditProfile098"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGuidelineEditProfile03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuidelineEditProfile004"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.04" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuidelineEditProfile096"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96" />
+
+    <ProgressBar
+        android:id="@+id/progressBarEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageEditProfileArrowBack"
+        style="@style/widthHeightIsWrapContent"
+
+        android:src="@drawable/ic_baseline_arrow_back_24"
+
+        app:layout_constraintBottom_toBottomOf="@id/horizontalGuidelineEditProfile008"
+        app:layout_constraintStart_toStartOf="@id/verticalGuidelineEditProfile004"
+        app:layout_constraintTop_toTopOf="@id/horizontalGuidelineEditProfile003" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textViewMyContactsContacts"
+        style="@style/widthHeightIsWrapContent"
+
+        android:fontFamily="@font/opensans_semi_bold"
+        android:text="@string/editProfileEditProfile"
+        android:textColor="@color/alabaster"
+        android:textSize="@dimen/text_18sp"
+
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuidelineEditProfile008"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/horizontalGuidelineEditProfile003" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewEditProfilePicture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_marginVertical="@dimen/dimension_24dp"
+        android:contentDescription="@string/profile_image"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuidelineEditProfile03"
+
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/horizontalGuidelineEditProfile008"
+
+        tools:src="@tools:sample/avatars" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewSignUpExtendedChooseProfileImageFromGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimension_16dp"
+        android:src="@drawable/ic_image_from_camera"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuidelineEditProfile03"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toEndOf="@id/imageViewEditProfilePicture"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuidelineEditProfile008" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEditProfileUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/editProfileUsername"
+        app:expandedHintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayoutEditProfileCareer"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuidelineEditProfile096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuidelineEditProfile004"
+        app:layout_constraintTop_toBottomOf="@id/horizontalGuidelineEditProfile03">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextEditProfileUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEditProfileCareer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/editProfileCareer"
+        app:expandedHintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayoutEditProfileEmail"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuidelineEditProfile096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuidelineEditProfile004"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutEditProfileUsername">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextEditProfileCareer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEditProfileEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/editProfileEmail"
+        app:expandedHintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayoutEditProfilePhone"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuidelineEditProfile096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuidelineEditProfile004"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutEditProfileCareer">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextEditProfileEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEditProfilePhone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/editProfilePhone"
+        app:expandedHintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayoutEditProfileAddress"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuidelineEditProfile096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuidelineEditProfile004"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutEditProfileEmail">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextEditProfilePhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEditProfileAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/editProfileAddress"
+        app:expandedHintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayoutEditProfileDateOfBirth"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuidelineEditProfile096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuidelineEditProfile004"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutEditProfilePhone">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextEditProfileAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutEditProfileDateOfBirth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/editProfileDOB"
+        app:expandedHintEnabled="false"
+        app:layout_constraintBottom_toTopOf="@id/buttonEditProfileSave"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuidelineEditProfile096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuidelineEditProfile004"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutEditProfileAddress">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditTextEditProfileDateOfBirth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:inputType="date"
+            android:textColor="@color/woodsmoke"
+            tools:text="Test" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonEditProfileSave"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/btn_orange"
+        android:text="@string/editProfileSave"
+        android:textAllCaps="true"
+        android:textAppearance="@style/viewMyContactsTextAppearance"
+
+        app:layout_constraintBottom_toTopOf="@id/horizontalGuidelineEditProfile098"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuidelineEditProfile096"
+        app:layout_constraintStart_toStartOf="@id/verticalGuidelineEditProfile004"
+        tools:ignore="VisualLintButtonSize" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

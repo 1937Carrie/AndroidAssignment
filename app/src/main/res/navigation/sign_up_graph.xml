@@ -3,23 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sign_up_graph"
-    app:startDestination="@id/signUpFragment">
+    app:startDestination="@id/logInFragment">
     <fragment
         android:id="@+id/signUpFragment"
         android:name="sdumchykov.androidApp.presentation.signUp.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        tools:layout="@layout/fragment_sign_up">
         <action
-            android:id="@+id/action_signUpFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
+            android:id="@+id/action_signUpFragment_to_logInFragment"
+            app:destination="@id/logInFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signUpExtendedFragment"
+            app:destination="@id/signUpExtendedFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="sdumchykov.androidApp.presentation.MainActivity"
         android:label="activity_main"
-        tools:layout="@layout/activity_main" >
-        <argument
-            android:name="email"
-            app:argType="string" />
-    </activity>
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/logInFragment"
+        android:name="sdumchykov.androidApp.presentation.logIn.LogInFragment"
+        android:label="fragment_log_in"
+        tools:layout="@layout/fragment_log_in">
+        <action
+            android:id="@+id/action_logInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_logInFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpExtendedFragment"
+        android:name="sdumchykov.androidApp.presentation.signUpExtended.SignUpExtendedFragment"
+        android:label="fragment_sign_up_extended"
+        tools:layout="@layout/fragment_sign_up_extended">
+        <action
+            android:id="@+id/action_signUpExtendedFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
 </navigation>
