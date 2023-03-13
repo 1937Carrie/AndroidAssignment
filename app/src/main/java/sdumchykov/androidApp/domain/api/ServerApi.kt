@@ -4,12 +4,12 @@ import retrofit2.Response
 import retrofit2.http.*
 import sdumchykov.androidApp.domain.model.Data
 import sdumchykov.androidApp.domain.model.ServerResponse
-import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.domain.model.authorizeUser.AuthorizationData
 import sdumchykov.androidApp.domain.model.contacts.Contacts
 import sdumchykov.androidApp.domain.model.register.RegisterData
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
+import sdumchykov.androidApp.domain.model.requestModels.EditProfileResponseData
 import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 
 interface ServerApi {
@@ -26,7 +26,7 @@ interface ServerApi {
         @Path("userID") userId: Int,
         @Header("Authorization") token: String,
         @Body body: EditProfileUser
-    ): Response<ServerResponse<User>>
+    ): Response<ServerResponse<EditProfileResponseData>>
 
     @POST("login")
     @Headers("Content-type: application/json")

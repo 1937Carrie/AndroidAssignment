@@ -1,12 +1,14 @@
 package sdumchykov.androidApp.presentation.logIn
 
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentLogInBinding
+import sdumchykov.androidApp.domain.utils.Constants
 import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
 import sdumchykov.androidApp.presentation.signUp.CredentialsViewModel
@@ -91,8 +93,45 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>(FragmentLogInBinding::i
         with(binding) {
             buttonLogInLogin.setOnClickListener {
                 saveRememberMe()
-                authorizeAccount()
+                if (isEmailAndPasswordCorrect()) {
+                    authorizeAccount()
+                } else {
+                    showErrorHint()
+                }
             }
+        }
+    }
+
+    private fun isEmailAndPasswordCorrect(): Boolean = isEmailCorrect() && isPasswordCorrect()
+
+    private fun isEmailCorrect(): Boolean {
+        with(binding) {
+            val emailIsOk =
+                Patterns.EMAIL_ADDRESS.matcher(textInputLayoutLogInEmail.editText?.text.toString())
+                    .matches()
+
+            return emailIsOk
+        }
+    }
+
+    private fun isPasswordCorrect(): Boolean {
+        with(binding) {
+            val password = textInputLayoutLogInPassword.editText?.text.toString()
+
+            val isPasswordEqualOrGreaterSixteenSymbols =
+                (password.length) <= Constants.MAXIMUM_PASSWORD_LENGTH
+
+            return isPasswordEqualOrGreaterSixteenSymbols
+        }
+    }
+
+    private fun showErrorHint() {
+        with(binding) {
+            textInputLayoutLogInEmail.error =
+                if (!isEmailCorrect()) getString(R.string.error_message_email) else null
+
+            textInputLayoutLogInPassword.error =
+                if (!isPasswordCorrect()) getString(R.string.error_message_password) else null
         }
     }
 

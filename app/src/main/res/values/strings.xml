@@ -49,7 +49,7 @@
     <string name="editProfileSave">Save</string>
     <!-- Main activity service strings  -->
     <string name="error_message_email">Enter valid email</string>
-    <string name="error_message_password">Min 8 symbols. Letters and digits are required</string>
+    <string name="error_message_password">Max 16 symbols</string>
     <!--  RecyclerView  -->
     <string name="contactHasBeenDeleted">%1$s has been deleted</string>
     <string name="contactHasBeenRestored">%1$s has been restored</string>

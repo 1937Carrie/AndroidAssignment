@@ -49,7 +49,7 @@
     <string name="editProfileSave">Save</string>
     <!-- Main activity service strings  -->
     <string name="error_message_email">Введіть валідний email</string>
-    <string name="error_message_password">Мінімум 8 символів. Букви і літери обов\'язково</string>
+    <string name="error_message_password">Максимум 16 символів</string>
     <!--  RecyclerView  -->
     <string name="contactHasBeenDeleted">%1$s був видалений</string>
     <string name="contactHasBeenRestored">%1$s був відновлений</string>
