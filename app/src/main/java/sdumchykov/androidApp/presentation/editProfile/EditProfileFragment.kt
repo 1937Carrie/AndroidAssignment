@@ -108,7 +108,7 @@ class EditProfileFragment :
         with(binding) {
             buttonEditProfileSave.setOnClickListener {
                 val name = textInputLayoutEditProfileUsername.editText?.text.toString()
-                val phone = textInputLayoutEditProfileEmail.editText?.text.toString()
+                val phone = textInputLayoutEditProfilePhone.editText?.text.toString()
                 val address = textInputLayoutEditProfileAddress.editText?.text.toString()
                 val career = textInputLayoutEditProfileCareer.editText?.text.toString()
                 val DOB = textInputLayoutEditProfileDateOfBirth.editText?.text.toString()

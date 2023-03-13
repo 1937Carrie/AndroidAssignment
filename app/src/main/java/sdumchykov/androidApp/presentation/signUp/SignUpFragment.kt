@@ -9,11 +9,9 @@ import androidx.navigation.Navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import sdumchykov.androidApp.R
 import sdumchykov.androidApp.databinding.FragmentSignUpBinding
+import sdumchykov.androidApp.domain.utils.Constants
+import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
-
-private const val MINIMUM_PASSWORD_LENGTH = 8
-private const val PATTERN_DIGIT = "\\d"
-private const val PATTERN_CHARACTERS = "[a-zA-Z]+"
 
 @AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate) {
@@ -23,7 +21,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        buttonRegisterDisable()
         textInputDoOnTextChanged()
     }
 
@@ -34,8 +31,23 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         signInSetListener()
     }
 
-    private fun buttonRegisterDisable() {
-        binding.buttonSignUpRegister.isEnabled = false
+    override fun setObservers() {
+        setStatusObserver()
+    }
+
+    private fun setStatusObserver() {
+        credentialsViewModel.status.observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+                Status.SUCCESS -> {
+                    val action =
+                        SignUpFragmentDirections.actionSignUpFragmentToSignUpExtendedFragment()
+                    findNavController(binding.root).navigate(action)
+                }
+                Status.ERROR -> {}
+                Status.LOADING -> {}
+            }
+
+        }
     }
 
     private fun textInputDoOnTextChanged() {
@@ -55,11 +67,12 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
 
             editTextSignUpPassword.doOnTextChanged { _, _, _, _ ->
                 val lessThanEightSymbols =
-                    editTextSignUpPassword.text.toString().length < MINIMUM_PASSWORD_LENGTH
+                    editTextSignUpPassword.text.toString().length < Constants.MINIMUM_PASSWORD_LENGTH
                 val notContainsDigits =
-                    !editTextSignUpPassword.text.toString().contains(Regex(PATTERN_DIGIT))
+                    !editTextSignUpPassword.text.toString().contains(Regex(Constants.PATTERN_DIGIT))
                 val notContainsCharacters =
-                    !editTextSignUpPassword.text.toString().contains(Regex(PATTERN_CHARACTERS))
+                    !editTextSignUpPassword.text.toString()
+                        .contains(Regex(Constants.PATTERN_CHARACTERS))
 
                 textInputLayoutSignUpPassword.error =
                     if (lessThanEightSymbols || notContainsDigits || notContainsCharacters) resources.getString(
@@ -76,14 +89,13 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     }
 
     private fun buttonRegisterSetListener() {
-        binding.buttonSignUpRegister.setOnClickListener {
-            val email = binding.textInputLayoutSignUpEmail.editText?.text.toString()
-            val password = binding.textInputLayoutSignUpPassword.editText?.text.toString()
+        with(binding) {
+            buttonSignUpRegister.setOnClickListener {
+                val email = textInputLayoutSignUpEmail.editText?.text.toString()
+                val password = textInputLayoutSignUpPassword.editText?.text.toString()
 
-            credentialsViewModel.register(email, password)
-
-            val action = SignUpFragmentDirections.actionSignUpFragmentToSignUpExtendedFragment()
-            findNavController(binding.root).navigate(action)
+                credentialsViewModel.register(email, password)
+            }
         }
     }
 

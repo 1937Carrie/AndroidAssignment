@@ -3,12 +3,12 @@ package sdumchykov.androidApp.domain.repository
 import retrofit2.Response
 import sdumchykov.androidApp.domain.model.Data
 import sdumchykov.androidApp.domain.model.ServerResponse
-import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.domain.model.authorizeUser.AuthorizationData
 import sdumchykov.androidApp.domain.model.contacts.Contacts
 import sdumchykov.androidApp.domain.model.register.RegisterData
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
+import sdumchykov.androidApp.domain.model.requestModels.EditProfileResponseData
 import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 
 interface NetworkUsersRepository {
@@ -22,7 +22,7 @@ interface NetworkUsersRepository {
         userId: Int,
         token: String,
         body: EditProfileUser
-    ): Response<ServerResponse<User>>
+    ): Response<ServerResponse<EditProfileResponseData>>
 
     suspend fun authorizeUser(body: AuthorizeModel): Response<ServerResponse<AuthorizationData>>
 

@@ -1,17 +1,16 @@
 package sdumchykov.androidApp.presentation.signUpExtended
 
 import android.telephony.PhoneNumberFormattingTextWatcher
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
 import sdumchykov.androidApp.databinding.FragmentSignUpExtendedBinding
+import sdumchykov.androidApp.domain.utils.Status
 import sdumchykov.androidApp.presentation.base.BaseFragment
+import sdumchykov.androidApp.presentation.signUp.CredentialsViewModel
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpExtendedFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignUpExtendedFragment :
     BaseFragment<FragmentSignUpExtendedBinding>(FragmentSignUpExtendedBinding::inflate) {
+    private val viewModel: CredentialsViewModel by viewModels()
 
     override fun setListeners() {
         buttonForwardSetListener()
@@ -19,15 +18,32 @@ class SignUpExtendedFragment :
     }
 
     override fun setObservers() {
+        setStatusObserver()
+    }
+
+    private fun setStatusObserver() {
+        viewModel.status.observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+                Status.SUCCESS -> {
+                    val action =
+                        SignUpExtendedFragmentDirections.actionSignUpExtendedFragmentToMainActivity()
+                    findNavController(binding.root).navigate(action)
+                }
+                Status.ERROR -> {}
+                Status.LOADING -> {}
+            }
+        }
+
     }
 
     private fun buttonForwardSetListener() {
-        binding.buttonSignUpExtendedForward.setOnClickListener {
+        with(binding) {
+            buttonSignUpExtendedForward.setOnClickListener {
+                val name = textInputLayoutSignUpExtendedUserName.editText?.text.toString()
+                val phone = textInputLayoutSignUpExtendedMobilePhone.editText?.text.toString()
 
-
-            val action =
-                SignUpExtendedFragmentDirections.actionSignUpExtendedFragmentToMainActivity()
-            findNavController(binding.root).navigate(action)
+                viewModel.apiEditProfile(name, phone)
+            }
         }
     }
 

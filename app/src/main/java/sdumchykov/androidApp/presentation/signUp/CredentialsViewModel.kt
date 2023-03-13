@@ -12,6 +12,7 @@ import sdumchykov.androidApp.R
 import sdumchykov.androidApp.domain.local.AppDatabase
 import sdumchykov.androidApp.domain.local.User
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
+import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 import sdumchykov.androidApp.domain.repository.NetworkUsersRepository
 import sdumchykov.androidApp.domain.storage.Storage
 import sdumchykov.androidApp.domain.utils.Constants
@@ -131,6 +132,55 @@ class CredentialsViewModel @Inject constructor(
         }
     }
 
+    fun apiEditProfile(
+        name: String, phone: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userDao = db.userDao()
+            val userId = userDao.getUser().id
+
+            setLoadingStatus(_status)
+
+            val response = try {
+                serverRepository.editUser(
+                    userId, Constants.BEARER_TOKEN + getAccessToken(), EditProfileUser(
+                        name = name,
+                        phone = phone
+                    )
+                )
+            } catch (e: IOException) {
+                setErrorStatus(_status, R.string.messageIOException)
+                return@launch
+            } catch (e: HttpException) {
+                setErrorStatus(_status, R.string.messageHTTPException)
+                return@launch
+            }
+            if (response.isSuccessful) {
+                val user = response.body()?.data?.user
+                val userData = User(
+                    address = user?.address,
+                    birthday = user?.birthday,
+                    career = user?.career,
+                    email = user?.email,
+                    facebook = user?.facebook,
+                    id = user?.id ?: 0,
+                    image = user?.image,
+                    instagram = user?.instagram,
+                    linkedin = user?.linkedin,
+                    name = user?.name,
+                    phone = user?.phone,
+                    twitter = user?.twitter
+                )
+                if (userDao.getUser() != null) userDao.delete(userDao.getUser())
+                userDao.insert(userData)
+
+                setSuccessStatus(_status)
+            } else {
+                setErrorStatus(_status, R.string.messageUnexpectedState)
+            }
+        }
+    }
+
     private fun setSuccessStatus(destination: MutableLiveData<Response<Status>>) {
         destination.postValue(Response.success(Status.SUCCESS))
     }
@@ -148,5 +198,9 @@ class CredentialsViewModel @Inject constructor(
     fun savePassword(password: String) = sharedPreferencesStorage.save(PASSWORD, password)
 
     fun getPassword(): String = sharedPreferencesStorage.getString(PASSWORD) ?: ""
+
+    private fun getAccessToken(): String {
+        return sharedPreferencesStorage.getString(Constants.ACCESS_TOKEN) ?: ""
+    }
 
 }

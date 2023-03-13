@@ -66,6 +66,24 @@ class EditProfileViewModel @Inject constructor(
                 return@launch
             }
             if (response.isSuccessful) {
+                val user = response.body()?.data?.user
+                val userData = User(
+                    address = user?.address,
+                    birthday = user?.birthday,
+                    career = user?.career,
+                    email = user?.email,
+                    facebook = user?.facebook,
+                    id = user?.id ?: 0,
+                    image = user?.image,
+                    instagram = user?.instagram,
+                    linkedin = user?.linkedin,
+                    name = user?.name,
+                    phone = user?.phone,
+                    twitter = user?.twitter
+                )
+                if (userDao.getUser() != null) userDao.delete(userDao.getUser())
+                userDao.insert(userData)
+
                 setSuccessStatus()
             } else {
                 setErrorStatus(R.string.messageUnexpectedState)

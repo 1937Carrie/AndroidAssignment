@@ -4,12 +4,12 @@ import retrofit2.Response
 import sdumchykov.androidApp.domain.api.RemoteData
 import sdumchykov.androidApp.domain.model.Data
 import sdumchykov.androidApp.domain.model.ServerResponse
-import sdumchykov.androidApp.domain.model.User
 import sdumchykov.androidApp.domain.model.authorizeUser.AuthorizationData
 import sdumchykov.androidApp.domain.model.contacts.Contacts
 import sdumchykov.androidApp.domain.model.register.RegisterData
 import sdumchykov.androidApp.domain.model.requestModels.AuthorizeModel
 import sdumchykov.androidApp.domain.model.requestModels.ContactIdModel
+import sdumchykov.androidApp.domain.model.requestModels.EditProfileResponseData
 import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 import sdumchykov.androidApp.domain.repository.NetworkUsersRepository
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class NetworkUsersRepositoryImpl @Inject constructor(
         userId: Int,
         token: String,
         body: EditProfileUser
-    ): Response<ServerResponse<User>> =
+    ): Response<ServerResponse<EditProfileResponseData>> =
         remoteData.editUser(userId, token, body)
 
     override suspend fun authorizeUser(body: AuthorizeModel): Response<ServerResponse<AuthorizationData>> =
