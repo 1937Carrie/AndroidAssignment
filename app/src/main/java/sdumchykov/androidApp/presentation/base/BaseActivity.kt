@@ -23,8 +23,8 @@ abstract class BaseActivity<VBinding : ViewBinding>(
     }
 
     override fun onDestroy() {
-        _binding = null
         super.onDestroy()
+        _binding = null
     }
 
     protected open fun setListeners() {}
