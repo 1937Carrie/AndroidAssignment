@@ -1,17 +1,16 @@
 AndroidApp
 ===
 
-Description: This android app is created like a social network client with demo features. Users can
-create their profiles, sign in with known credentials, remember these credentials for autologin in
-the app, edit their profile, add friends to their account, and delete unnecessary users from the
-contact list.
+Description: This android app is created like a social network client with demo features. User can
+create their profiles, sign in, edit their profile, add friends to it account, and delete
+unnecessary users from the contact list.
 
-Used technologies: XML Layouts, Activity, Intents, RecyclerView, Adapter, ViewHolder, Glide,
-Extension functions, Scope functions, ViewModels, DialogFragment, Fragment, Navigation component,
-Safe Args, ViewPager2, TabLayout, SharedPreferences, Swipe-to-refresh design pattern, Retrofit2,
-REST API, Coroutines, Hilt, Room.
+Used technologies: XML View, Activity, Intents, RecyclerView, Glide, MVVM with Clean architecture,
+DialogFragment, Fragment, Navigation, Safe Args, ViewPager2, TabLayout, SharedPreferences,
+Retrofit2, REST API, Coroutines, Hilt, Room.
 
-Identification. If authentication to the server failed, a service message will be displayed.
+Identification. If authentication to the server fails, an error message will be displayed to let the
+user know something gone wrong.
 
 <img src="Media\identification.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
 
@@ -19,11 +18,11 @@ Show contact list.
 
 <img src="Media\showServerContactList.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
 
-Add contact to current account from server users.
+Add contact to current account from remote users.
 
 <img src="Media\addContactFromServerUsers.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
 
-Look detail info about contact.
+View detailed information about a contact.
 
 <img src="Media\lookDetailInfo.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
 
