@@ -12,20 +12,20 @@ Retrofit2, REST API, Coroutines, Hilt, Room.
 Identification. If authentication to the server fails, an error message will be displayed to let the
 user know something gone wrong.
 
-<img src="Media\identification.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
+<img src="media\identification.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
 
 Show contact list.
 
-<img src="Media\showServerContactList.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
+<img src="media\showServerContactList.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
 
 Add contact to current account from remote users.
 
-<img src="Media\addContactFromServerUsers.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
+<img src="media\addContactFromServerUsers.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
 
 View detailed information about a contact.
 
-<img src="Media\lookDetailInfo.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
+<img src="media\lookDetailInfo.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
 
 Edit current account information.
 
-<img src="Media\editAccountInformation.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
+<img src="media\editAccountInformation.gif" alt="Demo GIF" style="zoom:50%; float: left;" />
