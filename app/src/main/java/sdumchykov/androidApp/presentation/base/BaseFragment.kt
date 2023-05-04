@@ -7,12 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseFragment<B : ViewBinding>(
-    private val inflater: (LayoutInflater, ViewGroup?, Boolean) -> B
+abstract class BaseFragment<VB : ViewBinding>(
+    private val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : Fragment() {
 
-    private var _binding: B? = null
-    protected val binding get() = _binding!!
+    private var _binding: VB? = null
+
+    /**
+     * This property is only valid between onCreateView and onDestroyView.
+     */
+    val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,13 +29,13 @@ abstract class BaseFragment<B : ViewBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = this.inflater.invoke(inflater, container, false)
+        _binding = bindingInflater.invoke(inflater, container, false)
         return binding.root
     }
 
     override fun onDestroyView() {
-        _binding = null
         super.onDestroyView()
+        _binding = null
     }
 
     protected open fun setObservers() {}

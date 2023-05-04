@@ -5,26 +5,21 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseActivity<VBinding : ViewBinding>(
-    private val inflaterMethod: (LayoutInflater) -> VBinding
+abstract class BaseActivity<VB : ViewBinding>(
+    private val bindingInflater: (LayoutInflater) -> VB
 ) :
     AppCompatActivity() {
 
-    private var _binding: VBinding? = null
-    val binding get() = _binding!!
+    private lateinit var _binding: VB
+    val binding get() = _binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = inflaterMethod.invoke(layoutInflater)
+        _binding = bindingInflater.invoke(layoutInflater)
         setContentView(binding.root)
 
         setListeners()
         setObservers()
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
     }
 
     protected open fun setListeners() {}
