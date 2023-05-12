@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -47,11 +48,26 @@ class GoogleButton @JvmOverloads constructor(
     //endregion
 
     init {
-        val shape = GradientDrawable()
-        shape.shape = GradientDrawable.RECTANGLE
-        shape.setColor(Color.WHITE)
-        shape.cornerRadius = radius
-        background = shape // background is rounded rectangle
+        val typedArray =
+            context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.background))
+        val backgroundDrawable = typedArray.getDrawable(0)
+        typedArray.recycle()
+
+        val shape =
+            if (backgroundDrawable == null)
+                GradientDrawable().apply { setColor(Color.WHITE) }
+            else
+                when (backgroundDrawable) {
+                    is ColorDrawable -> GradientDrawable().apply { setColor(backgroundDrawable.color) }
+                    else -> backgroundDrawable as GradientDrawable
+                }
+
+        shape.apply {
+            this.shape = GradientDrawable.RECTANGLE
+            this.cornerRadius = radius
+        }
+
+        background = shape
 
         paint.apply {
             isAntiAlias = true
