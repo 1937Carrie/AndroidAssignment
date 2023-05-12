@@ -13,6 +13,7 @@ import sdumchykov.androidApp.domain.model.requestModels.EditProfileResponseData
 import sdumchykov.androidApp.domain.model.requestModels.EditProfileUser
 
 interface ServerApi {
+    @FormUrlEncoded
     @POST("users")
     @Headers("Content-type: multipart/form-data")
     suspend fun registerUser(
