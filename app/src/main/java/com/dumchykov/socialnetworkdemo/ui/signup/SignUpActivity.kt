@@ -1,29 +1,47 @@
-package com.dumchykov.socialnetworkdemo.ui
+package com.dumchykov.socialnetworkdemo.ui.signup
 
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.lifecycleScope
 import com.dumchykov.socialnetworkdemo.R
+import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
 import com.dumchykov.socialnetworkdemo.data.validateEmail
 import com.dumchykov.socialnetworkdemo.data.validatePassword
 import com.dumchykov.socialnetworkdemo.databinding.ActivitySignUpBinding
+import com.dumchykov.socialnetworkdemo.ui.myprofile.MyProfileActivity
+import kotlinx.coroutines.launch
 
-class AuthActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
+    private val viewModel: SignUpViewModel by viewModels {
+        SignUpViewModel.factory(DataStoreProvider(this))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
         )
         binding = ActivitySignUpBinding.inflate(layoutInflater)
+        lifecycleScope.launch {
+            viewModel.navFlag.collect { flag ->
+                if (flag.not()) return@collect
+                val (email, password) = viewModel.credentials.value
+                if (email.isEmpty() || password.isEmpty()) return@collect
+                binding.textInputEmailEditText.setText(email)
+                binding.textInputPasswordEditText.setText(password)
+                startMyProfileActivity()
+            }
+        }
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars =
@@ -57,12 +75,22 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun doOnRegisterClick() {
-//        if (binding.checkboxRememberMe.isChecked) TODO("add datastore caching")
-        val startMyProfileIntent = Intent(this, MainActivity::class.java)
-        val email = binding.textInputEmailEditText.text.toString()
-        startMyProfileIntent.putExtras(bundleOf("email" to email))
+        if (binding.checkboxRememberMe.isChecked) {
+            saveCredentials()
+        }
+        startMyProfileActivity()
+    }
+
+    private fun startMyProfileActivity() {
+        val startMyProfileIntent = Intent(this, MyProfileActivity::class.java)
         startActivity(startMyProfileIntent)
         finish()
+    }
+
+    private fun saveCredentials() {
+        val email = binding.textInputEmailEditText.text.toString()
+        val password = binding.textInputPasswordEditText.text.toString()
+        viewModel.saveCredentials(email, password)
     }
 
     private fun setEmailPasswordInputValidations() {
