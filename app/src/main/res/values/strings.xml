@@ -19,5 +19,7 @@
     <string name="register">Register</string>
     <string name="remember_me">Remember me</string>
     <string name="sign_in">Sign In</string>
+    <string name="text_input_email_description">Incorrect E-Mail address</string>
+    <string name="text_input_password_error_description">Your password must include a minimum of 6 characters</string>
 
 </resources>

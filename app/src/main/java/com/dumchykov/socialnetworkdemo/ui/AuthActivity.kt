@@ -1,11 +1,12 @@
 package com.dumchykov.socialnetworkdemo.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -36,35 +37,52 @@ class AuthActivity : AppCompatActivity() {
         }
 
         setEmailPasswordInputValidations()
+        setRegisterClickListener()
+    }
+
+    private fun setRegisterClickListener() {
+        binding.buttonRegister.setOnClickListener {
+            val email = binding.textInputEmailEditText.text.toString()
+            val password = binding.textInputPasswordEditText.text.toString()
+            val emailValidationResult = validateEmail(email)
+            val passwordValidationResult = validatePassword(password)
+            when (emailValidationResult && passwordValidationResult) {
+                true -> doOnRegisterClick()
+                false -> {
+                    updateEmailInputError(binding.textInputEmailEditText.text.toString())
+                    updatePasswordInputError(binding.textInputPasswordEditText.text.toString())
+                }
+            }
+        }
+    }
+
+    private fun doOnRegisterClick() {
+//        if (binding.checkboxRememberMe.isChecked) TODO("add datastore caching")
+        val startMyProfileIntent = Intent(this, MainActivity::class.java)
+        val email = binding.textInputEmailEditText.text.toString()
+        startMyProfileIntent.putExtras(bundleOf("email" to email))
+        startActivity(startMyProfileIntent)
+        finish()
     }
 
     private fun setEmailPasswordInputValidations() {
         binding.textInputEmailEditText.doOnTextChanged { text, _, _, _ ->
-            val emailValidationResult = validateEmail(text.toString())
-            binding.textInputEmailLayout.error = when (emailValidationResult) {
-                true -> {
-                    Log.d(
-                        "AAA",
-                        binding.textInputEmailLayout.defaultHintTextColor?.defaultColor.toString()
-                    )
-                    null
-                }
-
-                false -> {
-                    Log.d(
-                        "AAA",
-                        binding.textInputEmailLayout.defaultHintTextColor?.defaultColor.toString()
-                    )
-                    "Incorrect E-Mail address"
-                }
-            }
+            updateEmailInputError(text.toString())
         }
         binding.textInputPasswordEditText.doOnTextChanged { text, _, _, _ ->
-            val passwordValidationResult = validatePassword(text.toString())
-            binding.textInputPasswordLayout.error = when (passwordValidationResult) {
-                true -> null
-                false -> "Your password must include a minimum of 6 characters."
-            }
+            updatePasswordInputError(text.toString())
         }
+    }
+
+    private fun updatePasswordInputError(password: String) {
+        val passwordValidationResult = validatePassword(password)
+        binding.textInputPasswordLayout.error =
+            if (passwordValidationResult) null else getString(R.string.text_input_password_error_description)
+    }
+
+    private fun updateEmailInputError(email: String) {
+        val emailValidationResult = validateEmail(email)
+        binding.textInputEmailLayout.error =
+            if (emailValidationResult) null else getString(R.string.text_input_email_description)
     }
 }
