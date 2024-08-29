@@ -1,4 +1,4 @@
-package com.dumchykov.socialnetworkdemo
+package com.dumchykov.socialnetworkdemo.ui
 
 import android.graphics.Color
 import android.os.Bundle
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import com.dumchykov.socialnetworkdemo.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

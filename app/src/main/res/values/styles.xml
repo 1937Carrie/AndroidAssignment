@@ -7,9 +7,12 @@
     </style>
 
     <style name="text_input_layout">
-        <item name="expandedHintEnabled">false</item>
         <item name="android:textColorHint">@color/custom_white</item>
         <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="boxStrokeErrorColor">@color/white</item>
+        <item name="errorEnabled">true</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="expandedHintEnabled">false</item>
         <item name="hintTextColor">@color/custom_white</item>
     </style>
 

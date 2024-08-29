@@ -8,7 +8,7 @@
     android:background="@color/custom_blue"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".AuthActivity">
+    tools:context=".ui.AuthActivity">
 
     <LinearLayout
         android:id="@+id/layoutTop"
