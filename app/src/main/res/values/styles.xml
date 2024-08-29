@@ -6,4 +6,21 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="text_input_layout">
+        <item name="expandedHintEnabled">false</item>
+        <item name="android:textColorHint">@color/custom_white</item>
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="hintTextColor">@color/custom_white</item>
+    </style>
+
+    <style name="text_input_edit_text">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@color/custom_white</item>
+        <item name="android:textSize">18sp</item>
+        <!--    Attr colorControlActivated is responsible for cursor color    -->
+        <item name="colorControlActivated">@color/custom_white</item>
+        <item name="fontFamily">@font/opensans_semi_bold</item>
+        <item name="singleLine">true</item>
+    </style>
+
 </resources>

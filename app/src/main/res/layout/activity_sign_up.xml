@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/custom_blue"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".AuthActivity">
+
+    <LinearLayout
+        android:id="@+id/layoutTop"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom|center"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semi_bold"
+            android:text="@string/let_s_get_acquainted"
+            android:textColor="@color/custom_white"
+            android:textSize="24sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="8dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:text="@string/fill_out_the_profile_and_go_to_the_application"
+            android:textColor="@color/custom_white"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="24dp" />
+
+    <LinearLayout
+        android:id="@+id/layoutMiddle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputEmailLayout"
+            style="@style/text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/e_mail"
+            android:theme="@style/text_input_edit_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEmailEditText"
+                style="@style/text_input_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="24dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputPasswordLayout"
+            style="@style/text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:theme="@style/text_input_edit_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputPasswordEditText"
+                style="@style/text_input_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="16dp" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/checkboxRememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/custom_checkbox"
+            android:checked="true"
+            android:fontFamily="@font/opensans_semi_bold"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="8dp"
+            android:text="@string/remember_me"
+            android:textColor="@color/custom_gray_2"
+            android:textSize="14sp"
+            app:buttonTint="@null" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="24dp" />
+
+    <LinearLayout
+        android:id="@+id/layoutBottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/buttonGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/roboto_regular"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:letterSpacing="0.15"
+            android:text="@string/google"
+            android:textColor="@color/custom_gray"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_google"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="@null" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="8dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textOr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semi_bold"
+            android:text="@string/or"
+            android:textColor="@color/custom_white"
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="8dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonRegister"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/outlined_button_3"
+            android:fontFamily="@font/opensans_semi_bold"
+            android:letterSpacing="0.15"
+            android:text="@string/register"
+            android:textColor="@color/custom_white"
+            android:textSize="16sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="16dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textTOS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regular"
+            android:text="@string/by_clicking_register_you_agree_to_our_terms_and_conditions"
+            android:textColor="@color/custom_white"
+            android:textSize="12sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="8dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textAlready"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semi_bold"
+                android:text="@string/already_have_an_account"
+                android:textColor="@color/custom_gray_2"
+                android:textSize="14sp" />
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="wrap_content" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semi_bold"
+                android:text="@string/sign_in"
+                android:textColor="@color/custom_white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
