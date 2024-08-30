@@ -1,7 +1,6 @@
 package com.dumchykov.socialnetworkdemo.ui.mycontacts
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +10,9 @@ import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.databinding.ActivityMyContactsBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class MyContactsActivity : AppCompatActivity() {
@@ -36,6 +37,16 @@ class MyContactsActivity : AppCompatActivity() {
     private fun initAdapter() {
         contactsAdapter = ContactsAdapter { contact ->
             viewModel.removeContact(contact.id)
+            Snackbar
+                .make(
+                    binding.recyclerContacts,
+                    getString(R.string.contact_has_been_deleted, contact.name),
+                    Snackbar.LENGTH_LONG
+                )
+                .setAction(getString(R.string.undo)) {
+                    viewModel.addContact(contact)
+                }
+                .show()
         }
 
         binding.recyclerContacts.adapter = contactsAdapter

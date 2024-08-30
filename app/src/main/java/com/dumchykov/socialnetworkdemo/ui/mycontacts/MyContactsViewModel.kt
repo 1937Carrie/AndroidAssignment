@@ -24,4 +24,11 @@ class MyContactsViewModel : ViewModel() {
         contactMutableList.removeIf { it.id == contactId }
         updateContactsState { contactMutableList }
     }
+
+    fun addContact(contact: Contact) {
+        val contactMutableList = contacts.value.toMutableList()
+        contactMutableList.add(contact)
+        contactMutableList.sortBy { it.id }
+        updateContactsState { contactMutableList }
+    }
 }
