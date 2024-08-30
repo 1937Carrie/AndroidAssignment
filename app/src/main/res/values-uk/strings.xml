@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    MyProfile    -->
+    <string name="edit_profile">Редагувати профіль</string>
+    <string name="log_out">Вийти</string>
+    <string name="settings">Налаштування</string>
+    <string name="view_my_contacts">Переглянути мої контакти</string>
+
+    <!--    Sign Up    -->
+    <string name="already_have_an_account">Вже маєте акаунт?</string>
+    <string name="by_clicking_register_you_agree_to_our_terms_and_conditions">Натиснувши «Зареєструватися», ви погоджуєтеся з нашими положеннями та умовами</string>
+    <string name="e_mail">Електронна пошта</string>
+    <string name="fill_out_the_profile_and_go_to_the_application">Заповнюйте профіль і переходьте до заявки!</string>
+    <string name="let_s_get_acquainted">Давай знайомитись</string>
+    <string name="or">або</string>
+    <string name="password">Пароль</string>
+    <string name="register">Зареєструватися</string>
+    <string name="remember_me">Запамʼятати мене</string>
+    <string name="sign_in">Увійти</string>
+    <string name="text_input_email_description">Неправильна адреса електронної пошти</string>
+    <string name="text_input_password_error_description">Ваш пароль має містити мінімум 6 символів</string>
+</resources>
