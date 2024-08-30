@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semi_bold"
             android:text="@string/let_s_get_acquainted"
+            android:textAlignment="center"
             android:textColor="@color/custom_white"
             android:textSize="24sp" />
 
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_regular"
             android:text="@string/fill_out_the_profile_and_go_to_the_application"
+            android:textAlignment="center"
             android:textColor="@color/custom_white"
             android:textSize="12sp" />
 
@@ -180,6 +182,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_regular"
             android:text="@string/by_clicking_register_you_agree_to_our_terms_and_conditions"
+            android:textAlignment="center"
             android:textColor="@color/custom_white"
             android:textSize="12sp" />
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name" translatable="false">My Application</string>
 
     <!--    MyProfile    -->
     <string name="edit_profile">Edit profile</string>
