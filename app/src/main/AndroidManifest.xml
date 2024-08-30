@@ -27,9 +27,7 @@
         <activity android:name=".ui.myprofile.MyProfileActivity" />
         <activity
             android:name=".ui.signup.SignUpActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
 
     </application>
 

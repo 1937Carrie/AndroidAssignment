@@ -7,6 +7,26 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -19,6 +39,7 @@ import com.dumchykov.socialnetworkdemo.data.validatePassword
 import com.dumchykov.socialnetworkdemo.databinding.ActivitySignUpBinding
 import com.dumchykov.socialnetworkdemo.ui.myprofile.MyProfileActivity
 import kotlinx.coroutines.launch
+import androidx.compose.ui.graphics.Color as ComposeUiColor
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
@@ -40,6 +61,12 @@ class SignUpActivity : AppCompatActivity() {
                 binding.textInputEmailEditText.setText(email)
                 binding.textInputPasswordEditText.setText(password)
                 startMyProfileActivity()
+            }
+        }
+        binding.buttonGoogle.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                ButtonGoogle()
             }
         }
         setContentView(binding.root)
@@ -112,5 +139,42 @@ class SignUpActivity : AppCompatActivity() {
         val emailValidationResult = validateEmail(email)
         binding.textInputEmailLayout.error =
             if (emailValidationResult) null else getString(R.string.text_input_email_description)
+    }
+}
+
+@Preview(heightDp = 40)
+@Composable
+fun ButtonGoogle() {
+    Button(
+        onClick = {},
+        modifier = Modifier.fillMaxSize(),
+        colors = ButtonDefaults.buttonColors(
+            ComposeUiColor.White,
+            ComposeUiColor.White,
+            ComposeUiColor.White,
+            ComposeUiColor.White
+        )
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.ic_google),
+                contentDescription = ""
+            )
+            Text(
+                text = stringResource(R.string.google).uppercase(),
+                color = colorResource(R.color.black),
+                fontSize = 16.sp,
+                fontFamily = FontFamily(
+                    Font(
+                        R.font.opensans_bold,
+                        FontWeight.W600,
+                        FontStyle.Normal
+                    )
+                ),
+                letterSpacing = 1.5.sp
+            )
+        }
     }
 }
