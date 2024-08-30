@@ -47,5 +47,6 @@ dependencies {
     // Preferences DataStore (SharedPreferences like APIs)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.glide)
     implementation(libs.material)
 }
