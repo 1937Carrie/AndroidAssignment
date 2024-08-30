@@ -1,4 +1,4 @@
-package com.dumchykov.socialnetworkdemo.ui.mycontacts
+package com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -39,7 +39,7 @@ class ContactsAdapter(
         holder.onBind(getItem(position))
     }
 
-    class Diff() : DiffUtil.ItemCallback<Contact>() {
+    class Diff : DiffUtil.ItemCallback<Contact>() {
         override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
             return oldItem.id == newItem.id
         }

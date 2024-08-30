@@ -31,4 +31,17 @@ class MyContactsViewModel : ViewModel() {
         contactMutableList.sortBy { it.id }
         updateContactsState { contactMutableList }
     }
+
+    fun addContact(name: String, career: String, address: String) {
+        val contactMutableList = contacts.value.toMutableList()
+        val newContact = Contact(
+            id = contactMutableList.size,
+            name = name,
+            career = career,
+            address = address
+        )
+        contactMutableList.add(newContact)
+        contactMutableList.sortBy { it.id }
+        updateContactsState { contactMutableList }
+    }
 }

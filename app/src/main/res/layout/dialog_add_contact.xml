@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/custom_blue"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensans_semi_bold"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Add contact dialog"
+        android:textAlignment="center"
+        android:textColor="@color/custom_white"
+        android:textSize="18sp" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextName"
+        style="@style/text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="Name"
+        android:maxLines="1"
+        android:textColor="@color/custom_white"
+        android:theme="@style/text_input_edit_text" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextCareer"
+        style="@style/text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="Career"
+        android:maxLines="1"
+        android:textColor="@color/custom_white"
+        android:theme="@style/text_input_edit_text" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextAddress"
+        style="@style/text_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="Address"
+        android:maxLines="1"
+        android:textColor="@color/custom_white"
+        android:theme="@style/text_input_edit_text" />
+
+</LinearLayout>

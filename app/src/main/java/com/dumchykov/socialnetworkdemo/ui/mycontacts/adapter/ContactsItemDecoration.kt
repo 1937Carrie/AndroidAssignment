@@ -1,4 +1,4 @@
-package com.dumchykov.socialnetworkdemo.ui.mycontacts
+package com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter
 
 import android.content.Context
 import android.graphics.Rect

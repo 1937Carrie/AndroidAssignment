@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.databinding.ActivityMyContactsBinding
+import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsAdapter
+import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsItemDecoration
+import com.dumchykov.socialnetworkdemo.ui.mycontacts.dialogfragment.AddContactDialog
+import com.dumchykov.socialnetworkdemo.ui.mycontacts.dialogfragment.AddContactFragmentFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -21,6 +25,10 @@ class MyContactsActivity : AppCompatActivity() {
     private val viewModel: MyContactsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportFragmentManager.fragmentFactory =
+            AddContactFragmentFactory { name, career, address ->
+                viewModel.addContact(name, career, address)
+            }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMyContactsBinding.inflate(layoutInflater)
@@ -31,7 +39,17 @@ class MyContactsActivity : AppCompatActivity() {
             v.updatePadding(systemBars.left, systemBars.top, systemBars.right)
             insets
         }
+        setAddContactClickListener()
         initAdapter()
+    }
+
+    private fun setAddContactClickListener() {
+        binding.textAddContacts.setOnClickListener {
+            val newFragment = AddContactDialog { name, career, address ->
+                viewModel.addContact(name, career, address)
+            }
+            newFragment.show(supportFragmentManager, "add contact")
+        }
     }
 
     private fun initAdapter() {
