@@ -35,7 +35,7 @@ class MyContactsActivity : AppCompatActivity() {
 
     private fun initAdapter() {
         contactsAdapter = ContactsAdapter { contact ->
-            Log.d("AAA", "$contact have been deleted")
+            viewModel.removeContact(contact.id)
         }
 
         binding.recyclerContacts.adapter = contactsAdapter
