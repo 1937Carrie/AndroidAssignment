@@ -1,12 +1,9 @@
 package com.dumchykov.socialnetworkdemo.ui.signup
 
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import androidx.activity.SystemBarStyle
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -27,62 +24,60 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
 import com.dumchykov.socialnetworkdemo.data.validateEmail
 import com.dumchykov.socialnetworkdemo.data.validatePassword
-import com.dumchykov.socialnetworkdemo.databinding.ActivitySignUpBinding
-import com.dumchykov.socialnetworkdemo.ui.myprofile.MyProfileActivity
+import com.dumchykov.socialnetworkdemo.databinding.FragmentSignUpBinding
 import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color as ComposeUiColor
 
-class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignUpBinding
-    private val viewModel: SignUpViewModel by viewModels {
-        SignUpViewModel.factory(DataStoreProvider(this))
+class SignUpFragment : Fragment() {
+    private var _binding: FragmentSignUpBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: SignUpViewModel by viewModels(
+        factoryProducer = {
+            SignUpViewModel.factory(DataStoreProvider(requireContext()))
+        })
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
-        )
-        binding = ActivitySignUpBinding.inflate(layoutInflater)
-        lifecycleScope.launch {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.navFlag.collect { flag ->
                 if (flag.not()) return@collect
                 val (email, password) = viewModel.credentials.value
-                if (email.isEmpty() || password.isEmpty()) return@collect
                 binding.textInputEmailEditText.setText(email)
                 binding.textInputPasswordEditText.setText(password)
-                startMyProfileActivity()
+                navigateToMyProfile()
             }
         }
+        super.onViewCreated(view, savedInstanceState)
         binding.buttonGoogle.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ButtonGoogle()
             }
         }
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars =
-                insets.getInsets(WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(
-                left = systemBars.left + resources.getDimensionPixelSize(R.dimen._16dp),
-                top = systemBars.top + resources.getDimensionPixelSize(R.dimen._16dp),
-                right = systemBars.right + resources.getDimensionPixelSize(R.dimen._16dp)
-            )
-            insets
-        }
-
         setEmailPasswordInputValidations()
         setRegisterClickListener()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setRegisterClickListener() {
@@ -103,18 +98,17 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun doOnRegisterClick() {
         if (binding.checkboxRememberMe.isChecked) {
-            saveCredentials()
+            saveCredentialsAndNavigate()
+        } else {
+            navigateToMyProfile()
         }
-        startMyProfileActivity()
     }
 
-    private fun startMyProfileActivity() {
-        val startMyProfileIntent = Intent(this, MyProfileActivity::class.java)
-        startActivity(startMyProfileIntent)
-        finish()
+    private fun navigateToMyProfile() {
+        findNavController().navigate(R.id.action_signUpFragment_to_myProfileFragment)
     }
 
-    private fun saveCredentials() {
+    private fun saveCredentialsAndNavigate() {
         val email = binding.textInputEmailEditText.text.toString()
         val password = binding.textInputPasswordEditText.text.toString()
         viewModel.saveCredentials(email, password)

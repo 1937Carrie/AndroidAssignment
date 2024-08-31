@@ -46,6 +46,7 @@ class MyContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setArrowBackClickListener()
         setAddContactClickListener()
         initAdapter()
     }
@@ -53,6 +54,12 @@ class MyContactsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setArrowBackClickListener() {
+        binding.buttonArrowBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun setAddContactClickListener() {
@@ -93,7 +100,7 @@ class MyContactsFragment : Fragment() {
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.recyclerContacts.addItemDecoration(ContactsItemDecoration(requireContext()))
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.contacts.collect { contacts ->
                 contactsAdapter.submitList(contacts)
             }

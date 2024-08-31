@@ -8,7 +8,7 @@
     android:background="@color/custom_blue"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.signup.SignUpActivity">
+    tools:context=".ui.signup.SignUpFragment">
 
     <LinearLayout
         android:id="@+id/layoutTop"
@@ -127,7 +127,7 @@
             android:id="@+id/buttonGoogle"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            tools:composableName="com.dumchykov.socialnetworkdemo.ui.signup.SignUpActivityKt.ButtonGoogle" />
+            tools:composableName="com.dumchykov.socialnetworkdemo.ui.signup.SignUpFragmentKt.ButtonGoogle" />
 
         <Space
             android:layout_width="wrap_content"

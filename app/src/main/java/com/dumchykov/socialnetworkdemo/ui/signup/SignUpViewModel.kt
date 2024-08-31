@@ -24,6 +24,7 @@ class SignUpViewModel(
     init {
         viewModelScope.launch {
             val (email, password) = dataStore.readCredentials().first()
+            if (email.isEmpty() || password.isEmpty()) return@launch
             _credentials.update { email to password }
             _navFlag.update { true }
         }
@@ -32,6 +33,7 @@ class SignUpViewModel(
     fun saveCredentials(email: String, password: String) {
         viewModelScope.launch {
             dataStore.writeCredentials(email, password)
+            _navFlag.update { true }
         }
     }
 
