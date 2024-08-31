@@ -103,8 +103,6 @@
             android:button="@drawable/custom_checkbox"
             android:checked="true"
             android:fontFamily="@font/opensans_semi_bold"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:padding="8dp"
             android:text="@string/remember_me"
             android:textColor="@color/custom_gray_2"
@@ -125,24 +123,11 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <Button
+        <androidx.compose.ui.platform.ComposeView
             android:id="@+id/buttonGoogle"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:backgroundTint="@color/white"
-            android:fontFamily="@font/roboto_regular"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:letterSpacing="0.15"
-            android:text="@string/google"
-            android:textColor="@color/custom_gray"
-            android:textSize="16sp"
-            app:icon="@drawable/ic_google"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="@null" />
+            tools:composableName="com.dumchykov.socialnetworkdemo.ui.signup.SignUpActivityKt.ButtonGoogle" />
 
         <Space
             android:layout_width="wrap_content"

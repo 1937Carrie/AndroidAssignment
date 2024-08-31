@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -18,6 +19,7 @@ android {
     }
 
     buildFeatures {
+        compose = true
         viewBinding = true
     }
 
@@ -42,10 +44,17 @@ android {
 dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     // Preferences DataStore (SharedPreferences like APIs)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.glide)
     implementation(libs.material)
+    implementation(platform(libs.androidx.compose.bom))
 }

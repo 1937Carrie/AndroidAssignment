@@ -22,4 +22,10 @@
     <string name="text_input_email_description">Incorrect E-Mail address</string>
     <string name="text_input_password_error_description">Your password must include a minimum of 6 characters</string>
 
+    <!--    MyContacts    -->
+    <string name="add_contacts">Add contacts</string>
+    <string name="contact_has_been_deleted">%1$s has been deleted</string>
+    <string name="contacts">Contacts</string>
+    <string name="undo">Undo</string>
+
 </resources>
