@@ -1,6 +1,7 @@
 package com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,14 +12,14 @@ import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactBinding
 
 class ContactsAdapter(
-    private val onClick: (Contact) -> Unit = {},
+    private val onClick: (View, Contact) -> Unit = { _, _ -> },
     private val onDelete: (Contact) -> Unit = {},
 ) : ListAdapter<Contact, ContactsAdapter.ViewHolder>(Diff()) {
     inner class ViewHolder(private val binding: ItemContactBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(contact: Contact) {
             binding.root.setOnClickListener {
-                onClick(contact)
+                onClick(binding.imageMain, contact)
             }
             binding.textName.text = contact.name
             binding.textCareer.text = contact.career
@@ -31,6 +32,11 @@ class ContactsAdapter(
                 .circleCrop()
                 .placeholder(R.drawable.image_main)
                 .into(binding.imageMain)
+            setTransitionName(contact)
+        }
+
+        private fun setTransitionName(contact: Contact) {
+            binding.imageMain.transitionName = "${contact.id}_${contact.name}"
         }
     }
 

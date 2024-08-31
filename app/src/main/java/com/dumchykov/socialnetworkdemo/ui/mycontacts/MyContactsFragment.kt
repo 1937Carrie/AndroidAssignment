@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
+import androidx.core.app.NotificationCompat.CallStyle.CallType
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionInflater
 import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.databinding.FragmentMyContactsBinding
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsAdapter
@@ -41,6 +46,8 @@ class MyContactsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMyContactsBinding.inflate(inflater, container, false)
+        val animation = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = animation
         return binding.root
     }
 
@@ -49,6 +56,8 @@ class MyContactsFragment : Fragment() {
         setArrowBackClickListener()
         setAddContactClickListener()
         initAdapter()
+        postponeEnterTransition()
+        binding.recyclerContacts.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     override fun onDestroyView() {
@@ -73,13 +82,15 @@ class MyContactsFragment : Fragment() {
 
     private fun initAdapter() {
         contactsAdapter = ContactsAdapter(
-            onClick = { contact ->
+            onClick = { view, contact ->
                 val contactBundle = bundleOf(
+                    "contact.id" to contact.id.toString(),
                     "contact.name" to contact.name,
                     "contact.career" to contact.career,
                     "contact.address" to contact.address,
                 )
-                findNavController().navigate(R.id.detailsFragment, contactBundle)
+                val extras = FragmentNavigatorExtras(view to "${contact.id}_${contact.name}")
+                findNavController().navigate(R.id.detailsFragment, contactBundle, null, extras)
             },
             onDelete = { contact ->
                 viewModel.removeContact(contact.id)
