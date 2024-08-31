@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/custom_white"
+    tools:context=".ui.details.DetailsFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontal05"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <View
+        android:id="@+id/viewTop"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/custom_blue"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/layoutTop"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/buttonArrowBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/opensans_semi_bold"
+            android:gravity="center"
+            android:text="Profile"
+            android:textAlignment="center"
+            android:textColor="@color/custom_white"
+            android:textSize="24sp" />
+
+    </FrameLayout>
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flowTop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="imageMain, spacerBetweenImageAndName, textName, spacerBetweenNameAndProfession, textProfession, spacerBetweenProfessionAndAddress, textAddress"
+        app:flow_verticalStyle="packed"
+        app:layout_constraintBottom_toBottomOf="@id/guidelineHorizontal05"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/layoutTop" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageMain"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_main"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintWidth_percent="0.3"
+        app:shapeAppearanceOverlay="@style/rounded" />
+
+    <Space
+        android:id="@+id/spacerBetweenImageAndName"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensans_semi_bold"
+        android:text="Lucile Alvarado"
+        android:textColor="@color/custom_white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/imageMain" />
+
+    <Space
+        android:id="@+id/spacerBetweenNameAndProfession"
+        android:layout_width="wrap_content"
+        android:layout_height="8dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textProfession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensans_semi_bold"
+        android:text="Graphic designer"
+        android:textColor="@color/custom_gray_2"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/textName" />
+
+    <Space
+        android:id="@+id/spacerBetweenProfessionAndAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5295 Gaylord Walks Apk. 110"
+        android:textColor="@color/custom_gray_2"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@id/textProfession" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flowIcons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="imageFacebook, imageLinkedIn, imageInstagram"
+        app:flow_horizontalGap="32dp"
+        app:flow_horizontalStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/buttonMessage"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@id/guidelineHorizontal05" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_facebook" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageLinkedIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_linkedin" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageInstagram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_instagram" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonMessage"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:background="@drawable/filled_button_orange"
+        android:fontFamily="@font/opensans_semi_bold"
+        android:letterSpacing="0.15"
+        android:text="Message"
+        android:textColor="@color/custom_white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
