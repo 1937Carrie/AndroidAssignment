@@ -27,6 +27,14 @@ class MyContactsFragment : Fragment() {
     private lateinit var contactsAdapter: ContactsAdapter
     private val viewModel: MyContactsViewModel by viewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        parentFragmentManager.fragmentFactory =
+            AddContactFragmentFactory { name, career, address ->
+                viewModel.addContact(name, career, address)
+            }
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,14 +48,6 @@ class MyContactsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setAddContactClickListener()
         initAdapter()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        parentFragmentManager.fragmentFactory =
-            AddContactFragmentFactory { name, career, address ->
-                viewModel.addContact(name, career, address)
-            }
-        super.onCreate(savedInstanceState)
     }
 
     override fun onDestroyView() {
@@ -66,6 +66,14 @@ class MyContactsFragment : Fragment() {
 
     private fun initAdapter() {
         contactsAdapter = ContactsAdapter(
+            onClick = { contact ->
+                val contactBundle = bundleOf(
+                    "contact.name" to contact.name,
+                    "contact.career" to contact.career,
+                    "contact.address" to contact.address,
+                )
+                findNavController().navigate(R.id.detailsFragment, contactBundle)
+            },
             onDelete = { contact ->
                 viewModel.removeContact(contact.id)
                 Snackbar

@@ -11,11 +11,15 @@ import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactBinding
 
 class ContactsAdapter(
+    private val onClick: (Contact) -> Unit = {},
     private val onDelete: (Contact) -> Unit = {},
 ) : ListAdapter<Contact, ContactsAdapter.ViewHolder>(Diff()) {
     inner class ViewHolder(private val binding: ItemContactBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(contact: Contact) {
+            binding.root.setOnClickListener {
+                onClick(contact)
+            }
             binding.textName.text = contact.name
             binding.textCareer.text = contact.career
             binding.imageDelete.setOnClickListener {

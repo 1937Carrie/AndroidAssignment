@@ -14,9 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
-
         <activity
-            android:name=".ui.mycontacts.MyContactsActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +27,6 @@
         <activity
             android:name=".ui.signup.SignUpActivity"
             android:exported="false" />
-
     </application>
 
 </manifest>
