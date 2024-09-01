@@ -8,6 +8,8 @@ import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.dumchykov.socialnetworkdemo.R
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 
 class PagerFragment : Fragment() {
@@ -31,6 +33,14 @@ class PagerFragment : Fragment() {
         viewPager = view.findViewById(R.id.pager)
         viewPager.adapter = pagerAdapter
         viewPager.doOnPreDraw { startPostponedEnterTransition() }
+
+        val tabLayout: TabLayout = view.findViewById(R.id.tabLayout)
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = when (position) {
+                Page.MyProfile.ordinal -> Page.MyProfile.name
+                else -> Page.MyContacts.name
+            }
+        }.attach()
     }
 
     fun changeCurrentItem(item: Int) {
