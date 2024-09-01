@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.CallSuper
-import androidx.core.app.NotificationCompat.CallStyle.CallType
+import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
@@ -22,6 +21,8 @@ import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsAdapter
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsItemDecoration
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.dialogfragment.AddContactDialog
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.dialogfragment.AddContactFragmentFactory
+import com.dumchykov.socialnetworkdemo.ui.pager.Page
+import com.dumchykov.socialnetworkdemo.ui.pager.PagerFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -53,6 +54,7 @@ class MyContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBackPressDispatcher()
         setArrowBackClickListener()
         setAddContactClickListener()
         initAdapter()
@@ -65,9 +67,18 @@ class MyContactsFragment : Fragment() {
         _binding = null
     }
 
+    private fun setBackPressDispatcher() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            owner = viewLifecycleOwner,
+            onBackPressed = {
+                (parentFragment as PagerFragment).changeCurrentItem(Page.MyProfile.ordinal)
+            }
+        )
+    }
+
     private fun setArrowBackClickListener() {
         binding.buttonArrowBack.setOnClickListener {
-            findNavController().navigateUp()
+            (parentFragment as PagerFragment).changeCurrentItem(Page.MyProfile.ordinal)
         }
     }
 
@@ -90,7 +101,12 @@ class MyContactsFragment : Fragment() {
                     "contact.address" to contact.address,
                 )
                 val extras = FragmentNavigatorExtras(view to "${contact.id}_${contact.name}")
-                findNavController().navigate(R.id.detailsFragment, contactBundle, null, extras)
+                findNavController().navigate(
+                    R.id.action_pagerFragment_to_detailsFragment,
+                    contactBundle,
+                    null,
+                    extras
+                )
             },
             onDelete = { contact ->
                 viewModel.removeContact(contact.id)

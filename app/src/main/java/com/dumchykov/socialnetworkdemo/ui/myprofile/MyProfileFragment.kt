@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
 import com.dumchykov.socialnetworkdemo.databinding.FragmentMyProfileBinding
+import com.dumchykov.socialnetworkdemo.ui.pager.Page
+import com.dumchykov.socialnetworkdemo.ui.pager.PagerFragment
 import kotlinx.coroutines.launch
 
 class MyProfileFragment : Fragment() {
@@ -43,7 +45,7 @@ class MyProfileFragment : Fragment() {
 
     private fun setViewMyContactsClickListener() {
         binding.buttonViewMyContacts.setOnClickListener {
-            findNavController().navigate(R.id.myContactsFragment)
+            (parentFragment as PagerFragment).changeCurrentItem(Page.MyContacts.ordinal)
         }
     }
 
@@ -53,7 +55,7 @@ class MyProfileFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.exitFlag.collect {
                     if (it) {
-                        findNavController().navigate(R.id.action_myProfileFragment_to_signUpFragment)
+                        findNavController().navigate(R.id.action_pager_to_signUpFragment)
                     }
                 }
             }
