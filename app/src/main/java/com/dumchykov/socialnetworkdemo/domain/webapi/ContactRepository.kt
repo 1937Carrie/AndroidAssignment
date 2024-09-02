@@ -2,17 +2,16 @@ package com.dumchykov.socialnetworkdemo.domain.webapi
 
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.Contact
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
 
 interface ContactRepository {
-    suspend fun addContact(contactId: Int): Boolean
+    suspend fun addContact(bearerToken: String, userId: Int, contactId: ContactId): ResponseState
     suspend fun authorize(email: String, password: String): ResponseState
-    suspend fun deleteContact(contactId: Int): Boolean
-    suspend fun editUser(user: Contact)
-    suspend fun getCurrentUser(): Contact
-    suspend fun getUserById(userId: Int): Contact
-    suspend fun getUserContacts(): List<Contact>
-    suspend fun getUsers()
-    suspend fun refreshToken()
+    suspend fun deleteContact(userId: Int, contactId: Int, bearerToken: String): ResponseState
+    suspend fun editUser(userId: Int, bearerToken: String, user: Contact): ResponseState
+    suspend fun getUserById(userId: Int, bearerToken: String): ResponseState
+    suspend fun getUserContacts(userId: Int, bearerToken: String): ResponseState
+    suspend fun getUsers(bearerToken: String): ResponseState
+    suspend fun refreshToken(refreshToken: String): ResponseState
     suspend fun register(email: String, password: String): ResponseState
-    suspend fun updateUserContacts()
 }
