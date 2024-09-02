@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,6 +19,7 @@ import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentLoginBinding
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.SingleUserResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -57,44 +57,23 @@ class LoginFragment : Fragment() {
     private fun observeLoginAttempt() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.loginState.collect { state ->
-                when (state) {
-                    is ResponseState.Error -> {
-                        binding.layoutProgress.visibility = View.GONE
-                        Toast.makeText(
-                            requireContext(),
-                            state.errorMessage.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                handleStandardResponse(
+                    state = state,
+                    context = requireContext(),
+                    scope = this,
+                    progressLayout = binding.layoutProgress
+                ) {
+                    if (binding.checkboxRememberMe.isChecked) saveCredentials().join()
+                    binding.layoutProgress.visibility = View.GONE
+                    val (currentUser, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as SingleUserResponse
+                    sharedViewModel.updateState {
+                        copy(
+                            currentUser = currentUser,
+                            accessToken = accessToken,
+                            refreshToken = refreshToken
+                        )
                     }
-
-                    is ResponseState.HttpCode -> {
-                        binding.layoutProgress.visibility = View.GONE
-                        Toast.makeText(
-                            requireContext(),
-                            "${state.code}, ${state.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-
-                    ResponseState.Loading -> {
-                        binding.layoutProgress.visibility = View.VISIBLE
-                    }
-
-                    is ResponseState.Success<*> -> {
-                        if (binding.checkboxRememberMe.isChecked) saveCredentials().join()
-                        binding.layoutProgress.visibility = View.GONE
-                        val (currentUser, accessToken, refreshToken) = state.data as SingleUserResponse
-                        sharedViewModel.updateState {
-                            copy(
-                                currentUser = currentUser,
-                                accessToken = accessToken,
-                                refreshToken = refreshToken
-                            )
-                        }
-                        findNavController().navigate(R.id.action_loginFragment_to_pagerFragment)
-                    }
-
-                    ResponseState.Initial -> {}
+                    findNavController().navigate(R.id.action_loginFragment_to_pagerFragment)
                 }
             }
         }
