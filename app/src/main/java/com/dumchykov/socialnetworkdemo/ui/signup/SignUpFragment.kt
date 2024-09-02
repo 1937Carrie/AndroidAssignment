@@ -73,11 +73,18 @@ class SignUpFragment : Fragment() {
         }
         setEmailPasswordInputValidations()
         setRegisterClickListener()
+        setSignInClickListener()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setSignInClickListener() {
+        binding.textSignIn.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun setRegisterClickListener() {
