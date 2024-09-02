@@ -19,7 +19,6 @@ import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.databinding.FragmentMyContactsBinding
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsAdapter
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsItemDecoration
-import com.dumchykov.socialnetworkdemo.ui.mycontacts.dialogfragment.AddContactDialog
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.dialogfragment.AddContactFragmentFactory
 import com.dumchykov.socialnetworkdemo.ui.pager.Page
 import com.dumchykov.socialnetworkdemo.ui.pager.PagerFragment
@@ -47,7 +46,8 @@ class MyContactsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMyContactsBinding.inflate(inflater, container, false)
-        val animation = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+        val animation =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
         sharedElementEnterTransition = animation
         return binding.root
     }
@@ -85,10 +85,7 @@ class MyContactsFragment : Fragment() {
 
     private fun setAddContactClickListener() {
         binding.textAddContacts.setOnClickListener {
-            val newFragment = AddContactDialog { name, career, address ->
-                viewModel.addContact(name, career, address)
-            }
-            newFragment.show(parentFragmentManager, "add contact")
+            findNavController().navigate(R.id.action_pagerFragment_to_addContactsFragment)
         }
     }
 

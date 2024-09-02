@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_pagerFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_pagerFragment_to_addContactsFragment"
+            app:destination="@id/addContactsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -64,4 +67,9 @@
         android:name="com.dumchykov.socialnetworkdemo.ui.editprofile.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/addContactsFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.addcontacts.AddContactsFragment"
+        android:label="fragment_add_contacts"
+        tools:layout="@layout/fragment_add_contacts" />
 </navigation>
