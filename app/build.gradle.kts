@@ -19,9 +19,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"http://178.63.9.114:7777/api/\"")
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
         viewBinding = true
     }
@@ -63,6 +66,13 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.material)
     implementation(platform(libs.androidx.compose.bom))
+    // Kotlin serialization
+    implementation(libs.kotlinx.serialization.json)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
