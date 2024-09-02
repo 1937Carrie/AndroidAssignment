@@ -57,6 +57,7 @@ class MyContactsFragment : Fragment() {
         setBackPressDispatcher()
         setArrowBackClickListener()
         setAddContactClickListener()
+        setFabClickListener()
         initAdapter()
         postponeEnterTransition()
         binding.recyclerContacts.doOnPreDraw { startPostponedEnterTransition() }
@@ -91,8 +92,15 @@ class MyContactsFragment : Fragment() {
         }
     }
 
+    private fun setFabClickListener() {
+        binding.fab.setOnClickListener {
+            viewModel.multipleRemovingContact()
+        }
+    }
+
     private fun initAdapter() {
         contactsAdapter = ContactsAdapter(
+            context = requireContext(),
             onClick = { view, contact ->
                 val contactBundle = bundleOf(
                     "contact.id" to contact.id.toString(),
@@ -120,7 +128,11 @@ class MyContactsFragment : Fragment() {
                         viewModel.addContact(contact)
                     }
                     .show()
-            })
+            },
+            onChangeSelect = { contact ->
+                viewModel.updateContactCheckState(contact)
+            }
+        )
 
         binding.recyclerContacts.adapter = contactsAdapter
         binding.recyclerContacts.layoutManager =
@@ -128,8 +140,12 @@ class MyContactsFragment : Fragment() {
         binding.recyclerContacts.addItemDecoration(ContactsItemDecoration(requireContext()))
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.contacts.collect { contacts ->
-                contactsAdapter.submitList(contacts)
+            viewModel.myContactsState.collect { myContactsState ->
+                contactsAdapter.updateMultiSelectState { myContactsState.isMultiselect }
+                contactsAdapter.submitList(myContactsState.contacts)
+
+                binding.fab.visibility =
+                    if (myContactsState.isMultiselect) View.VISIBLE else View.GONE
             }
         }
     }
