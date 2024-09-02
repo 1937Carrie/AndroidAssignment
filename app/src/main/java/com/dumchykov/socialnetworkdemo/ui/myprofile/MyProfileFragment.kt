@@ -35,6 +35,7 @@ class MyProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setName()
         setLogOutClickListener()
+        setEditProfileClickListener()
         setViewMyContactsClickListener()
     }
 
@@ -46,6 +47,12 @@ class MyProfileFragment : Fragment() {
     private fun setViewMyContactsClickListener() {
         binding.buttonViewMyContacts.setOnClickListener {
             (parentFragment as PagerFragment).changeCurrentItem(Page.MyContacts.ordinal)
+        }
+    }
+
+    private fun setEditProfileClickListener() {
+        binding.buttonEditProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_pagerFragment_to_editProfileFragment)
         }
     }
 

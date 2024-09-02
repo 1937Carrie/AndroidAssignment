@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/custom_blue"
+    android:orientation="vertical"
+    tools:context=".ui.editprofile.EditProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <FrameLayout
+            android:id="@+id/layoutTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/buttonArrowBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="8dp"
+                android:src="@drawable/ic_arrow_back" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/opensans_semi_bold"
+                android:gravity="center"
+                android:text="Add contact"
+                android:textAlignment="center"
+                android:textColor="@color/custom_white"
+                android:textSize="18sp" />
+
+        </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginVertical="28dp"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:id="@+id/layoutIconPerson"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@color/custom_gray_2"
+                    app:shapeAppearanceOverlay="@style/rounded" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/custom_white" />
+
+            </FrameLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageAddImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_add_image"
+                app:layout_constraintBottom_toBottomOf="@id/layoutIconPerson"
+                app:layout_constraintStart_toEndOf="@id/layoutIconPerson"
+                app:layout_constraintTop_toTopOf="@id/layoutIconPerson" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/custom_white"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputUserNameLayout"
+                style="@style/text_input_layout_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:theme="@style/text_input_edit_text_edit_profile">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputUserNameEditText"
+                    style="@style/text_input_edit_text_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputCareerLayout"
+                style="@style/text_input_layout_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Career"
+                android:theme="@style/text_input_edit_text_edit_profile">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputCareerEditText"
+                    style="@style/text_input_edit_text_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputEmailLayout"
+                style="@style/text_input_layout_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/e_mail"
+                android:theme="@style/text_input_edit_text_edit_profile">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEmailEditText"
+                    style="@style/text_input_edit_text_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputPhoneLayout"
+                style="@style/text_input_layout_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone"
+                android:theme="@style/text_input_edit_text_edit_profile">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputPhoneEditText"
+                    style="@style/text_input_edit_text_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputAddressLayout"
+                style="@style/text_input_layout_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Address"
+                android:theme="@style/text_input_edit_text_edit_profile">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputAddressEditText"
+                    style="@style/text_input_edit_text_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputBirthDateLayout"
+                style="@style/text_input_layout_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Date of birth"
+                android:theme="@style/text_input_edit_text_edit_profile">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputBirthDateEditText"
+                    style="@style/text_input_edit_text_edit_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSave"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/filled_button_orange"
+            android:fontFamily="@font/opensans_semi_bold"
+            android:letterSpacing="0.15"
+            android:text="Save"
+            android:textColor="@color/custom_white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+
+    </LinearLayout>
+
+</LinearLayout>
