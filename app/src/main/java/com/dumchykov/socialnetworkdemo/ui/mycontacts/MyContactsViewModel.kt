@@ -8,32 +8,36 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class MyContactsViewModel : ViewModel() {
-    private val _contacts = MutableStateFlow(mutableListOf<Contact>())
-    val contacts get() = _contacts.asStateFlow()
+    private val _myContactsState = MutableStateFlow(MyContactsState())
+    val myContactsState get() = _myContactsState.asStateFlow()
 
     init {
-        updateContactsState { getHardcodedContacts().toMutableList() }
+        updateContactsState { copy(contacts = getHardcodedContacts().toMutableList()) }
     }
 
-    private fun updateContactsState(reducer: MutableList<Contact>.() -> MutableList<Contact>) {
-        _contacts.update(reducer)
+    private fun updateContactsState(reducer: MyContactsState.() -> MyContactsState) {
+        _myContactsState.update(reducer)
+    }
+
+    private fun isMultiSelected(): Boolean {
+        return myContactsState.value.contacts.firstOrNull { it.isSelected } != null
     }
 
     fun removeContact(contactId: Int) {
-        val contactMutableList = contacts.value.toMutableList()
+        val contactMutableList = myContactsState.value.contacts.toMutableList()
         contactMutableList.removeIf { it.id == contactId }
-        updateContactsState { contactMutableList }
+        updateContactsState { copy(contacts = contactMutableList) }
     }
 
     fun addContact(contact: Contact) {
-        val contactMutableList = contacts.value.toMutableList()
+        val contactMutableList = myContactsState.value.contacts.toMutableList()
         contactMutableList.add(contact)
         contactMutableList.sortBy { it.id }
-        updateContactsState { contactMutableList }
+        updateContactsState { copy(contacts = contactMutableList) }
     }
 
     fun addContact(name: String, career: String, address: String) {
-        val contactMutableList = contacts.value.toMutableList()
+        val contactMutableList = myContactsState.value.contacts.toMutableList()
         val newContact = Contact(
             id = contactMutableList.size,
             name = name,
@@ -42,6 +46,24 @@ class MyContactsViewModel : ViewModel() {
         )
         contactMutableList.add(newContact)
         contactMutableList.sortBy { it.id }
-        updateContactsState { contactMutableList }
+        updateContactsState { copy(contacts = contactMutableList) }
+    }
+
+    fun updateContactCheckState(contact: Contact) {
+        val contactMutableList = myContactsState.value.contacts.toMutableList()
+        val indexOfFirst = contactMutableList.indexOfFirst { it.id == contact.id }
+        contactMutableList[indexOfFirst] = contact.copy(isSelected = contact.isSelected.not())
+        updateContactsState { copy(contacts = contactMutableList) }
+        val isMultiselect = isMultiSelected()
+        updateContactsState { copy(isMultiselect = isMultiselect) }
+    }
+
+    fun multipleRemovingContact() {
+        val selectedContacts =
+            myContactsState.value.contacts.toMutableList().filter { it.isSelected }
+        selectedContacts.forEach { contact ->
+            removeContact(contact.id)
+        }
+        updateContactsState { copy(isMultiselect = false) }
     }
 }

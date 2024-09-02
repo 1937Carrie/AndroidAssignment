@@ -105,7 +105,7 @@ class SignUpFragment : Fragment() {
     }
 
     private fun navigateToMyProfile() {
-        findNavController().navigate(R.id.action_signUpFragment_to_myProfileFragment)
+        findNavController().navigate(R.id.action_signUpFragment_to_pager)
     }
 
     private fun saveCredentialsAndNavigate() {
