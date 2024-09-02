@@ -3,11 +3,14 @@ package com.dumchykov.socialnetworkdemo.ui.mycontacts
 import androidx.lifecycle.ViewModel
 import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
 import com.dumchykov.socialnetworkdemo.data.contactsprovider.getHardcodedContacts
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class MyContactsViewModel : ViewModel() {
+@HiltViewModel
+class MyContactsViewModel @Inject constructor() : ViewModel() {
     private val _myContactsState = MutableStateFlow(MyContactsState())
     val myContactsState get() = _myContactsState.asStateFlow()
 

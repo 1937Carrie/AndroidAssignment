@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.databinding.FragmentSignUpExtendedBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpExtendedFragment : Fragment() {
     private var _binding: FragmentSignUpExtendedBinding? = null
     private val binding get() = _binding!!

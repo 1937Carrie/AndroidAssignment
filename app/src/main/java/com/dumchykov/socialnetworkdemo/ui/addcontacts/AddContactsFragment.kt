@@ -9,13 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.databinding.FragmentAddContactsBinding
 import com.dumchykov.socialnetworkdemo.ui.addcontacts.adapter.AddContactsAdapter
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsItemDecoration
-import com.dumchykov.socialnetworkdemo.ui.pager.Page
-import com.dumchykov.socialnetworkdemo.ui.pager.PagerFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddContactsFragment : Fragment() {
     private var _binding: FragmentAddContactsBinding? = null
     private val binding get() = _binding!!

@@ -13,8 +13,10 @@ import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
 import com.dumchykov.socialnetworkdemo.databinding.FragmentMyProfileBinding
 import com.dumchykov.socialnetworkdemo.ui.pager.Page
 import com.dumchykov.socialnetworkdemo.ui.pager.PagerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MyProfileFragment : Fragment() {
     private var _binding: FragmentMyProfileBinding? = null
     private val binding get() = _binding!!

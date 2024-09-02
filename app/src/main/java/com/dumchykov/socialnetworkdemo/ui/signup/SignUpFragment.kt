@@ -34,9 +34,11 @@ import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
 import com.dumchykov.socialnetworkdemo.data.validateEmail
 import com.dumchykov.socialnetworkdemo.data.validatePassword
 import com.dumchykov.socialnetworkdemo.databinding.FragmentSignUpBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color as ComposeUiColor
 
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!

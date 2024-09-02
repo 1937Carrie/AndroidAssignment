@@ -23,8 +23,10 @@ import com.dumchykov.socialnetworkdemo.ui.mycontacts.dialogfragment.AddContactFr
 import com.dumchykov.socialnetworkdemo.ui.pager.Page
 import com.dumchykov.socialnetworkdemo.ui.pager.PagerFragment
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MyContactsFragment : Fragment() {
     private var _binding: FragmentMyContactsBinding? = null
     private val binding get() = _binding!!

@@ -11,11 +11,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 // At the top level of your kotlin file:
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
 
-class DataStoreProvider(private val context: Context) {
+class DataStoreProvider @Inject constructor(private val context: Context) {
 
     private fun readString(key: String): Flow<String> {
         val preferencesKey = stringPreferencesKey(key)
