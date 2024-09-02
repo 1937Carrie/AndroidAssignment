@@ -2,6 +2,9 @@ package com.dumchykov.socialnetworkdemo.data.di
 
 import android.content.Context
 import com.dumchykov.socialnetworkdemo.BuildConfig
+import com.dumchykov.socialnetworkdemo.data.webapi.ContactRepositoryImpl
+import com.dumchykov.socialnetworkdemo.domain.webapi.ContactApiService
+import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -32,5 +35,10 @@ object AppModule {
             .client(client)
             .build()
             .create()
+    }
+
+    @Provides
+    fun provideContactRepository(contactApiService: ContactApiService): ContactRepository {
+        return ContactRepositoryImpl(contactApiService)
     }
 }
