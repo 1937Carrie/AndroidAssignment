@@ -21,15 +21,6 @@ class SignUpViewModel(
     private val _navFlag = MutableStateFlow(false)
     val navFlag get() = _navFlag.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            val (email, password) = dataStore.readCredentials().first()
-            if (email.isEmpty() || password.isEmpty()) return@launch
-            _credentials.update { email to password }
-            _navFlag.update { true }
-        }
-    }
-
     fun saveCredentials(email: String, password: String) {
         viewModelScope.launch {
             dataStore.writeCredentials(email, password)

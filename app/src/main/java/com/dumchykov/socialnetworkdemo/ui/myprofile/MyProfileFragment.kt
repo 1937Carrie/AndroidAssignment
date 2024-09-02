@@ -55,7 +55,7 @@ class MyProfileFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.exitFlag.collect {
                     if (it) {
-                        findNavController().navigate(R.id.action_pager_to_signUpFragment)
+                        findNavController().navigate(R.id.action_pagerFragment_to_loginFragment)
                     }
                 }
             }

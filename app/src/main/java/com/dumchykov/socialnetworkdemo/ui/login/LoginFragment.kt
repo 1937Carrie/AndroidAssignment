@@ -23,7 +23,8 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnSignUpClickListener()
+        setLoginClickListener()
+        setSignUpClickListener()
     }
 
     override fun onDestroyView() {
@@ -31,7 +32,13 @@ class LoginFragment : Fragment() {
         _binding = null
     }
 
-    private fun setOnSignUpClickListener() {
+    private fun setLoginClickListener(){
+        binding.buttonLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_pagerFragment)
+        }
+    }
+
+    private fun setSignUpClickListener() {
         binding.textSignUp.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
