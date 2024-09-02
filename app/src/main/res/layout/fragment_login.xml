@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -11,184 +11,207 @@
     tools:context=".ui.login.LoginFragment">
 
     <LinearLayout
-        android:id="@+id/layoutTop"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="bottom|center"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_semi_bold"
-            android:text="Hello!"
-            android:textAlignment="center"
-            android:textColor="@color/custom_white"
-            android:textSize="24sp" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="8dp" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_regular"
-            android:text="Enter your email and password below"
-            android:textAlignment="center"
-            android:textColor="@color/custom_white"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="24dp" />
-
-    <LinearLayout
-        android:id="@+id/layoutMiddle"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputEmailLayout"
-            style="@style/text_input_layout"
+        <LinearLayout
+            android:id="@+id/layoutTop"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/e_mail"
-            android:theme="@style/text_input_edit_text">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom|center"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEmailEditText"
-                style="@style/text_input_edit_text"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:fontFamily="@font/opensans_semi_bold"
+                android:text="Hello!"
+                android:textAlignment="center"
+                android:textColor="@color/custom_white"
+                android:textSize="24sp" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="8dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Enter your email and password below"
+                android:textAlignment="center"
+                android:textColor="@color/custom_white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
         <Space
             android:layout_width="wrap_content"
             android:layout_height="24dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputPasswordLayout"
-            style="@style/text_input_layout"
+        <LinearLayout
+            android:id="@+id/layoutMiddle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:theme="@style/text_input_edit_text">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputPasswordEditText"
-                style="@style/text_input_edit_text"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputEmailLayout"
+                style="@style/text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/e_mail"
+                android:theme="@style/text_input_edit_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEmailEditText"
+                    style="@style/text_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="24dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputPasswordLayout"
+                style="@style/text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:theme="@style/text_input_edit_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputPasswordEditText"
+                    style="@style/text_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/checkboxRememberMe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/custom_checkbox"
+                    android:checked="true"
+                    android:fontFamily="@font/opensans_semi_bold"
+                    android:padding="8dp"
+                    android:text="@string/remember_me"
+                    android:textColor="@color/custom_gray_2"
+                    android:textSize="14sp"
+                    app:buttonTint="@null" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textForgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semi_bold"
+                    android:text="Forgot your password?"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="16dp" />
+            android:layout_height="24dp" />
 
         <LinearLayout
+            android:id="@+id/layoutBottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/checkboxRememberMe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@drawable/custom_checkbox"
-                android:checked="true"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonLogin"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@drawable/outlined_button_3"
                 android:fontFamily="@font/opensans_semi_bold"
-                android:padding="8dp"
-                android:text="@string/remember_me"
-                android:textColor="@color/custom_gray_2"
-                android:textSize="14sp"
-                app:buttonTint="@null" />
+                android:letterSpacing="0.15"
+                android:text="Login"
+                android:textColor="@color/custom_white"
+                android:textSize="16sp" />
 
             <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="wrap_content"
+                android:layout_height="16dp" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textForgotPassword"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_semi_bold"
-                android:text="Forgot your password?"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textDontHaveAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semi_bold"
+                    android:text="Don’t have account?"
+                    android:textColor="@color/custom_gray_2"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="12dp"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textSignUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semi_bold"
+                    android:text="Sign Up"
+                    android:textColor="@color/custom_white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="24dp" />
 
     <LinearLayout
-        android:id="@+id/layoutBottom"
+        android:id="@+id/layoutProgress"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@color/custom_orange_a040"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonLogin"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@drawable/outlined_button_3"
-            android:fontFamily="@font/opensans_semi_bold"
-            android:letterSpacing="0.15"
-            android:text="Login"
-            android:textColor="@color/custom_white"
-            android:textSize="16sp" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="16dp" />
-
-        <LinearLayout
+        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textDontHaveAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_semi_bold"
-                android:text="Don’t have account?"
-                android:textColor="@color/custom_gray_2"
-                android:textSize="14sp" />
-
-            <Space
-                android:layout_width="12dp"
-                android:layout_height="wrap_content" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_semi_bold"
-                android:text="Sign Up"
-                android:textColor="@color/custom_white"
-                android:textSize="14sp" />
-
-        </LinearLayout>
+            android:indeterminate="true" />
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

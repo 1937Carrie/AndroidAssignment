@@ -1,19 +1,36 @@
 package com.dumchykov.socialnetworkdemo.ui.login
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.dumchykov.socialnetworkdemo.R
+import com.dumchykov.socialnetworkdemo.data.validateEmail
+import com.dumchykov.socialnetworkdemo.data.validatePassword
+import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentLoginBinding
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.SingleUserResponse
+import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: LoginViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +44,9 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setLoginClickListener()
         setSignUpClickListener()
+        setForgotPasswordClickListener()
+        observeLoginAttempt()
+        setEmailPasswordInputValidations()
     }
 
     override fun onDestroyView() {
@@ -34,9 +54,102 @@ class LoginFragment : Fragment() {
         _binding = null
     }
 
-    private fun setLoginClickListener(){
+    private fun observeLoginAttempt() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.loginState.collect { state ->
+                when (state) {
+                    is ResponseState.Error -> {
+                        binding.layoutProgress.visibility = View.GONE
+                        Toast.makeText(
+                            requireContext(),
+                            state.errorMessage.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    is ResponseState.HttpCode -> {
+                        binding.layoutProgress.visibility = View.GONE
+                        Toast.makeText(
+                            requireContext(),
+                            "${state.code}, ${state.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    ResponseState.Loading -> {
+                        binding.layoutProgress.visibility = View.VISIBLE
+                    }
+
+                    is ResponseState.Success<*> -> {
+                        if (binding.checkboxRememberMe.isChecked) saveCredentials().join()
+                        binding.layoutProgress.visibility = View.GONE
+                        val (currentUser, accessToken, refreshToken) = state.data as SingleUserResponse
+                        sharedViewModel.updateState {
+                            copy(
+                                currentUser = currentUser,
+                                accessToken = accessToken,
+                                refreshToken = refreshToken
+                            )
+                        }
+                        findNavController().navigate(R.id.action_loginFragment_to_pagerFragment)
+                    }
+
+                    ResponseState.Initial -> {}
+                }
+            }
+        }
+    }
+
+    private fun setEmailPasswordInputValidations() {
+        binding.textInputEmailEditText.doOnTextChanged { text, _, _, _ ->
+            updateEmailInputError(text.toString())
+        }
+        binding.textInputPasswordEditText.doOnTextChanged { text, _, _, _ ->
+            updatePasswordInputError(text.toString())
+        }
+    }
+
+    private fun updatePasswordInputError(password: String) {
+        val passwordValidationResult = validatePassword(password)
+        binding.textInputPasswordLayout.error =
+            if (passwordValidationResult) null else getString(R.string.text_input_password_error_description)
+    }
+
+    private fun updateEmailInputError(email: String) {
+        val emailValidationResult = validateEmail(email)
+        binding.textInputEmailLayout.error =
+            if (emailValidationResult) null else getString(R.string.text_input_email_description)
+    }
+
+    private fun setForgotPasswordClickListener() {
+        binding.textForgotPassword.setOnClickListener {
+            val url =
+                "https://memi.klev.club/uploads/posts/2024-05/memi-klev-club-qtvt-p-memi-chelovek-sidit-za-stolom-s-butilkoi-7.jpg"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setData(Uri.parse(url))
+            startActivity(intent)
+        }
+    }
+
+    private fun saveCredentials(): Job {
+        val email = binding.textInputEmailEditText.text.toString()
+        val password = binding.textInputPasswordEditText.text.toString()
+        return viewModel.saveCredentials(email, password)
+    }
+
+    private fun setLoginClickListener() {
         binding.buttonLogin.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_pagerFragment)
+            val email = binding.textInputEmailEditText.text.toString()
+            val password = binding.textInputPasswordEditText.text.toString()
+            val emailValidationResult = validateEmail(email)
+            val passwordValidationResult = validatePassword(password)
+            when (emailValidationResult && passwordValidationResult) {
+                true -> viewModel.authorize(email, password)
+                false -> {
+                    updateEmailInputError(binding.textInputEmailEditText.text.toString())
+                    updatePasswordInputError(binding.textInputPasswordEditText.text.toString())
+                }
+            }
         }
     }
 
