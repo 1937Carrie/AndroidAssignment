@@ -26,15 +26,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.dumchykov.socialnetworkdemo.R
-import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
 import com.dumchykov.socialnetworkdemo.data.validateEmail
 import com.dumchykov.socialnetworkdemo.data.validatePassword
+import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentSignUpBinding
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.SingleUserResponse
+import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color as ComposeUiColor
 
@@ -42,10 +47,8 @@ import androidx.compose.ui.graphics.Color as ComposeUiColor
 class SignUpFragment : Fragment() {
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SignUpViewModel by viewModels(
-        factoryProducer = {
-            SignUpViewModel.factory(DataStoreProvider(requireContext()))
-        })
+    private val viewModel: SignUpViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,15 +60,6 @@ class SignUpFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.navFlag.collect { flag ->
-                if (flag.not()) return@collect
-                val (email, password) = viewModel.credentials.value
-                binding.textInputEmailEditText.setText(email)
-                binding.textInputPasswordEditText.setText(password)
-                navigateToMyProfile()
-            }
-        }
         super.onViewCreated(view, savedInstanceState)
         binding.buttonGoogle.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -76,11 +70,37 @@ class SignUpFragment : Fragment() {
         setEmailPasswordInputValidations()
         setRegisterClickListener()
         setSignInClickListener()
+        observeRegisterAttempt()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun observeRegisterAttempt() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.signUpState.collect { state ->
+                handleStandardResponse(
+                    state = state,
+                    context = requireContext(),
+                    scope = this,
+                    progressLayout = binding.layoutProgress
+                ) {
+                    if (binding.checkboxRememberMe.isChecked) saveCredentialsAndNavigate().join()
+                    binding.layoutProgress.visibility = View.GONE
+                    val (user, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as SingleUserResponse
+                    sharedViewModel.updateState {
+                        copy(
+                            currentUser = user,
+                            accessToken = accessToken,
+                            refreshToken = refreshToken
+                        )
+                    }
+                    findNavController().navigate(R.id.action_signUpFragment_to_signUpExtendedFragment)
+                }
+            }
+        }
     }
 
     private fun setSignInClickListener() {
@@ -117,10 +137,10 @@ class SignUpFragment : Fragment() {
         findNavController().navigate(R.id.action_signUpFragment_to_signUpExtendedFragment)
     }
 
-    private fun saveCredentialsAndNavigate() {
+    private fun saveCredentialsAndNavigate(): Job {
         val email = binding.textInputEmailEditText.text.toString()
         val password = binding.textInputPasswordEditText.text.toString()
-        viewModel.saveCredentials(email, password)
+        return viewModel.saveCredentials(email, password)
     }
 
     private fun setEmailPasswordInputValidations() {

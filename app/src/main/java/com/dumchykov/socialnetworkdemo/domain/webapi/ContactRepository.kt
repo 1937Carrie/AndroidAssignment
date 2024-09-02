@@ -13,6 +13,6 @@ interface ContactRepository {
     suspend fun getUserContacts(): List<Contact>
     suspend fun getUsers()
     suspend fun refreshToken()
-    suspend fun register(email: String, password: String, saveCredentials: Boolean = false)
+    suspend fun register(email: String, password: String): ResponseState
     suspend fun updateUserContacts()
 }

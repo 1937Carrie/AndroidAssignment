@@ -53,8 +53,20 @@ class ContactRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun register(email: String, password: String, saveCredentials: Boolean) {
-        TODO("Not yet implemented")
+    override suspend fun register(
+        email: String,
+        password: String,
+    ): ResponseState {
+        try {
+            val registerResponse = contactApiService.register(email, password)
+            return if (registerResponse.code == 200) {
+                ResponseState.Success(registerResponse.data)
+            } else {
+                ResponseState.HttpCode(registerResponse.code, registerResponse.message)
+            }
+        } catch (e: Throwable) {
+            return ResponseState.Error(e.message)
+        }
     }
 
     override suspend fun updateUserContacts() {
