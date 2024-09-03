@@ -1,49 +1,41 @@
 package com.dumchykov.socialnetworkdemo.ui.signup
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
+import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
+import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignUpViewModel(
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val contactRepository: ContactRepository,
     private val dataStore: DataStoreProvider,
 ) : ViewModel() {
-    private val _credentials = MutableStateFlow(Pair("", ""))
-    val credentials get() = _credentials.asStateFlow()
+    private val _signUpState = MutableStateFlow<ResponseState>(ResponseState.Initial)
+    val signUpState get() = _signUpState.asStateFlow()
 
-    private val _navFlag = MutableStateFlow(false)
-    val navFlag get() = _navFlag.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            val (email, password) = dataStore.readCredentials().first()
-            if (email.isEmpty() || password.isEmpty()) return@launch
-            _credentials.update { email to password }
-            _navFlag.update { true }
-        }
+    private fun updateState(reducer: ResponseState.() -> ResponseState) {
+        _signUpState.update(reducer)
     }
 
-    fun saveCredentials(email: String, password: String) {
-        viewModelScope.launch {
+    fun saveCredentials(email: String, password: String): Job {
+        return viewModelScope.launch {
             dataStore.writeCredentials(email, password)
-            _navFlag.update { true }
         }
     }
 
-    companion object {
-        fun factory(dataStore: DataStoreProvider): ViewModelProvider.Factory {
-            return viewModelFactory {
-                initializer {
-                    SignUpViewModel(dataStore)
-                }
-            }
+    fun register(email: String, password: String) {
+        viewModelScope.launch {
+            updateState { ResponseState.Loading }
+            val registerResponse = contactRepository.register(email, password)
+            updateState { registerResponse }
         }
     }
 }

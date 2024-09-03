@@ -26,24 +26,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.dumchykov.socialnetworkdemo.R
-import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
 import com.dumchykov.socialnetworkdemo.data.validateEmail
 import com.dumchykov.socialnetworkdemo.data.validatePassword
+import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentSignUpBinding
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.AuthenticationResponse
+import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color as ComposeUiColor
 
+@AndroidEntryPoint
 class SignUpFragment : Fragment() {
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SignUpViewModel by viewModels(
-        factoryProducer = {
-            SignUpViewModel.factory(DataStoreProvider(requireContext()))
-        })
+    private val viewModel: SignUpViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,15 +60,6 @@ class SignUpFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.navFlag.collect { flag ->
-                if (flag.not()) return@collect
-                val (email, password) = viewModel.credentials.value
-                binding.textInputEmailEditText.setText(email)
-                binding.textInputPasswordEditText.setText(password)
-                navigateToMyProfile()
-            }
-        }
         super.onViewCreated(view, savedInstanceState)
         binding.buttonGoogle.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -73,11 +69,44 @@ class SignUpFragment : Fragment() {
         }
         setEmailPasswordInputValidations()
         setRegisterClickListener()
+        setSignInClickListener()
+        observeRegisterAttempt()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun observeRegisterAttempt() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.signUpState.collect { state ->
+                handleStandardResponse(
+                    state = state,
+                    context = requireContext(),
+                    scope = this,
+                    progressLayout = binding.layoutProgress.root
+                ) {
+                    if (binding.checkboxRememberMe.isChecked) saveCredentialsAndNavigate().join()
+                    binding.layoutProgress.root.visibility = View.GONE
+                    val (user, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as AuthenticationResponse
+                    sharedViewModel.updateState {
+                        copy(
+                            currentUser = user,
+                            accessToken = accessToken,
+                            refreshToken = refreshToken
+                        )
+                    }
+                    findNavController().navigate(R.id.action_signUpFragment_to_signUpExtendedFragment)
+                }
+            }
+        }
+    }
+
+    private fun setSignInClickListener() {
+        binding.textSignIn.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun setRegisterClickListener() {
@@ -87,7 +116,7 @@ class SignUpFragment : Fragment() {
             val emailValidationResult = validateEmail(email)
             val passwordValidationResult = validatePassword(password)
             when (emailValidationResult && passwordValidationResult) {
-                true -> doOnRegisterClick()
+                true -> registerAccount()
                 false -> {
                     updateEmailInputError(binding.textInputEmailEditText.text.toString())
                     updatePasswordInputError(binding.textInputPasswordEditText.text.toString())
@@ -96,22 +125,16 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun doOnRegisterClick() {
-        if (binding.checkboxRememberMe.isChecked) {
-            saveCredentialsAndNavigate()
-        } else {
-            navigateToMyProfile()
-        }
-    }
-
-    private fun navigateToMyProfile() {
-        findNavController().navigate(R.id.action_signUpFragment_to_pager)
-    }
-
-    private fun saveCredentialsAndNavigate() {
+    private fun registerAccount() {
         val email = binding.textInputEmailEditText.text.toString()
         val password = binding.textInputPasswordEditText.text.toString()
-        viewModel.saveCredentials(email, password)
+        viewModel.register(email, password)
+    }
+
+    private fun saveCredentialsAndNavigate(): Job {
+        val email = binding.textInputEmailEditText.text.toString()
+        val password = binding.textInputPasswordEditText.text.toString()
+        return viewModel.saveCredentials(email, password)
     }
 
     private fun setEmailPasswordInputValidations() {
@@ -133,42 +156,5 @@ class SignUpFragment : Fragment() {
         val emailValidationResult = validateEmail(email)
         binding.textInputEmailLayout.error =
             if (emailValidationResult) null else getString(R.string.text_input_email_description)
-    }
-}
-
-@Preview(heightDp = 40)
-@Composable
-fun ButtonGoogle() {
-    Button(
-        onClick = {},
-        modifier = Modifier.fillMaxSize(),
-        colors = ButtonDefaults.buttonColors(
-            ComposeUiColor.White,
-            ComposeUiColor.White,
-            ComposeUiColor.White,
-            ComposeUiColor.White
-        )
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_google),
-                contentDescription = ""
-            )
-            Text(
-                text = stringResource(R.string.google).uppercase(),
-                color = colorResource(R.color.black),
-                fontSize = 16.sp,
-                fontFamily = FontFamily(
-                    Font(
-                        R.font.opensans_bold,
-                        FontWeight.W600,
-                        FontStyle.Normal
-                    )
-                ),
-                letterSpacing = 1.5.sp
-            )
-        }
     }
 }

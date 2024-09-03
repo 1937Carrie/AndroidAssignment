@@ -2,10 +2,9 @@ package com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.viewholders
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactBinding
+import com.dumchykov.socialnetworkdemo.ui.util.setImageWithGlide
 
 class PlainViewHolder(
     private val binding: ItemContactBinding,
@@ -26,12 +25,7 @@ class PlainViewHolder(
         binding.imageDelete.setOnClickListener {
             onDelete(contact)
         }
-        Glide
-            .with(binding.imageMain)
-            .load("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
-            .circleCrop()
-            .placeholder(R.drawable.image_main)
-            .into(binding.imageMain)
+        binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
         setTransitionName(contact)
     }
 

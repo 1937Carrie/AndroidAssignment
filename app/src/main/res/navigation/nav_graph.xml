@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/signUpFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/detailsFragment"
@@ -16,10 +16,8 @@
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up">
         <action
-            android:id="@+id/action_signUpFragment_to_pager"
-            app:destination="@id/pagerFragment"
-            app:popUpTo="@id/signUpFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_signUpFragment_to_signUpExtendedFragment"
+            app:destination="@id/signUpExtendedFragment" />
     </fragment>
     <fragment
         android:id="@+id/pagerFragment"
@@ -27,11 +25,55 @@
         android:label="Pager"
         tools:layout="@layout/fragment_pager">
         <action
-            android:id="@+id/action_pager_to_signUpFragment"
-            app:destination="@id/signUpFragment"
-            app:popUpTo="@id/signUpFragment" />
-        <action
             android:id="@+id/action_pagerFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_pagerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_pagerFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_pagerFragment_to_addContactsFragment"
+            app:destination="@id/addContactsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_pagerFragment"
+            app:destination="@id/pagerFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpExtendedFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.signupextended.SignUpExtendedFragment"
+        android:label="fragment_sign_up_extended"
+        tools:layout="@layout/fragment_sign_up_extended">
+        <action
+            android:id="@+id/action_signUpExtendedFragment_to_pagerFragment"
+            app:destination="@id/pagerFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.editprofile.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/addContactsFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.addcontacts.AddContactsFragment"
+        android:label="fragment_add_contacts"
+        tools:layout="@layout/fragment_add_contacts">
+        <action
+            android:id="@+id/action_addContactsFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
 </navigation>

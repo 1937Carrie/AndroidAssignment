@@ -97,10 +97,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/image_main"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintWidth_percent="0.3"
-        app:shapeAppearanceOverlay="@style/rounded" />
+        app:shapeAppearanceOverlay="@style/rounded"
+        tools:src="@drawable/image_main" />
 
     <Space
         android:id="@+id/spacerBetweenImageAndName"
@@ -191,8 +191,44 @@
         android:text="Message"
         android:textColor="@color/custom_white"
         android:textSize="16sp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonMessageWhileNotFriended"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/outlined_button_2"
+        android:fontFamily="@font/opensans_semi_bold"
+        android:text="Message"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/buttonAddToMyContacts"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonAddToMyContacts"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:background="@drawable/filled_button_orange"
+        android:fontFamily="@font/opensans_semi_bold"
+        android:letterSpacing="0.15"
+        android:text="Add to my contacts"
+        android:textColor="@color/custom_white"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+
+    <include
+        android:id="@+id/layoutProgress"
+        layout="@layout/layout_progress"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

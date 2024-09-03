@@ -23,7 +23,34 @@
         <!--    Attr colorControlActivated is responsible for cursor color    -->
         <item name="colorControlActivated">@color/custom_white</item>
         <item name="fontFamily">@font/opensans_semi_bold</item>
-        <item name="singleLine">true</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="text_input_layout_edit_profile">
+        <item name="android:textColorHint">@color/custom_gray_2</item>
+        <item name="boxStrokeColor">@color/text_input_box_stroke_edit_profile</item>
+        <item name="boxStrokeErrorColor">@color/white</item>
+        <item name="expandedHintEnabled">false</item>
+        <item name="hintTextColor">@color/custom_gray_2</item>
+    </style>
+
+    <style name="text_input_edit_text_edit_profile">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <!--    Attr colorControlActivated is responsible for cursor color    -->
+        <item name="colorControlActivated">@color/custom_gray_2</item>
+        <item name="fontFamily">@font/opensans_semi_bold</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="text_input_edit_text_search">
+        <item name="android:textColor">@color/custom_white</item>
+        <item name="android:textSize">14sp</item>
+        <!--    Attr colorControlActivated is responsible for cursor color    -->
+        <item name="colorControlActivated">@color/custom_gray_2</item>
+        <item name="fontFamily">@font/opensans_semi_bold</item>
+        <item name="android:singleLine">true</item>
     </style>
 
 </resources>
