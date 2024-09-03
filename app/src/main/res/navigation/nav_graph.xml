@@ -41,7 +41,7 @@
         android:id="@+id/loginFragment"
         android:name="com.dumchykov.socialnetworkdemo.ui.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
@@ -55,7 +55,7 @@
         android:id="@+id/signUpExtendedFragment"
         android:name="com.dumchykov.socialnetworkdemo.ui.signupextended.SignUpExtendedFragment"
         android:label="fragment_sign_up_extended"
-        tools:layout="@layout/fragment_sign_up_extended" >
+        tools:layout="@layout/fragment_sign_up_extended">
         <action
             android:id="@+id/action_signUpExtendedFragment_to_pagerFragment"
             app:destination="@id/pagerFragment"
@@ -71,5 +71,9 @@
         android:id="@+id/addContactsFragment"
         android:name="com.dumchykov.socialnetworkdemo.ui.addcontacts.AddContactsFragment"
         android:label="fragment_add_contacts"
-        tools:layout="@layout/fragment_add_contacts" />
+        tools:layout="@layout/fragment_add_contacts">
+        <action
+            android:id="@+id/action_addContactsFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
 </navigation>

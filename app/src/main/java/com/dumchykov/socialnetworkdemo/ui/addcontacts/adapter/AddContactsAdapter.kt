@@ -9,6 +9,7 @@ import com.dumchykov.socialnetworkdemo.databinding.ItemContactAddBinding
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsAdapter
 
 class AddContactsAdapter(
+    private val onClickListener: (Int, String) -> Unit,
     private val onAddListener: (Int) -> Unit,
 ) : ListAdapter<Contact, RecyclerView.ViewHolder>(ContactsAdapter.Diff()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -23,6 +24,6 @@ class AddContactsAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder as AddContactsViewHolder
-        holder.onBind(getItem(position), onAddListener)
+        holder.onBind(getItem(position), onClickListener, onAddListener)
     }
 }

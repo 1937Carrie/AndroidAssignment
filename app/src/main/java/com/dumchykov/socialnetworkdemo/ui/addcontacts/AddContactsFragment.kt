@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentAddContactsBinding
@@ -82,6 +84,12 @@ class AddContactsFragment : Fragment() {
 
     private fun initAdapter() {
         addContactsAdapter = AddContactsAdapter(
+            onClickListener = { userId, userName ->
+                val bundle = bundleOf(
+                    "contact.id" to userId,
+                    "contact.name" to userName)
+                findNavController().navigate(R.id.action_addContactsFragment_to_detailsFragment, bundle)
+            },
             onAddListener = { userId ->
                 val bearerToken = sharedViewModel.shareState.value.accessToken
                 val currentUserId = sharedViewModel.shareState.value.currentUser.id
