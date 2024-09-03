@@ -2,7 +2,10 @@ package com.dumchykov.socialnetworkdemo.ui.util
 
 import android.content.Context
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -44,4 +47,13 @@ suspend fun handleStandardResponse(
 
         ResponseState.Initial -> {}
     }
+}
+
+fun ImageView.setImageWithGlide(url: String) {
+    Glide
+        .with(this)
+        .load(url)
+        .circleCrop()
+        .placeholder(R.drawable.image_main)
+        .into(this)
 }
