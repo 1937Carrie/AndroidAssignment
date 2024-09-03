@@ -90,4 +90,12 @@ class MyContactsViewModel @Inject constructor(
             updateState { contactUsersResponse }
         }
     }
+
+    fun getAllUsers(bearerToken: String) {
+        viewModelScope.launch {
+            updateState { ResponseState.Loading }
+            val getUsersResponse = contactRepository.getUsers(bearerToken)
+            updateState { getUsersResponse }
+        }
+    }
 }

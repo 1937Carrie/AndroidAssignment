@@ -1,5 +1,6 @@
 package com.dumchykov.socialnetworkdemo.ui.mycontacts
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,10 +23,10 @@ import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentMyContactsBinding
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleContactResponse
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleUserResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsAdapter
 import com.dumchykov.socialnetworkdemo.ui.mycontacts.adapter.ContactsItemDecoration
-import com.dumchykov.socialnetworkdemo.ui.mycontacts.dialogfragment.AddContactFragmentFactory
 import com.dumchykov.socialnetworkdemo.ui.pager.Page
 import com.dumchykov.socialnetworkdemo.ui.pager.PagerFragment
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
@@ -42,12 +43,9 @@ class MyContactsFragment : Fragment() {
     private val viewModel: MyContactsViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        parentFragmentManager.fragmentFactory =
-            AddContactFragmentFactory { name, career, address ->
-                viewModel.addContact(name, career, address)
-            }
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        getAllUsers()
     }
 
     override fun onCreateView(
@@ -75,15 +73,20 @@ class MyContactsFragment : Fragment() {
         binding.recyclerContacts.doOnPreDraw { startPostponedEnterTransition() }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun updateUserContacts() {
         val userId = sharedViewModel.shareState.value.currentUser.id
         val bearerToken = sharedViewModel.shareState.value.accessToken
         viewModel.getUserContacts(userId, bearerToken)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun getAllUsers() {
+        val bearerToken = sharedViewModel.shareState.value.accessToken
+        viewModel.getAllUsers(bearerToken)
     }
 
     private fun observeApiResponse() {
@@ -111,6 +114,11 @@ class MyContactsFragment : Fragment() {
                                 })
                             }
                         }
+
+                        is MultipleUserResponse -> {
+                            state.data as MultipleUserResponse
+                            sharedViewModel.updateState { copy(userList = state.data.users) }
+                        }
                     }
                 }
             }
@@ -122,7 +130,7 @@ class MyContactsFragment : Fragment() {
             context = requireContext(),
             onClick = { view, contact ->
                 val contactBundle = bundleOf(
-                    "contact.id" to contact.id.toString(),
+                    "contact.id" to contact.id,
                     "contact.name" to contact.name,
                     "contact.career" to contact.career,
                     "contact.address" to contact.address,
