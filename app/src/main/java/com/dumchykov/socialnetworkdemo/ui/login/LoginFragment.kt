@@ -17,7 +17,7 @@ import com.dumchykov.socialnetworkdemo.data.validateEmail
 import com.dumchykov.socialnetworkdemo.data.validatePassword
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentLoginBinding
-import com.dumchykov.socialnetworkdemo.domain.webapi.models.SingleUserResponse
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.AuthenticationResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,7 +66,7 @@ class LoginFragment : Fragment() {
                 ) {
                     if (binding.checkboxRememberMe.isChecked) saveCredentials().join()
                     binding.layoutProgress.root.visibility = View.GONE
-                    val (currentUser, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as SingleUserResponse
+                    val (currentUser, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as AuthenticationResponse
                     sharedViewModel.updateState {
                         copy(
                             currentUser = currentUser,

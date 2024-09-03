@@ -1,5 +1,6 @@
 package com.dumchykov.socialnetworkdemo.domain.webapi
 
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.AuthenticationResponse
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.Contact
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactApiResponse
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
@@ -27,10 +28,10 @@ interface ContactApiService {
     suspend fun register(
         @Field("email") email: String,
         @Field("password") password: String,
-    ): ContactApiResponse<SingleUserResponse>
+    ): ContactApiResponse<AuthenticationResponse>
 
     @POST("login")
-    suspend fun authorize(@Body emailPassword: EmailPassword): ContactApiResponse<SingleUserResponse>
+    suspend fun authorize(@Body emailPassword: EmailPassword): ContactApiResponse<AuthenticationResponse>
 
     @POST("refresh")
     suspend fun refreshToken(@Header("RefreshToken") refreshToken: String): ContactApiResponse<TokenResponse>
