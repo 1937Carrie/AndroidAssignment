@@ -41,6 +41,7 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        observeCachedCredentials()
         super.onViewCreated(view, savedInstanceState)
         setLoginClickListener()
         setSignUpClickListener()
@@ -135,6 +136,18 @@ class LoginFragment : Fragment() {
     private fun setSignUpClickListener() {
         binding.textSignUp.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
+        }
+    }
+
+    private fun observeCachedCredentials() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.credentialsState.collect { (email, password) ->
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    binding.textInputEmailEditText.setText(email)
+                    binding.textInputPasswordEditText.setText(password)
+                    viewModel.authorize(email, password)
+                }
+            }
         }
     }
 }
