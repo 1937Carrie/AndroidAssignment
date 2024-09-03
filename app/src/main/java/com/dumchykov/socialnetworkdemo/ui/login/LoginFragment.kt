@@ -62,10 +62,10 @@ class LoginFragment : Fragment() {
                     state = state,
                     context = requireContext(),
                     scope = this,
-                    progressLayout = binding.layoutProgress
+                    progressLayout = binding.layoutProgress.root
                 ) {
                     if (binding.checkboxRememberMe.isChecked) saveCredentials().join()
-                    binding.layoutProgress.visibility = View.GONE
+                    binding.layoutProgress.root.visibility = View.GONE
                     val (currentUser, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as SingleUserResponse
                     sharedViewModel.updateState {
                         copy(

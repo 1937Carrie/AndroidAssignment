@@ -54,9 +54,9 @@ class SignUpExtendedFragment : Fragment() {
                     state = state,
                     context = requireContext(),
                     scope = this,
-                    progressLayout = binding.layoutProgress
+                    progressLayout = binding.layoutProgress.root
                 ) {
-                    binding.layoutProgress.visibility = View.GONE
+                    binding.layoutProgress.root.visibility = View.GONE
                     val (user) = (state as ResponseState.Success<*>).data as EditUserResponse
                     sharedViewModel.updateState {
                         copy(
