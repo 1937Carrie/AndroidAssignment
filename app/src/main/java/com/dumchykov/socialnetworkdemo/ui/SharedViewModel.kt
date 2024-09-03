@@ -37,4 +37,6 @@ data class ShareState(
     ),
     val accessToken: String = "",
     val refreshToken: String = "",
+    val userList: List<Contact> = emptyList(),
+    val userContactIdList: List<Int> = emptyList(),
 )
