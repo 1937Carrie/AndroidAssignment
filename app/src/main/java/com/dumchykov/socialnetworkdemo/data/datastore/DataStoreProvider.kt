@@ -50,10 +50,6 @@ class DataStoreProvider @Inject constructor(private val context: Context) {
         }
     }
 
-    fun readEmail(): Flow<String> {
-        return readString(KEY_EMAIL)
-    }
-
     companion object {
         const val PREFERENCES_NAME = "miscellaneous"
         const val KEY_EMAIL = "email"

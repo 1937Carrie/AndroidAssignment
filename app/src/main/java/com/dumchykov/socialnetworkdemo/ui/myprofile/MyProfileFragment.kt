@@ -84,10 +84,6 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun setName() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.name.collect { name ->
-                binding.textName.text = name
-            }
-        }
+        binding.textName.text = sharedViewModel.shareState.value.currentUser.name
     }
 }

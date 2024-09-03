@@ -24,14 +24,6 @@ class MyProfileViewModel @Inject constructor(
     private val _name = MutableStateFlow("")
     val name get() = _name.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            dataStore.readEmail().collect { email ->
-                _name.update { email }
-            }
-        }
-    }
-
     fun clearCredentials() {
         viewModelScope.launch {
             async { dataStore.clearCredentials() }.await()
