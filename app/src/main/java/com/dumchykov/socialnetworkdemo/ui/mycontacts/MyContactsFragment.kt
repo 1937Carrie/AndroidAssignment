@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -65,6 +66,7 @@ class MyContactsFragment : Fragment() {
         updateUserContacts()
         setBackPressDispatcher()
         setArrowBackClickListener()
+        setSearchRelatedListeners()
         setAddContactClickListener()
         setFabClickListener()
         initAdapter()
@@ -190,6 +192,25 @@ class MyContactsFragment : Fragment() {
     private fun setAddContactClickListener() {
         binding.textAddContacts.setOnClickListener {
             findNavController().navigate(R.id.action_pagerFragment_to_addContactsFragment)
+        }
+    }
+
+    private fun setSearchRelatedListeners() {
+        binding.buttonSearch.setOnClickListener {
+            binding.layoutTop.visibility = View.GONE
+            binding.layoutSearch.visibility = View.VISIBLE
+        }
+
+        binding.imageCloseSearch.setOnClickListener {
+            binding.textInputSearchEditText.setText("")
+            binding.layoutTop.visibility = View.VISIBLE
+            binding.layoutSearch.visibility = View.GONE
+        }
+
+        binding.textInputSearchEditText.doOnTextChanged { text, _, _, _ ->
+            val filteredList = viewModel.contactListState.value.contacts
+                .filter { it.name.lowercase().contains(text.toString().lowercase()) }
+            contactsAdapter.submitList(filteredList)
         }
     }
 

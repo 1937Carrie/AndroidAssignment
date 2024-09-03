@@ -44,4 +44,13 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="text_input_edit_text_search">
+        <item name="android:textColor">@color/custom_white</item>
+        <item name="android:textSize">14sp</item>
+        <!--    Attr colorControlActivated is responsible for cursor color    -->
+        <item name="colorControlActivated">@color/custom_gray_2</item>
+        <item name="fontFamily">@font/opensans_semi_bold</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
 </resources>

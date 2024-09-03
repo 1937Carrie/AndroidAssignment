@@ -57,6 +57,39 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layoutSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputSearchEditText"
+                style="@style/text_input_edit_text_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/filled_rounded_gray"
+                android:drawableRight="@drawable/ic_search"
+                android:padding="8dp"
+                android:theme="@style/text_input_edit_text_search" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageCloseSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@drawable/ic_close_cross" />
+
+        </LinearLayout>
+
         <Space
             android:layout_width="wrap_content"
             android:layout_height="32dp" />
