@@ -75,13 +75,24 @@
             android:layout_width="wrap_content"
             android:layout_height="26dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerContacts"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/custom_white"
-            tools:listitem="@layout/item_contact" />
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerContacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/custom_white"
+                tools:listitem="@layout/item_contact" />
+
+            <include
+                android:id="@+id/layoutProgress"
+                layout="@layout/layout_progress"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
