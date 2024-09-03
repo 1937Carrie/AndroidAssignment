@@ -6,4 +6,5 @@ data class Contact(
     val career: String = "",
     val address: String = "",
     val isSelected: Boolean = false,
+    val isAdded: Boolean = false,
 )
