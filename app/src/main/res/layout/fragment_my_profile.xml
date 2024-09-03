@@ -184,6 +184,20 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_instagram" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textGoToSettingsAndFillOut"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/opensans_semi_bold"
+        android:text="Go to settings and fill out the profile"
+        android:textAlignment="center"
+        android:textColor="@color/custom_blue"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/buttonEditProfile"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonEditProfile"
         android:layout_width="0dp"
