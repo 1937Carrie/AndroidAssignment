@@ -1,164 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/custom_blue"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".ui.signupextended.SignUpExtendedFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutTop"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:background="@color/custom_blue"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <FrameLayout
-            android:id="@+id/layoutIconPerson"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutTop"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.3">
+            android:layout_weight="1">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@color/custom_gray_2"
-                app:shapeAppearanceOverlay="@style/rounded" />
+            <FrameLayout
+                android:id="@+id/layoutIconPerson"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@color/custom_gray_2"
+                    app:shapeAppearanceOverlay="@style/rounded" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_person"
+                    android:tint="@color/custom_white" />
+
+            </FrameLayout>
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_person"
-                android:tint="@color/custom_white" />
+                android:id="@+id/imageAddImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_add_image"
+                app:layout_constraintBottom_toBottomOf="@id/layoutIconPerson"
+                app:layout_constraintStart_toEndOf="@id/layoutIconPerson"
+                app:layout_constraintTop_toTopOf="@id/layoutIconPerson" />
 
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageAddImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_add_image"
-            app:layout_constraintBottom_toBottomOf="@id/layoutIconPerson"
-            app:layout_constraintStart_toEndOf="@id/layoutIconPerson"
-            app:layout_constraintTop_toTopOf="@id/layoutIconPerson" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutMiddle"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_semi_bold"
-            android:text="Your profile data"
-            android:textAlignment="center"
-            android:textColor="@color/custom_white"
-            android:textSize="24sp" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="8dp" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_regular"
-            android:text="Fill out the profile and go to the application!"
-            android:textAlignment="center"
-            android:textColor="@color/custom_white"
-            android:textSize="12sp" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="24dp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputEmailLayout"
-            style="@style/text_input_layout"
+        <LinearLayout
+            android:id="@+id/layoutMiddle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/e_mail"
-            android:theme="@style/text_input_edit_text">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputEmailEditText"
-                style="@style/text_input_edit_text"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semi_bold"
+                android:text="Your profile data"
+                android:textAlignment="center"
+                android:textColor="@color/custom_white"
+                android:textSize="24sp" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="8dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:text="Fill out the profile and go to the application!"
+                android:textAlignment="center"
+                android:textColor="@color/custom_white"
+                android:textSize="12sp" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="24dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputEmailLayout"
+                style="@style/text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/e_mail"
+                android:theme="@style/text_input_edit_text">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputMobilePhoneLayout"
-            style="@style/text_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Mobile phone"
-            android:theme="@style/text_input_edit_text">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEmailEditText"
+                    style="@style/text_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInputMobilePhoneEditText"
-                style="@style/text_input_edit_text"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputMobilePhoneLayout"
+                style="@style/text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="phone" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Mobile phone"
+                android:theme="@style/text_input_edit_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputMobilePhoneEditText"
+                    style="@style/text_input_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutBottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonCancel"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/outlined_button_4"
+                android:fontFamily="@font/opensans_semi_bold"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/custom_white"
+                android:textSize="16sp" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="16dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonForward"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@drawable/filled_button_orange"
+                android:fontFamily="@font/opensans_semi_bold"
+                android:letterSpacing="0.15"
+                android:text="Forward"
+                android:textColor="@color/custom_white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutBottom"
+        android:id="@+id/layoutProgress"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:background="@color/custom_orange_a040"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonCancel"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/outlined_button_4"
-            android:fontFamily="@font/opensans_semi_bold"
-            android:text="Cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/custom_white"
-            android:textSize="16sp" />
-
-        <Space
+        <ProgressBar
             android:layout_width="wrap_content"
-            android:layout_height="16dp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonForward"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@drawable/filled_button_orange"
-            android:fontFamily="@font/opensans_semi_bold"
-            android:letterSpacing="0.15"
-            android:text="Forward"
-            android:textColor="@color/custom_white"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>
