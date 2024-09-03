@@ -116,7 +116,7 @@ class SignUpFragment : Fragment() {
             val emailValidationResult = validateEmail(email)
             val passwordValidationResult = validatePassword(password)
             when (emailValidationResult && passwordValidationResult) {
-                true -> doOnRegisterClick()
+                true -> registerAccount()
                 false -> {
                     updateEmailInputError(binding.textInputEmailEditText.text.toString())
                     updatePasswordInputError(binding.textInputPasswordEditText.text.toString())
@@ -125,16 +125,10 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun doOnRegisterClick() {
-        if (binding.checkboxRememberMe.isChecked) {
-            saveCredentialsAndNavigate()
-        } else {
-            navigateToMyProfile()
-        }
-    }
-
-    private fun navigateToMyProfile() {
-        findNavController().navigate(R.id.action_signUpFragment_to_signUpExtendedFragment)
+    private fun registerAccount() {
+        val email = binding.textInputEmailEditText.text.toString()
+        val password = binding.textInputPasswordEditText.text.toString()
+        viewModel.register(email, password)
     }
 
     private fun saveCredentialsAndNavigate(): Job {
