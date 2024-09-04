@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kapt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
@@ -47,6 +49,10 @@ android {
     }
 }
 
+room {
+    schemaDirectory("${rootProject.projectDir}/schemas")
+}
+
 dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
@@ -76,4 +82,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    //Room
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 }
