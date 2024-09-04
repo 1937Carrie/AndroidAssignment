@@ -7,13 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionInflater
-import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
+import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentDetailsBinding
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleContactResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import com.dumchykov.socialnetworkdemo.ui.util.setImageWithGlide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -39,15 +44,10 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val userId = arguments?.getInt("contact.id") ?: throw IllegalStateException()
         val contactName = arguments?.getString("contact.name")
-        val users = sharedViewModel.shareState.value.userList
-        val userContactIdList = sharedViewModel.shareState.value.userContactIdList
         setTransition(userId, contactName)
-        val user = viewModel.getUserById(users, userContactIdList, userId)
-        bindUi(user)
-
-        binding.buttonArrowBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
+        bindUi(userId)
+        setOnButtonArrowBackClickListener()
+        observeApiResponse()
     }
 
     override fun onDestroyView() {
@@ -55,23 +55,65 @@ class DetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun bindUi(user: Contact) {
-        binding.textName.text = user.name
-        binding.textProfession.text = user.career
-        binding.textAddress.text = user.address
-        binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
-
-        when (user.isAdded) {
-            true -> {
-                binding.buttonMessage.visibility = View.VISIBLE
-                binding.buttonMessageWhileNotFriended.visibility = View.GONE
-                binding.buttonAddToMyContacts.visibility = View.GONE
+    private fun observeApiResponse() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.detailsState.collect { state ->
+                handleStandardResponse(
+                    state = state,
+                    context = requireContext(),
+                    scope = this
+                ) {
+                    val (contacts) = (state as ResponseState.Success<*>).data as MultipleContactResponse
+                    sharedViewModel.updateState { copy(userContactIdList = contacts.map { it.id }) }
+                    viewModel.updateContactState {
+                        copy(
+                            isAdded = viewModel.isUserAddedToContact(
+                                sharedViewModel.shareState.value.userContactIdList
+                            )
+                        )
+                    }
+                }
             }
+        }
+    }
 
-            false -> {
-                binding.buttonMessage.visibility = View.GONE
-                binding.buttonMessageWhileNotFriended.visibility = View.VISIBLE
-                binding.buttonAddToMyContacts.visibility = View.VISIBLE
+    private fun setOnButtonArrowBackClickListener() {
+        binding.buttonArrowBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun bindUi(contactId: Int) {
+        val users = sharedViewModel.shareState.value.userList
+        val userContactIdList = sharedViewModel.shareState.value.userContactIdList
+        viewModel.getUserById(users, userContactIdList, contactId)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.contactState.collect { contact ->
+                binding.textName.text = contact.name
+                binding.textProfession.text = contact.career
+                binding.textAddress.text = contact.address
+                binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
+
+                when (contact.isAdded) {
+                    true -> {
+                        binding.buttonMessage.visibility = View.VISIBLE
+                        binding.buttonMessageWhileNotFriended.visibility = View.GONE
+                        binding.buttonAddToMyContacts.visibility = View.GONE
+                    }
+
+                    false -> {
+                        binding.buttonMessage.visibility = View.GONE
+                        binding.buttonMessageWhileNotFriended.visibility = View.VISIBLE
+                        binding.buttonAddToMyContacts.visibility = View.VISIBLE
+
+                        binding.buttonAddToMyContacts.setOnClickListener {
+                            val bearerToken = sharedViewModel.shareState.value.accessToken
+                            val userId = sharedViewModel.shareState.value.currentUser.id
+                            viewModel.addContact(bearerToken, userId, ContactId(contactId))
+                        }
+                    }
+                }
             }
         }
     }

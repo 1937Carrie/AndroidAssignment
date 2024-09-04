@@ -14,12 +14,12 @@ suspend fun handleStandardResponse(
     state: ResponseState,
     context: Context,
     scope: CoroutineScope,
-    progressLayout: View,
+    progressLayout: View? = null,
     onSuccess: suspend () -> Unit,
 ) {
     when (state) {
         is ResponseState.Error -> {
-            progressLayout.visibility = View.GONE
+            progressLayout?.visibility = View.GONE
             Toast.makeText(
                 context,
                 state.errorMessage.toString(),
@@ -36,7 +36,7 @@ suspend fun handleStandardResponse(
         }
 
         ResponseState.Loading -> {
-            progressLayout.visibility = View.VISIBLE
+            progressLayout?.visibility = View.VISIBLE
         }
 
         is ResponseState.Success<*> -> {
