@@ -46,12 +46,16 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
-            handleDeepLink()
-            val userId = arguments?.getInt("contact.id") ?: throw IllegalStateException()
-            val contactName = arguments?.getString("contact.name")
-            setTransition(userId, contactName)
-            bindUi(userId)
-            observeApiResponse()
+            viewModel.authorizedUser.collect { user ->
+                if (user.id == -1) return@collect
+
+                handleDeepLink()
+                val userId = arguments?.getInt("contact.id") ?: throw IllegalStateException()
+                val contactName = arguments?.getString("contact.name")
+                setTransition(userId, contactName)
+                bindUi(userId)
+                observeApiResponse()
+            }
         }
     }
 
@@ -108,7 +112,7 @@ class DetailsFragment : Fragment() {
 
                         binding.buttonAddToMyContacts.setOnClickListener {
                             val bearerToken = sharedViewModel.shareState.value.accessToken
-                            val userId = sharedViewModel.shareState.value.currentUser.id
+                            val userId = viewModel.authorizedUser.value.id
                             viewModel.addContact(bearerToken, userId, ContactId(contactId))
                         }
                     }

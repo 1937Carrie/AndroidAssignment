@@ -69,10 +69,16 @@ class AddContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateAllUsers()
-        setArrowBackClickListener()
-        initAdapter()
-        observeApiResponse()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.authorizedUser.collect { user ->
+                if (user.id == -1) return@collect
+
+                updateAllUsers()
+                setArrowBackClickListener()
+                initAdapter()
+                observeApiResponse()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -121,7 +127,7 @@ class AddContactsFragment : Fragment() {
             },
             onAddListener = { contact ->
                 val bearerToken = sharedViewModel.shareState.value.accessToken
-                val currentUserId = sharedViewModel.shareState.value.currentUser.id
+                val currentUserId = viewModel.authorizedUser.value.id
                 viewModel.addContact(bearerToken, currentUserId, ContactId(contact.id))
                 viewModel.setProcessingContact(contact)
                 val isRequiredTiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU

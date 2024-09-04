@@ -65,16 +65,15 @@ class LoginFragment : Fragment() {
                     progressLayout = binding.layoutProgress.root
                 ) {
                     if (binding.checkboxRememberMe.isChecked) saveCredentials().join()
-                    binding.layoutProgress.root.visibility = View.GONE
-                    val (currentUser, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as AuthenticationResponse
+                    val (_, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as AuthenticationResponse
                     sharedViewModel.updateState {
                         copy(
-                            currentUser = currentUser,
                             accessToken = accessToken,
                             refreshToken = refreshToken
                         )
                     }
                     findNavController().navigate(R.id.action_loginFragment_to_pagerFragment)
+                    binding.layoutProgress.root.visibility = View.GONE
                 }
             }
         }

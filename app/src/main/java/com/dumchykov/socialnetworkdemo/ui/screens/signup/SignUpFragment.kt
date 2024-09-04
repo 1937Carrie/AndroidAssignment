@@ -69,10 +69,9 @@ class SignUpFragment : Fragment() {
                 ) {
                     if (binding.checkboxRememberMe.isChecked) saveCredentialsAndNavigate().join()
                     binding.layoutProgress.root.visibility = View.GONE
-                    val (user, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as AuthenticationResponse
+                    val (_, accessToken, refreshToken) = (state as ResponseState.Success<*>).data as AuthenticationResponse
                     sharedViewModel.updateState {
                         copy(
-                            currentUser = user,
                             accessToken = accessToken,
                             refreshToken = refreshToken
                         )

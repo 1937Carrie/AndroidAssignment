@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentSignUpExtendedBinding
+import com.dumchykov.socialnetworkdemo.domain.logic.toApiContact
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.EditUserResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
@@ -36,10 +37,16 @@ class SignUpExtendedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnAddImageClickListener()
-        setCancelClickListener()
-        setForwardClickListener()
-        observeEditUserAttempt()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.authorizedUser.collect { user ->
+                if (user.id == -1) return@collect
+
+                setOnAddImageClickListener()
+                setCancelClickListener()
+                setForwardClickListener()
+                observeEditUserAttempt()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -57,12 +64,8 @@ class SignUpExtendedFragment : Fragment() {
                     progressLayout = binding.layoutProgress.root
                 ) {
                     binding.layoutProgress.root.visibility = View.GONE
-                    val (user) = (state as ResponseState.Success<*>).data as EditUserResponse
-                    sharedViewModel.updateState {
-                        copy(
-                            currentUser = user,
-                        )
-                    }
+                    val (_) = (state as ResponseState.Success<*>).data as EditUserResponse
+                    ;
                     findNavController().navigate(R.id.action_signUpExtendedFragment_to_pagerFragment)
                 }
             }
@@ -71,9 +74,9 @@ class SignUpExtendedFragment : Fragment() {
 
     private fun setForwardClickListener() {
         binding.buttonForward.setOnClickListener {
-            val userId = sharedViewModel.shareState.value.currentUser.id
+            val userId = viewModel.authorizedUser.value.id
             val bearerToken = sharedViewModel.shareState.value.accessToken
-            val editedUser = sharedViewModel.shareState.value.currentUser.copy(
+            val editedUser = viewModel.authorizedUser.value.toApiContact().copy(
                 email = binding.textInputEmailEditText.text.toString(),
                 phone = binding.textInputMobilePhoneEditText.text.toString()
             )

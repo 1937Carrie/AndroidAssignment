@@ -9,9 +9,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentEditProfileBinding
-import com.dumchykov.socialnetworkdemo.domain.webapi.models.EditUserResponse
+import com.dumchykov.socialnetworkdemo.domain.logic.toApiContact
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,10 +32,16 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fillInDataInInputFields()
-        setArrowBackClickListener()
-        setSaveClickListener()
-        observeEditUserAttempt()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.authorizedUser.collect { user ->
+                if (user.id == -1) return@collect
+
+                fillInDataInInputFields()
+                setArrowBackClickListener()
+                setSaveClickListener()
+                observeEditUserAttempt()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -54,12 +59,6 @@ class EditProfileFragment : Fragment() {
                     progressLayout = binding.layoutProgress.root
                 ) {
                     binding.layoutProgress.root.visibility = View.GONE
-                    val (user) = (state as ResponseState.Success<*>).data as EditUserResponse
-                    sharedViewModel.updateState {
-                        copy(
-                            currentUser = user
-                        )
-                    }
                     findNavController().navigateUp()
                 }
             }
@@ -68,17 +67,19 @@ class EditProfileFragment : Fragment() {
 
     private fun setSaveClickListener() {
         binding.buttonSave.setOnClickListener {
-            val userId = sharedViewModel.shareState.value.currentUser.id
+            val userId = viewModel.authorizedUser.value.id
             val bearerToken = sharedViewModel.shareState.value.accessToken
-            val contact = sharedViewModel.shareState.value.currentUser.copy(
-                name = binding.textInputUserNameEditText.text.toString(),
-                career = binding.textInputCareerEditText.text.toString(),
-                email = binding.textInputEmailEditText.text.toString(),
-                phone = binding.textInputPhoneEditText.text.toString(),
-                address = binding.textInputAddressEditText.text.toString(),
-                birthday = binding.textInputBirthDateEditText.text.toString()
-            )
-            viewModel.editProfile(userId, bearerToken, contact)
+            with(binding) {
+                val contact = viewModel.authorizedUser.value.toApiContact().copy(
+                    name = textInputUserNameEditText.text.toString(),
+                    career = textInputCareerEditText.text.toString(),
+                    email = textInputEmailEditText.text.toString(),
+                    phone = textInputPhoneEditText.text.toString(),
+                    address = textInputAddressEditText.text.toString(),
+                    birthday = textInputBirthDateEditText.text.toString()
+                )
+                viewModel.editProfile(userId, bearerToken, contact)
+            }
         }
     }
 
@@ -89,12 +90,14 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun fillInDataInInputFields() {
-        val currentUser = sharedViewModel.shareState.value.currentUser
-        binding.textInputUserNameEditText.setText(currentUser.name)
-        binding.textInputCareerEditText.setText(currentUser.career)
-        binding.textInputEmailEditText.setText(currentUser.email)
-        binding.textInputPhoneEditText.setText(currentUser.phone)
-        binding.textInputAddressEditText.setText(currentUser.address)
-        binding.textInputBirthDateEditText.setText(currentUser.birthday)
+        val currentUser = viewModel.authorizedUser.value
+        with(binding) {
+            textInputUserNameEditText.setText(currentUser.name)
+            textInputCareerEditText.setText(currentUser.career)
+            textInputEmailEditText.setText(currentUser.email)
+            textInputPhoneEditText.setText(currentUser.phone)
+            textInputAddressEditText.setText(currentUser.address)
+            textInputBirthDateEditText.setText(currentUser.birthday)
+        }
     }
 }

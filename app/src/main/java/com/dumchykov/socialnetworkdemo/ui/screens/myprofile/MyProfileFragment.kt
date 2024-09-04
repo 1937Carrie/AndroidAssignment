@@ -35,7 +35,6 @@ class MyProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setName()
         updateUi()
         setLogOutClickListener()
         setEditProfileClickListener()
@@ -73,17 +72,20 @@ class MyProfileFragment : Fragment() {
     }
 
     private fun updateUi() {
-        val currentUser = sharedViewModel.shareState.value.currentUser
-        if (currentUser.facebook.isNullOrEmpty() || currentUser.linkedin.isNullOrEmpty() || currentUser.instagram.isNullOrEmpty()) {
-            binding.flowIcons.visibility = View.GONE
-            binding.textGoToSettingsAndFillOut.visibility = View.VISIBLE
-        } else {
-            binding.flowIcons.visibility = View.VISIBLE
-            binding.textGoToSettingsAndFillOut.visibility = View.GONE
-        }
-    }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.authorizedUser.collect { contact ->
+                if (contact.id == -1) return@collect
 
-    private fun setName() {
-        binding.textName.text = sharedViewModel.shareState.value.currentUser.name
+                binding.textName.text = contact.name
+                val currentUser = viewModel.authorizedUser.value
+                if (currentUser.facebook.isEmpty() || currentUser.linkedin.isEmpty() || currentUser.instagram.isEmpty()) {
+                    binding.flowIcons.visibility = View.GONE
+                    binding.textGoToSettingsAndFillOut.visibility = View.VISIBLE
+                } else {
+                    binding.flowIcons.visibility = View.VISIBLE
+                    binding.textGoToSettingsAndFillOut.visibility = View.GONE
+                }
+            }
+        }
     }
 }

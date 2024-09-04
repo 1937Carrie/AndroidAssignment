@@ -60,7 +60,7 @@ class MyContactsFragment : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                showNotification(viewModel.currentContact.value)
+                showNotification(viewModel.processingContact.value)
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -89,17 +89,23 @@ class MyContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateUserContacts()
-        setBackPressDispatcher()
-        setArrowBackClickListener()
-        setSearchRelatedListeners()
-        setAddContactClickListener()
-        setFabClickListener()
-        initAdapter()
-        observeApiResponse()
-        createNotificationChannel(requireContext())
-        postponeEnterTransition()
-        binding.recyclerContacts.doOnPreDraw { startPostponedEnterTransition() }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.authorizedUser.collect { user ->
+                if (user.id == -1) return@collect
+
+                updateUserContacts()
+                setBackPressDispatcher()
+                setArrowBackClickListener()
+                setSearchRelatedListeners()
+                setAddContactClickListener()
+                setFabClickListener()
+                initAdapter()
+                observeApiResponse()
+                createNotificationChannel(requireContext())
+                postponeEnterTransition()
+                binding.recyclerContacts.doOnPreDraw { startPostponedEnterTransition() }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -108,7 +114,7 @@ class MyContactsFragment : Fragment() {
     }
 
     private fun updateUserContacts() {
-        val userId = sharedViewModel.shareState.value.currentUser.id
+        val userId = viewModel.authorizedUser.value.id
         val bearerToken = sharedViewModel.shareState.value.accessToken
         viewModel.getUserContacts(userId, bearerToken)
     }
@@ -173,7 +179,7 @@ class MyContactsFragment : Fragment() {
                 )
             },
             onDelete = { contact ->
-                val userId = sharedViewModel.shareState.value.currentUser.id
+                val userId = viewModel.authorizedUser.value.id
                 val bearerToken = sharedViewModel.shareState.value.accessToken
                 viewModel.removeContact(userId, contact.id, bearerToken)
                 Snackbar
@@ -229,7 +235,7 @@ class MyContactsFragment : Fragment() {
 
     private fun setFabClickListener() {
         binding.fab.setOnClickListener {
-            val userId = sharedViewModel.shareState.value.currentUser.id
+            val userId = viewModel.authorizedUser.value.id
             val bearerToken = sharedViewModel.shareState.value.accessToken
             viewModel.multipleRemovingContact(userId, bearerToken)
         }
