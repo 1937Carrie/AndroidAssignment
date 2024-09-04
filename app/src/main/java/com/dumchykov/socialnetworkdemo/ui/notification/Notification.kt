@@ -10,7 +10,13 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
 import com.dumchykov.socialnetworkdemo.R
 
-fun createNotification(context: Context, userId: Int, userName: String): Notification {
+private fun createNotification(
+    context: Context,
+    userId: Int,
+    userName: String,
+    title: String,
+    contextText: String,
+): Notification {
     val args = bundleOf(
         "contact.id" to userId,
         "contact.name" to userName,
@@ -24,11 +30,32 @@ fun createNotification(context: Context, userId: Int, userName: String): Notific
 
     return NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.mipmap.ic_launcher)
-        .setContentTitle("Title")
-        .setContentText("Content")
+        .setContentTitle(title)
+        .setContentText(contextText)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setContentIntent(pendingIntent)
+        .setAutoCancel(true)
         .build()
+}
+
+fun createOnAddNotification(context: Context, userId: Int, userName: String): Notification {
+    return createNotification(
+        context,
+        userId,
+        userName,
+        "Contact was added",
+        userName
+    )
+}
+
+fun createOnRemoveNotification(context: Context, userId: Int, userName: String): Notification {
+    return createNotification(
+        context,
+        userId,
+        userName,
+        "Contact was removed",
+        userName
+    )
 }
 
 fun createNotificationChannel(context: Context) {
