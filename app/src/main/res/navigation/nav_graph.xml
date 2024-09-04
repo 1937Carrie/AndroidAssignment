@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.dumchykov.socialnetworkdemo.ui.details.DetailsFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.screens.details.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.dumchykov.socialnetworkdemo.ui.signup.SignUpFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.screens.signup.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/pagerFragment"
-        android:name="com.dumchykov.socialnetworkdemo.ui.pager.PagerFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.screens.pager.PagerFragment"
         android:label="Pager"
         tools:layout="@layout/fragment_pager">
         <action
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.dumchykov.socialnetworkdemo.ui.login.LoginFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.screens.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpExtendedFragment"
-        android:name="com.dumchykov.socialnetworkdemo.ui.signupextended.SignUpExtendedFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.screens.signupextended.SignUpExtendedFragment"
         android:label="fragment_sign_up_extended"
         tools:layout="@layout/fragment_sign_up_extended">
         <action
@@ -64,12 +64,12 @@
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.dumchykov.socialnetworkdemo.ui.editprofile.EditProfileFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.screens.editprofile.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
     <fragment
         android:id="@+id/addContactsFragment"
-        android:name="com.dumchykov.socialnetworkdemo.ui.addcontacts.AddContactsFragment"
+        android:name="com.dumchykov.socialnetworkdemo.ui.screens.addcontacts.AddContactsFragment"
         android:label="fragment_add_contacts"
         tools:layout="@layout/fragment_add_contacts">
         <action
