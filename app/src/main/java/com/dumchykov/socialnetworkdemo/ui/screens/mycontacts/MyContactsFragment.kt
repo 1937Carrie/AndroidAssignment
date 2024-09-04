@@ -1,11 +1,17 @@
 package com.dumchykov.socialnetworkdemo.ui.screens.mycontacts
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnPreDraw
 import androidx.core.widget.doOnTextChanged
@@ -26,6 +32,9 @@ import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleContactResponse
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleUserResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.notification.NOTIFICATION_ID
+import com.dumchykov.socialnetworkdemo.ui.notification.createNotification
+import com.dumchykov.socialnetworkdemo.ui.notification.createNotificationChannel
 import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.ContactsAdapter
 import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.ContactsItemDecoration
 import com.dumchykov.socialnetworkdemo.ui.screens.pager.Page
@@ -43,6 +52,22 @@ class MyContactsFragment : Fragment() {
     private lateinit var contactsAdapter: ContactsAdapter
     private val viewModel: MyContactsViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission is granted. Continue the action or workflow in your
+                // app.
+            } else {
+                // Explain to the user that the feature is unavailable because the
+                // feature requires a permission that the user has denied. At the
+                // same time, respect the user's decision. Don't link to system
+                // settings in an effort to convince the user to change their
+                // decision.
+            }
+        }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -71,6 +96,7 @@ class MyContactsFragment : Fragment() {
         setFabClickListener()
         initAdapter()
         observeApiResponse()
+        createNotificationChannel(requireContext())
         postponeEnterTransition()
         binding.recyclerContacts.doOnPreDraw { startPostponedEnterTransition() }
     }
@@ -159,6 +185,19 @@ class MyContactsFragment : Fragment() {
                         viewModel.addContact(bearerToken, userId, ContactId(contact.id))
                     }
                     .show()
+                val isRequiredTiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                if (isRequiredTiramisu && ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                } else {
+                    val notification =
+                        createNotification(requireContext(), contact.id, contact.name)
+                    NotificationManagerCompat.from(requireContext())
+                        .notify(NOTIFICATION_ID, notification)
+                }
             },
             onChangeSelect = { contact ->
                 viewModel.updateContactCheckState(contact)
