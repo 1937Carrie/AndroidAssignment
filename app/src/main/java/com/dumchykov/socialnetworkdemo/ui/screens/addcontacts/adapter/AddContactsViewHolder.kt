@@ -12,7 +12,7 @@ class AddContactsViewHolder(
     fun onBind(
         contact: Contact,
         onClickListener: (Int, String) -> Unit,
-        onAddListener: (Int) -> Unit,
+        onAddListener: (Contact) -> Unit,
     ) {
         binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
         binding.textName.text = contact.name
@@ -30,7 +30,7 @@ class AddContactsViewHolder(
             binding.imageAdded.visibility = View.GONE
 
             binding.layoutAddContact.setOnClickListener {
-                onAddListener(contact.id)
+                onAddListener(contact)
             }
         }
     }

@@ -10,7 +10,7 @@ import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.ContactsAda
 
 class AddContactsAdapter(
     private val onClickListener: (Int, String) -> Unit,
-    private val onAddListener: (Int) -> Unit,
+    private val onAddListener: (Contact) -> Unit,
 ) : ListAdapter<Contact, RecyclerView.ViewHolder>(ContactsAdapter.Diff()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return AddContactsViewHolder(

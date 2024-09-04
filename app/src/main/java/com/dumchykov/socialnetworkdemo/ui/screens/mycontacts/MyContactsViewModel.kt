@@ -23,6 +23,9 @@ class MyContactsViewModel @Inject constructor(
     private val _contactListState = MutableStateFlow(MyContactsState())
     val contactListState get() = _contactListState.asStateFlow()
 
+    private val _currentContact = MutableStateFlow(Contact())
+    val currentContact get() = _currentContact.asStateFlow()
+
     fun updateState(reducer: ResponseState.() -> ResponseState) {
         _myContactsState.update(reducer)
     }
@@ -97,5 +100,9 @@ class MyContactsViewModel @Inject constructor(
             val getUsersResponse = contactRepository.getUsers(bearerToken)
             updateState { getUsersResponse }
         }
+    }
+
+    fun setProcessingContact(contact: Contact) {
+        _currentContact.update { contact }
     }
 }

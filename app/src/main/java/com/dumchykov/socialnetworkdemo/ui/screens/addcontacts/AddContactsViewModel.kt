@@ -2,6 +2,7 @@ package com.dumchykov.socialnetworkdemo.ui.screens.addcontacts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
@@ -18,6 +19,9 @@ class AddContactsViewModel @Inject constructor(
 ) : ViewModel() {
     private val _addContactsState = MutableStateFlow<ResponseState>(ResponseState.Initial)
     val addContactsState get() = _addContactsState.asStateFlow()
+
+    private val _currentContact = MutableStateFlow(Contact())
+    val currentContact get() = _currentContact.asStateFlow()
 
     fun updateState(reducer: ResponseState.() -> ResponseState) {
         _addContactsState.update(reducer)
@@ -41,5 +45,9 @@ class AddContactsViewModel @Inject constructor(
 
     fun isUserAddedToContact(userContactIdList: List<Int>, userId: Int): Boolean {
         return userContactIdList.contains(userId)
+    }
+
+    fun setProcessingContact(contact: Contact) {
+        _currentContact.update { contact }
     }
 }

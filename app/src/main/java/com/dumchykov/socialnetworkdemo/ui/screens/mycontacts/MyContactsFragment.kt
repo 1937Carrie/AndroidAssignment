@@ -1,6 +1,7 @@
 package com.dumchykov.socialnetworkdemo.ui.screens.mycontacts
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -33,8 +35,8 @@ import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleContactRespo
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleUserResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
 import com.dumchykov.socialnetworkdemo.ui.notification.NOTIFICATION_ID
-import com.dumchykov.socialnetworkdemo.ui.notification.createNotification
 import com.dumchykov.socialnetworkdemo.ui.notification.createNotificationChannel
+import com.dumchykov.socialnetworkdemo.ui.notification.createOnRemoveNotification
 import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.ContactsAdapter
 import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.ContactsItemDecoration
 import com.dumchykov.socialnetworkdemo.ui.screens.pager.Page
@@ -58,14 +60,13 @@ class MyContactsFragment : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                // Permission is granted. Continue the action or workflow in your
-                // app.
+                showNotification(viewModel.currentContact.value)
             } else {
-                // Explain to the user that the feature is unavailable because the
-                // feature requires a permission that the user has denied. At the
-                // same time, respect the user's decision. Don't link to system
-                // settings in an effort to convince the user to change their
-                // decision.
+                Toast.makeText(
+                    requireContext(),
+                    "Post notification permission was not granted",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -185,6 +186,7 @@ class MyContactsFragment : Fragment() {
                         viewModel.addContact(bearerToken, userId, ContactId(contact.id))
                     }
                     .show()
+                viewModel.setProcessingContact(contact)
                 val isRequiredTiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 if (isRequiredTiramisu && ActivityCompat.checkSelfPermission(
                         requireContext(),
@@ -193,10 +195,7 @@ class MyContactsFragment : Fragment() {
                 ) {
                     requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 } else {
-                    val notification =
-                        createNotification(requireContext(), contact.id, contact.name)
-                    NotificationManagerCompat.from(requireContext())
-                        .notify(NOTIFICATION_ID, notification)
+                    showNotification(contact)
                 }
             },
             onChangeSelect = { contact ->
@@ -218,6 +217,14 @@ class MyContactsFragment : Fragment() {
                     if (myContactsState.isMultiselect) View.VISIBLE else View.GONE
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun showNotification(contact: Contact) {
+        val notification =
+            createOnRemoveNotification(requireContext(), contact.id, contact.name)
+        NotificationManagerCompat.from(requireContext())
+            .notify(NOTIFICATION_ID, notification)
     }
 
     private fun setFabClickListener() {

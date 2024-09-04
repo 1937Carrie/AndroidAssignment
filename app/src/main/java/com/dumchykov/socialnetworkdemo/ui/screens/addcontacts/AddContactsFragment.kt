@@ -1,9 +1,17 @@
 package com.dumchykov.socialnetworkdemo.ui.screens.addcontacts
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,6 +28,8 @@ import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleContactResponse
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleUserResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.notification.NOTIFICATION_ID
+import com.dumchykov.socialnetworkdemo.ui.notification.createOnAddNotification
 import com.dumchykov.socialnetworkdemo.ui.screens.addcontacts.adapter.AddContactsAdapter
 import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.ContactsItemDecoration
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
@@ -34,6 +44,21 @@ class AddContactsFragment : Fragment() {
     private lateinit var addContactsAdapter: AddContactsAdapter
     private val viewModel: AddContactsViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                showNotification(viewModel.currentContact.value)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Post notification permission was not granted",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
@@ -94,10 +119,21 @@ class AddContactsFragment : Fragment() {
                     bundle
                 )
             },
-            onAddListener = { userId ->
+            onAddListener = { contact ->
                 val bearerToken = sharedViewModel.shareState.value.accessToken
                 val currentUserId = sharedViewModel.shareState.value.currentUser.id
-                viewModel.addContact(bearerToken, currentUserId, ContactId(userId))
+                viewModel.addContact(bearerToken, currentUserId, ContactId(contact.id))
+                viewModel.setProcessingContact(contact)
+                val isRequiredTiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                if (isRequiredTiramisu && ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                } else {
+                    showNotification(contact)
+                }
             }
         )
         binding.recyclerContacts.adapter = addContactsAdapter
@@ -123,6 +159,14 @@ class AddContactsFragment : Fragment() {
                 addContactsAdapter.submitList(mappedUserList)
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun showNotification(contact: Contact) {
+        val notification =
+            createOnAddNotification(requireContext(), contact.id, contact.name)
+        NotificationManagerCompat.from(requireContext())
+            .notify(NOTIFICATION_ID, notification)
     }
 
     private fun setArrowBackClickListener() {
