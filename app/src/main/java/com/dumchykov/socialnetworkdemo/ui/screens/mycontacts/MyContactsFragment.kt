@@ -59,7 +59,8 @@ class MyContactsFragment : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                showNotification(viewModel.processingContact.value.name)
+                val contact = viewModel.processingContact.value
+                showNotification(contact.id, contact.name)
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -194,7 +195,7 @@ class MyContactsFragment : Fragment() {
                 ) {
                     requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 } else {
-                    showNotification(indicatorContact.name)
+                    showNotification(indicatorContact.id, indicatorContact.name)
                 }
             },
             onChangeSelect = { indicatorContact ->
@@ -219,9 +220,12 @@ class MyContactsFragment : Fragment() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun showNotification(indicatorContactName: String) {
+    private fun showNotification(
+        indicatorContactId: Int,
+        indicatorContactName: String,
+    ) {
         val notification =
-            createOnRemoveNotification(requireContext(), indicatorContactName)
+            createOnRemoveNotification(requireContext(), indicatorContactId, indicatorContactName)
         NotificationManagerCompat.from(requireContext())
             .notify(NOTIFICATION_ID, notification)
     }

@@ -130,24 +130,24 @@ class DetailsFragment : Fragment() {
     }
 
     private suspend fun handleDeepLink() {
-        val navBackStackEntry = findNavController().currentBackStackEntry
-        val isFromDeepLink =
-            navBackStackEntry?.arguments?.getBoolean(IS_FROM_DEEP_LINK, false) ?: false
+        viewLifecycleOwner.lifecycleScope.launch {
+            val navBackStackEntry = findNavController().currentBackStackEntry
+            val isFromDeepLink =
+                navBackStackEntry?.arguments?.getBoolean(IS_FROM_DEEP_LINK, false) ?: false
 
-        setOnArrowBackClickListener(isFromDeepLink)
-        if (isFromDeepLink) {
-            requireActivity().onBackPressedDispatcher.addCallback(
-                owner = viewLifecycleOwner,
-                onBackPressed = {
-                    navigateToMyProfile()
-                }
-            )
-            viewLifecycleOwner.lifecycleScope.launch {
+            setOnArrowBackClickListener(isFromDeepLink)
+            if (isFromDeepLink) {
+                requireActivity().onBackPressedDispatcher.addCallback(
+                    owner = viewLifecycleOwner,
+                    onBackPressed = {
+                        navigateToMyProfile()
+                    }
+                )
                 async { sharedViewModel.authorize() }.await()
                 async { sharedViewModel.getUserContacts() }.await()
                 async { sharedViewModel.getUsers() }.await()
-            }.join()
-        }
+            }
+        }.join()
     }
 
     private fun navigateToMyProfile() {

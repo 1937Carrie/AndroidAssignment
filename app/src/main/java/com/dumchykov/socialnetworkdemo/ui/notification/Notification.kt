@@ -9,6 +9,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
 import com.dumchykov.socialnetworkdemo.R
+import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.MyContactsFragment.Companion.INDICATOR_CONTACT_ID
+import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.MyContactsFragment.Companion.INDICATOR_CONTACT_NAME
 
 const val CHANNEL_ID = "channel_miscellaneous"
 const val IS_FROM_DEEP_LINK = "isFromDeepLink"
@@ -16,10 +18,13 @@ const val NOTIFICATION_ID = 10001
 
 private fun createNotification(
     context: Context,
-    title: String,
     contextText: String,
+    indicatorContactId: Int,
+    indicatorContactName: String,
 ): Notification {
     val args = bundleOf(
+        INDICATOR_CONTACT_ID to indicatorContactId,
+        INDICATOR_CONTACT_NAME to indicatorContactName,
         IS_FROM_DEEP_LINK to true
     )
     val pendingIntent = NavDeepLinkBuilder(context)
@@ -30,7 +35,7 @@ private fun createNotification(
 
     return NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.mipmap.ic_launcher)
-        .setContentTitle(title)
+        .setContentTitle(indicatorContactName)
         .setContentText(contextText)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setContentIntent(pendingIntent)
@@ -38,19 +43,29 @@ private fun createNotification(
         .build()
 }
 
-fun createOnAddNotification(context: Context, userName: String): Notification {
+fun createOnAddNotification(
+    context: Context,
+    indicatorContactId: Int,
+    indicatorContactName: String,
+): Notification {
     return createNotification(
         context,
-        userName,
-        context.getString(R.string.contact_was_added)
+        context.getString(R.string.contact_was_added),
+        indicatorContactId,
+        indicatorContactName
     )
 }
 
-fun createOnRemoveNotification(context: Context, userName: String): Notification {
+fun createOnRemoveNotification(
+    context: Context,
+    indicatorContactId: Int,
+    indicatorContactName: String,
+): Notification {
     return createNotification(
         context,
-        userName,
-        context.getString(R.string.contact_was_removed)
+        context.getString(R.string.contact_was_removed),
+        indicatorContactId,
+        indicatorContactName
     )
 }
 
