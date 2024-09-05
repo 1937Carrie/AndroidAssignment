@@ -3,7 +3,7 @@ package com.dumchykov.socialnetworkdemo.domain.webapi.models
 import kotlinx.serialization.SerialName
 
 @kotlinx.serialization.Serializable
-data class Contact(
+data class ApiContact(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String?,
     @SerialName("email") val email: String?,

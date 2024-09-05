@@ -12,14 +12,10 @@ import com.dumchykov.socialnetworkdemo.R
 
 private fun createNotification(
     context: Context,
-    userId: Int,
-    userName: String,
     title: String,
     contextText: String,
 ): Notification {
     val args = bundleOf(
-        "contact.id" to userId,
-        "contact.name" to userName,
         "isFromDeepLink" to true
     )
     val pendingIntent = NavDeepLinkBuilder(context)
@@ -38,23 +34,19 @@ private fun createNotification(
         .build()
 }
 
-fun createOnAddNotification(context: Context, userId: Int, userName: String): Notification {
+fun createOnAddNotification(context: Context, userName: String): Notification {
     return createNotification(
         context,
-        userId,
         userName,
-        "Contact was added",
-        userName
+        "Contact was added"
     )
 }
 
-fun createOnRemoveNotification(context: Context, userId: Int, userName: String): Notification {
+fun createOnRemoveNotification(context: Context, userName: String): Notification {
     return createNotification(
         context,
-        userId,
         userName,
-        "Contact was removed",
-        userName
+        "Contact was removed"
     )
 }
 

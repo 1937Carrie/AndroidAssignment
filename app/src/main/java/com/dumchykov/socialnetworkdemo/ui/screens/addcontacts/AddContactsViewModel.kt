@@ -2,12 +2,14 @@ package com.dumchykov.socialnetworkdemo.ui.screens.addcontacts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
+import com.dumchykov.socialnetworkdemo.data.contactsprovider.IndicatorContact
 import com.dumchykov.socialnetworkdemo.data.room.ContactsDatabase
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.domain.logic.toContact
+import com.dumchykov.socialnetworkdemo.domain.logic.toIndicatorContact
 import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleUserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,11 +28,17 @@ class AddContactsViewModel @Inject constructor(
     private val _addContactsState = MutableStateFlow<ResponseState>(ResponseState.Initial)
     val addContactsState get() = _addContactsState.asStateFlow()
 
-    private val _currentContact = MutableStateFlow(Contact())
-    val currentContact get() = _currentContact.asStateFlow()
+    private val _processingIndicatorContact = MutableStateFlow(IndicatorContact())
+    val processingContact get() = _processingIndicatorContact.asStateFlow()
 
     private val _authorizedUser = MutableStateFlow(PlainContact(id = -1))
     val authorizedUser get() = _authorizedUser.asStateFlow()
+
+    private val _allUsers = MutableStateFlow<List<IndicatorContact>>(emptyList())
+    val allUsers get() = _allUsers.asStateFlow()
+
+    private val _userContactIdList = MutableStateFlow<List<Int>>(emptyList())
+    val userContactIdList get() = _userContactIdList.asStateFlow()
 
     init {
         getAuthorizedUser()
@@ -53,6 +61,10 @@ class AddContactsViewModel @Inject constructor(
         viewModelScope.launch {
             updateState { ResponseState.Loading }
             val getUsersResponse = contactRepository.getUsers(bearerToken)
+            if (getUsersResponse is ResponseState.Success<*>) {
+                getUsersResponse.data as MultipleUserResponse
+                _allUsers.update { getUsersResponse.data.users.map { it.toIndicatorContact() } }
+            }
             updateState { getUsersResponse }
         }
     }
@@ -65,11 +77,15 @@ class AddContactsViewModel @Inject constructor(
         }
     }
 
-    fun isUserAddedToContact(userContactIdList: List<Int>, userId: Int): Boolean {
-        return userContactIdList.contains(userId)
+    fun isUserAddedToContact(userId: Int): Boolean {
+        return userContactIdList.value.contains(userId)
     }
 
-    fun setProcessingContact(contact: Contact) {
-        _currentContact.update { contact }
+    fun setProcessingContact(indicatorContact: IndicatorContact) {
+        _processingIndicatorContact.update { indicatorContact }
+    }
+
+    fun setUserContactIdList(userContactIdList: List<Int>) {
+        _userContactIdList.update { userContactIdList }
     }
 }

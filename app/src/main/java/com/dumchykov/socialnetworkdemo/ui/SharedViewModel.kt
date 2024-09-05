@@ -6,9 +6,9 @@ import com.dumchykov.socialnetworkdemo.data.datastore.DataStoreProvider
 import com.dumchykov.socialnetworkdemo.data.room.ContactsDatabase
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.domain.logic.toAuthorizedUserDBO
+import com.dumchykov.socialnetworkdemo.domain.logic.toContactDBO
 import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.AuthenticationResponse
-import com.dumchykov.socialnetworkdemo.domain.webapi.models.Contact
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleContactResponse
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleUserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -71,7 +71,9 @@ class SharedViewModel @Inject constructor(
             val usersResponse = contactRepository.getUsers(bearerToken)
             if ((usersResponse is ResponseState.Success<*>).not()) return@launch
             val (users) = (usersResponse as ResponseState.Success<*>).data as MultipleUserResponse
-            updateState { copy(userList = users) }
+            withContext(Dispatchers.IO) {
+                database.contactsDao.insertAll(users.map { it.toContactDBO() })
+            }
         }.join()
     }
 }
@@ -79,6 +81,5 @@ class SharedViewModel @Inject constructor(
 data class ShareState(
     val accessToken: String = "",
     val refreshToken: String = "",
-    val userList: List<Contact> = emptyList(),
     val userContactIdList: List<Int> = emptyList(),
 )

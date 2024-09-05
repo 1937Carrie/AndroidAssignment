@@ -2,7 +2,7 @@ package com.dumchykov.socialnetworkdemo.ui.screens.addcontacts.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
+import com.dumchykov.socialnetworkdemo.data.contactsprovider.IndicatorContact
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactAddBinding
 import com.dumchykov.socialnetworkdemo.ui.util.setImageWithGlide
 
@@ -10,19 +10,19 @@ class AddContactsViewHolder(
     private val binding: ItemContactAddBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun onBind(
-        contact: Contact,
+        indicatorContact: IndicatorContact,
         onClickListener: (Int, String) -> Unit,
-        onAddListener: (Contact) -> Unit,
+        onAddListener: (IndicatorContact) -> Unit,
     ) {
         binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
-        binding.textName.text = contact.name
-        binding.textCareer.text = contact.career
+        binding.textName.text = indicatorContact.name
+        binding.textCareer.text = indicatorContact.career
 
         binding.root.setOnClickListener {
-            onClickListener(contact.id, contact.name)
+            onClickListener(indicatorContact.id, indicatorContact.name)
         }
 
-        if (contact.isAdded) {
+        if (indicatorContact.isAdded) {
             binding.layoutAddContact.visibility = View.GONE
             binding.imageAdded.visibility = View.VISIBLE
         } else {
@@ -30,7 +30,7 @@ class AddContactsViewHolder(
             binding.imageAdded.visibility = View.GONE
 
             binding.layoutAddContact.setOnClickListener {
-                onAddListener(contact)
+                onAddListener(indicatorContact)
             }
         }
     }

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
+import com.dumchykov.socialnetworkdemo.data.contactsprovider.IndicatorContact
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactBinding
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactMultiselectBinding
 import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.viewholders.MultiSelectViewHolder
@@ -17,10 +17,10 @@ import kotlinx.coroutines.flow.update
 
 class ContactsAdapter(
     private val context: Context,
-    private val onClick: (View, Contact) -> Unit = { _, _ -> },
-    private val onDelete: (Contact) -> Unit = {},
-    private val onChangeSelect: (Contact) -> Unit = {},
-) : ListAdapter<Contact, RecyclerView.ViewHolder>(Diff()) {
+    private val onClick: (View, IndicatorContact) -> Unit = { _, _ -> },
+    private val onDelete: (IndicatorContact) -> Unit = {},
+    private val onChangeSelect: (IndicatorContact) -> Unit = {},
+) : ListAdapter<IndicatorContact, RecyclerView.ViewHolder>(Diff()) {
     private val isMultiSelected = MutableStateFlow(false)
 
     override fun getItemViewType(position: Int): Int {
@@ -72,12 +72,18 @@ class ContactsAdapter(
         isMultiSelected.update(reducer)
     }
 
-    class Diff : DiffUtil.ItemCallback<Contact>() {
-        override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+    class Diff : DiffUtil.ItemCallback<IndicatorContact>() {
+        override fun areItemsTheSame(
+            oldItem: IndicatorContact,
+            newItem: IndicatorContact,
+        ): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+        override fun areContentsTheSame(
+            oldItem: IndicatorContact,
+            newItem: IndicatorContact,
+        ): Boolean {
             return oldItem == newItem
         }
     }

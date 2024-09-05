@@ -2,12 +2,14 @@ package com.dumchykov.socialnetworkdemo.ui.screens.mycontacts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
+import com.dumchykov.socialnetworkdemo.data.contactsprovider.IndicatorContact
 import com.dumchykov.socialnetworkdemo.data.room.ContactsDatabase
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.domain.logic.toContact
+import com.dumchykov.socialnetworkdemo.domain.logic.toContactDBO
 import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleUserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,8 +31,8 @@ class MyContactsViewModel @Inject constructor(
     private val _contactListState = MutableStateFlow(MyContactsState())
     val contactListState get() = _contactListState.asStateFlow()
 
-    private val _processingContact = MutableStateFlow(Contact())
-    val processingContact get() = _processingContact.asStateFlow()
+    private val _processingIndicatorContact = MutableStateFlow(IndicatorContact())
+    val processingContact get() = _processingIndicatorContact.asStateFlow()
 
     private val _authorizedUser = MutableStateFlow(PlainContact(id = -1))
     val authorizedUser get() = _authorizedUser.asStateFlow()
@@ -57,7 +59,7 @@ class MyContactsViewModel @Inject constructor(
     }
 
     private fun isMultiSelected(): Boolean {
-        return contactListState.value.contacts.firstOrNull { it.isSelected } != null
+        return contactListState.value.indicatorContacts.firstOrNull { it.isSelected } != null
     }
 
     fun removeContact(userId: Int, contactId: Int, bearerToken: String) {
@@ -78,32 +80,33 @@ class MyContactsViewModel @Inject constructor(
     }
 
     fun addContact(name: String, career: String, address: String) {
-        val contactMutableList = contactListState.value.contacts.toMutableList()
-        val newContact = Contact(
+        val contactMutableList = contactListState.value.indicatorContacts.toMutableList()
+        val newIndicatorContact = IndicatorContact(
             id = contactMutableList.size,
             name = name,
             career = career,
             address = address
         )
-        contactMutableList.add(newContact)
+        contactMutableList.add(newIndicatorContact)
         contactMutableList.sortBy { it.id }
-        updateContactListState { copy(contacts = contactMutableList) }
+        updateContactListState { copy(indicatorContacts = contactMutableList) }
     }
 
-    fun updateContactCheckState(contact: Contact) {
-        val contactMutableList = contactListState.value.contacts.toMutableList()
-        val indexOfFirst = contactMutableList.indexOfFirst { it.id == contact.id }
-        contactMutableList[indexOfFirst] = contact.copy(isSelected = contact.isSelected.not())
-        updateContactListState { copy(contacts = contactMutableList) }
+    fun updateContactCheckState(indicatorContact: IndicatorContact) {
+        val contactMutableList = contactListState.value.indicatorContacts.toMutableList()
+        val indexOfFirst = contactMutableList.indexOfFirst { it.id == indicatorContact.id }
+        contactMutableList[indexOfFirst] =
+            indicatorContact.copy(isSelected = indicatorContact.isSelected.not())
+        updateContactListState { copy(indicatorContacts = contactMutableList) }
         val isMultiselect = isMultiSelected()
         updateContactListState { copy(isMultiselect = isMultiselect) }
     }
 
     fun multipleRemovingContact(userId: Int, bearerToken: String) {
         val selectedContacts =
-            contactListState.value.contacts.toMutableList().filter { it.isSelected }
-        selectedContacts.forEach { contact ->
-            removeContact(userId, contact.id, bearerToken)
+            contactListState.value.indicatorContacts.toMutableList().filter { it.isSelected }
+        selectedContacts.forEach { indicatorContact ->
+            removeContact(userId, indicatorContact.id, bearerToken)
         }
         updateContactListState { copy(isMultiselect = false) }
     }
@@ -120,11 +123,17 @@ class MyContactsViewModel @Inject constructor(
         viewModelScope.launch {
             updateState { ResponseState.Loading }
             val getUsersResponse = contactRepository.getUsers(bearerToken)
+            if (getUsersResponse is ResponseState.Success<*>) {
+                getUsersResponse.data as MultipleUserResponse
+                withContext(Dispatchers.IO) {
+                    database.contactsDao.insertAll(getUsersResponse.data.users.map { it.toContactDBO() })
+                }
+            }
             updateState { getUsersResponse }
         }
     }
 
-    fun setProcessingContact(contact: Contact) {
-        _processingContact.update { contact }
+    fun setProcessingContact(indicatorContact: IndicatorContact) {
+        _processingIndicatorContact.update { indicatorContact }
     }
 }

@@ -2,7 +2,7 @@ package com.dumchykov.socialnetworkdemo.data.webapi
 
 import com.dumchykov.socialnetworkdemo.domain.webapi.ContactApiService
 import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
-import com.dumchykov.socialnetworkdemo.domain.webapi.models.Contact
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.ApiContact
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.EmailPassword
 
@@ -57,7 +57,11 @@ class ContactRepositoryImpl(
         }
     }
 
-    override suspend fun editUser(userId: Int, bearerToken: String, user: Contact): ResponseState {
+    override suspend fun editUser(
+        userId: Int,
+        bearerToken: String,
+        user: ApiContact,
+    ): ResponseState {
         try {
             val editUserResponse = contactApiService.editUser(userId, bearerToken, user)
             return if (editUserResponse.code == 200) {

@@ -70,7 +70,7 @@ class EditProfileFragment : Fragment() {
             val userId = viewModel.authorizedUser.value.id
             val bearerToken = sharedViewModel.shareState.value.accessToken
             with(binding) {
-                val contact = viewModel.authorizedUser.value.toApiContact().copy(
+                val apiContact = viewModel.authorizedUser.value.toApiContact().copy(
                     name = textInputUserNameEditText.text.toString(),
                     career = textInputCareerEditText.text.toString(),
                     email = textInputEmailEditText.text.toString(),
@@ -78,7 +78,7 @@ class EditProfileFragment : Fragment() {
                     address = textInputAddressEditText.text.toString(),
                     birthday = textInputBirthDateEditText.text.toString()
                 )
-                viewModel.editProfile(userId, bearerToken, contact)
+                viewModel.editProfile(userId, bearerToken, apiContact)
             }
         }
     }

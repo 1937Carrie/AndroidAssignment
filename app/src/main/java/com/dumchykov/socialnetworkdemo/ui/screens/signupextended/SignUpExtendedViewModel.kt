@@ -6,7 +6,7 @@ import com.dumchykov.socialnetworkdemo.data.room.ContactsDatabase
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.domain.logic.toContact
 import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
-import com.dumchykov.socialnetworkdemo.domain.webapi.models.Contact
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.ApiContact
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +45,7 @@ class SignUpExtendedViewModel @Inject constructor(
         _signUpExtendedState.update(reducer)
     }
 
-    fun editUser(userId: Int, bearerToken: String, user: Contact) {
+    fun editUser(userId: Int, bearerToken: String, user: ApiContact) {
         viewModelScope.launch {
             updateState { ResponseState.Loading }
             val editUserResponse = contactRepository.editUser(userId, bearerToken, user)

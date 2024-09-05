@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SingleUserResponse(
-    @SerialName("user") val user: Contact,
+    @SerialName("user") val user: ApiContact,
 )

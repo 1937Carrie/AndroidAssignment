@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
+import com.dumchykov.socialnetworkdemo.data.contactsprovider.IndicatorContact
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactAddBinding
 import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.ContactsAdapter
 
 class AddContactsAdapter(
     private val onClickListener: (Int, String) -> Unit,
-    private val onAddListener: (Contact) -> Unit,
-) : ListAdapter<Contact, RecyclerView.ViewHolder>(ContactsAdapter.Diff()) {
+    private val onAddListener: (IndicatorContact) -> Unit,
+) : ListAdapter<IndicatorContact, RecyclerView.ViewHolder>(ContactsAdapter.Diff()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return AddContactsViewHolder(
             ItemContactAddBinding.inflate(

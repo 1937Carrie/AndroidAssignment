@@ -4,31 +4,31 @@ import android.content.Context
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.dumchykov.socialnetworkdemo.R
-import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
+import com.dumchykov.socialnetworkdemo.data.contactsprovider.IndicatorContact
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactMultiselectBinding
 import com.dumchykov.socialnetworkdemo.ui.util.setImageWithGlide
 
 class MultiSelectViewHolder(
     private val binding: ItemContactMultiselectBinding,
-    private val onChangeSelect: (Contact) -> Unit = {},
+    private val onChangeSelect: (IndicatorContact) -> Unit = {},
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun onBind(context: Context, contact: Contact) {
+    fun onBind(context: Context, indicatorContact: IndicatorContact) {
         binding.root.setOnClickListener {
-            onChangeSelect(contact)
+            onChangeSelect(indicatorContact)
         }
         binding.imageSelector.setImageDrawable(
             AppCompatResources.getDrawable(
                 context,
-                if (contact.isSelected) R.drawable.ic_selector_selected else R.drawable.ic_selector
+                if (indicatorContact.isSelected) R.drawable.ic_selector_selected else R.drawable.ic_selector
             )
         )
-        binding.textName.text = contact.name
-        binding.textCareer.text = contact.career
+        binding.textName.text = indicatorContact.name
+        binding.textCareer.text = indicatorContact.career
         binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
-        setTransitionName(contact)
+        setTransitionName(indicatorContact)
     }
 
-    private fun setTransitionName(contact: Contact) {
-        binding.imageMain.transitionName = "${contact.id}_${contact.name}"
+    private fun setTransitionName(indicatorContact: IndicatorContact) {
+        binding.imageMain.transitionName = "${indicatorContact.id}_${indicatorContact.name}"
     }
 }

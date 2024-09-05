@@ -27,12 +27,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.dumchykov.socialnetworkdemo.R
-import com.dumchykov.socialnetworkdemo.data.contactsprovider.Contact
+import com.dumchykov.socialnetworkdemo.data.contactsprovider.IndicatorContact
 import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentMyContactsBinding
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleContactResponse
-import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleUserResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
 import com.dumchykov.socialnetworkdemo.ui.notification.NOTIFICATION_ID
 import com.dumchykov.socialnetworkdemo.ui.notification.createNotificationChannel
@@ -60,7 +59,7 @@ class MyContactsFragment : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                showNotification(viewModel.processingContact.value)
+                showNotification(viewModel.processingContact.value.name)
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -137,10 +136,10 @@ class MyContactsFragment : Fragment() {
                     when ((state as ResponseState.Success<*>).data) {
                         is MultipleContactResponse -> {
                             state.data as MultipleContactResponse
-                            sharedViewModel.updateState { copy(userContactIdList = state.data.contacts.map { it.id }) }
+                            sharedViewModel.updateState { copy(userContactIdList = state.data.apiContacts.map { it.id }) }
                             viewModel.updateContactListState {
-                                copy(contacts = state.data.contacts.map {
-                                    Contact(
+                                copy(indicatorContacts = state.data.apiContacts.map {
+                                    IndicatorContact(
                                         id = it.id,
                                         name = it.name.toString(),
                                         career = it.career.toString(),
@@ -148,11 +147,6 @@ class MyContactsFragment : Fragment() {
                                     )
                                 })
                             }
-                        }
-
-                        is MultipleUserResponse -> {
-                            state.data as MultipleUserResponse
-                            sharedViewModel.updateState { copy(userList = state.data.users) }
                         }
                     }
                 }
@@ -163,14 +157,15 @@ class MyContactsFragment : Fragment() {
     private fun initAdapter() {
         contactsAdapter = ContactsAdapter(
             context = requireContext(),
-            onClick = { view, contact ->
+            onClick = { view, indicatorContact ->
                 val contactBundle = bundleOf(
-                    "contact.id" to contact.id,
-                    "contact.name" to contact.name,
-                    "contact.career" to contact.career,
-                    "contact.address" to contact.address,
+                    "indicatorContact.id" to indicatorContact.id,
+                    "indicatorContact.name" to indicatorContact.name,
+                    "indicatorContact.career" to indicatorContact.career,
+                    "indicatorContact.address" to indicatorContact.address,
                 )
-                val extras = FragmentNavigatorExtras(view to "${contact.id}_${contact.name}")
+                val extras =
+                    FragmentNavigatorExtras(view to "${indicatorContact.id}_${indicatorContact.name}")
                 findNavController().navigate(
                     R.id.action_pagerFragment_to_detailsFragment,
                     contactBundle,
@@ -178,21 +173,21 @@ class MyContactsFragment : Fragment() {
                     extras
                 )
             },
-            onDelete = { contact ->
+            onDelete = { indicatorContact ->
                 val userId = viewModel.authorizedUser.value.id
                 val bearerToken = sharedViewModel.shareState.value.accessToken
-                viewModel.removeContact(userId, contact.id, bearerToken)
+                viewModel.removeContact(userId, indicatorContact.id, bearerToken)
                 Snackbar
                     .make(
                         binding.recyclerContacts,
-                        getString(R.string.contact_has_been_deleted, contact.name),
+                        getString(R.string.contact_has_been_deleted, indicatorContact.name),
                         Snackbar.LENGTH_LONG
                     )
                     .setAction(getString(R.string.undo)) {
-                        viewModel.addContact(bearerToken, userId, ContactId(contact.id))
+                        viewModel.addContact(bearerToken, userId, ContactId(indicatorContact.id))
                     }
                     .show()
-                viewModel.setProcessingContact(contact)
+                viewModel.setProcessingContact(indicatorContact)
                 val isRequiredTiramisu = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 if (isRequiredTiramisu && ActivityCompat.checkSelfPermission(
                         requireContext(),
@@ -201,11 +196,11 @@ class MyContactsFragment : Fragment() {
                 ) {
                     requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 } else {
-                    showNotification(contact)
+                    showNotification(indicatorContact.name)
                 }
             },
-            onChangeSelect = { contact ->
-                viewModel.updateContactCheckState(contact)
+            onChangeSelect = { indicatorContact ->
+                viewModel.updateContactCheckState(indicatorContact)
             }
         )
 
@@ -217,7 +212,7 @@ class MyContactsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.contactListState.collect { myContactsState ->
                 contactsAdapter.updateMultiSelectState { myContactsState.isMultiselect }
-                contactsAdapter.submitList(myContactsState.contacts)
+                contactsAdapter.submitList(myContactsState.indicatorContacts)
 
                 binding.fab.visibility =
                     if (myContactsState.isMultiselect) View.VISIBLE else View.GONE
@@ -226,9 +221,9 @@ class MyContactsFragment : Fragment() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun showNotification(contact: Contact) {
+    private fun showNotification(indicatorContactName: String) {
         val notification =
-            createOnRemoveNotification(requireContext(), contact.id, contact.name)
+            createOnRemoveNotification(requireContext(), indicatorContactName)
         NotificationManagerCompat.from(requireContext())
             .notify(NOTIFICATION_ID, notification)
     }
@@ -260,7 +255,7 @@ class MyContactsFragment : Fragment() {
         }
 
         binding.textInputSearchEditText.doOnTextChanged { text, _, _, _ ->
-            val filteredList = viewModel.contactListState.value.contacts
+            val filteredList = viewModel.contactListState.value.indicatorContacts
                 .filter { it.name.lowercase().contains(text.toString().lowercase()) }
             contactsAdapter.submitList(filteredList)
         }

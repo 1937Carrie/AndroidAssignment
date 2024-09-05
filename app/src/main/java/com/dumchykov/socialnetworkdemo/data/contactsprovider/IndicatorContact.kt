@@ -1,6 +1,6 @@
 package com.dumchykov.socialnetworkdemo.data.contactsprovider
 
-data class Contact(
+data class IndicatorContact(
     val id: Int = 0,
     val name: String = "",
     val career: String = "",

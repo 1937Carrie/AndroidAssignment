@@ -7,7 +7,7 @@ import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.domain.logic.toAuthorizedUserDBO
 import com.dumchykov.socialnetworkdemo.domain.logic.toContact
 import com.dumchykov.socialnetworkdemo.domain.webapi.ContactRepository
-import com.dumchykov.socialnetworkdemo.domain.webapi.models.Contact
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.ApiContact
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.EditUserResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -47,10 +47,10 @@ class EditProfileViewModel @Inject constructor(
         _editProfileState.update(reducer)
     }
 
-    fun editProfile(userId: Int, bearerToken: String, contact: Contact) {
+    fun editProfile(userId: Int, bearerToken: String, apiContact: ApiContact) {
         viewModelScope.launch {
             updateState { ResponseState.Loading }
-            val editUserResponse = contactRepository.editUser(userId, bearerToken, contact)
+            val editUserResponse = contactRepository.editUser(userId, bearerToken, apiContact)
             if (editUserResponse is ResponseState.Success<*>) {
                 val (user) = editUserResponse.data as EditUserResponse
                 withContext(Dispatchers.IO) {

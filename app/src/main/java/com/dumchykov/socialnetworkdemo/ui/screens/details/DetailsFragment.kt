@@ -50,8 +50,8 @@ class DetailsFragment : Fragment() {
                 if (user.id == -1) return@collect
 
                 handleDeepLink()
-                val userId = arguments?.getInt("contact.id") ?: throw IllegalStateException()
-                val contactName = arguments?.getString("contact.name")
+                val userId = arguments?.getInt("indicatorContact.id") ?: 0
+                val contactName = arguments?.getString("indicatorContact.name").orEmpty()
                 setTransition(userId, contactName)
                 bindUi(userId)
                 observeApiResponse()
@@ -87,18 +87,17 @@ class DetailsFragment : Fragment() {
     }
 
     private fun bindUi(contactId: Int) {
-        val users = sharedViewModel.shareState.value.userList
         val userContactIdList = sharedViewModel.shareState.value.userContactIdList
-        viewModel.getUserById(users, userContactIdList, contactId)
+        viewModel.getUserById(userContactIdList, contactId)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.contactState.collect { contact ->
-                binding.textName.text = contact.name
-                binding.textProfession.text = contact.career
-                binding.textAddress.text = contact.address
+            viewModel.contactState.collect { indicatorContact ->
+                binding.textName.text = indicatorContact.name
+                binding.textProfession.text = indicatorContact.career
+                binding.textAddress.text = indicatorContact.address
                 binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
 
-                when (contact.isAdded) {
+                when (indicatorContact.isAdded) {
                     true -> {
                         binding.buttonMessage.visibility = View.VISIBLE
                         binding.buttonMessageWhileNotFriended.visibility = View.GONE
