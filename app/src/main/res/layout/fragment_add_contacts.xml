@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.addcontacts.AddContactsFragment">
+    tools:context=".ui.screens.addcontacts.AddContactsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

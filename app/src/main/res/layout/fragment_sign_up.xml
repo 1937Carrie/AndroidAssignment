@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.signup.SignUpFragment">
+    tools:context=".ui.screens.signup.SignUpFragment">
 
     <LinearLayout
         android:id="@+id/main"
@@ -72,8 +72,7 @@
                     style="@style/text_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:text="s.s@s.s" />
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Space
@@ -94,8 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="textPassword"
-                    android:text="123456" />
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Space
@@ -133,7 +131,7 @@
                 android:id="@+id/buttonGoogle"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                tools:composableName="com.dumchykov.socialnetworkdemo.ui.signup.SignUpFragmentKt.ButtonGoogle" />
+                tools:composableName="com.dumchykov.socialnetworkdemo.ui.screens.signup.ButtonGoogleKt.ButtonGoogle" />
 
             <Space
                 android:layout_width="wrap_content"

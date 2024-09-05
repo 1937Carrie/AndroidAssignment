@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MultipleUserResponse(
-    @SerialName("users") val users: List<Contact>,
+    @SerialName("users") val users: List<ApiContact>,
 )

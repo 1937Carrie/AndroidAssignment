@@ -1,7 +1,7 @@
 package com.dumchykov.socialnetworkdemo.domain.webapi
 
+import com.dumchykov.socialnetworkdemo.domain.webapi.models.ApiContact
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.AuthenticationResponse
-import com.dumchykov.socialnetworkdemo.domain.webapi.models.Contact
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactApiResponse
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.EditUserResponse
@@ -48,7 +48,7 @@ interface ContactApiService {
     suspend fun editUser(
         @Path("userId") userId: Int,
         @Header("Authorization") bearerToken: String,
-        @Body user: Contact,
+        @Body user: ApiContact,
     ): ContactApiResponse<EditUserResponse>
 
     @GET("users")

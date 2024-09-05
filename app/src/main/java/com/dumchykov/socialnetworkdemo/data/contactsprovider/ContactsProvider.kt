@@ -1,10 +1,10 @@
 package com.dumchykov.socialnetworkdemo.data.contactsprovider
 
-fun getHardcodedContacts(): List<Contact> {
-    val contacts = mutableListOf<Contact>()
+fun getHardcodedContacts(): List<IndicatorContact> {
+    val indicatorContacts = mutableListOf<IndicatorContact>()
     repeat(20) {
-        contacts.add(
-            Contact(
+        indicatorContacts.add(
+            IndicatorContact(
                 id = it,
                 name = "Name №$it",
                 career = "Career №$it",
@@ -12,5 +12,5 @@ fun getHardcodedContacts(): List<Contact> {
             )
         )
     }
-    return contacts
+    return indicatorContacts
 }

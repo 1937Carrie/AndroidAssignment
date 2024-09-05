@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MultipleContactResponse(
-    @SerialName("contacts") val contacts: List<Contact>,
+    @SerialName("contacts") val apiContacts: List<ApiContact>,
 )
