@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.data.contactsprovider.IndicatorContact
 import com.dumchykov.socialnetworkdemo.databinding.ItemContactMultiselectBinding
+import com.dumchykov.socialnetworkdemo.ui.util.PROFILE_IMAGE_URL
 import com.dumchykov.socialnetworkdemo.ui.util.setImageWithGlide
 
 class MultiSelectViewHolder(
@@ -24,7 +25,7 @@ class MultiSelectViewHolder(
         )
         binding.textName.text = indicatorContact.name
         binding.textCareer.text = indicatorContact.career
-        binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
+        binding.imageMain.setImageWithGlide(PROFILE_IMAGE_URL)
         setTransitionName(indicatorContact)
     }
 

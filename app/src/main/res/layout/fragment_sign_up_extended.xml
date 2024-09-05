@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_semi_bold"
-                android:text="Your profile data"
+                android:text="@string/your_profile_data"
                 android:textAlignment="center"
                 android:textColor="@color/custom_white"
                 android:textSize="24sp" />
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_regular"
-                android:text="Fill out the profile and go to the application!"
+                android:text="@string/fill_out_the_profile_and_go_to_the_application"
                 android:textAlignment="center"
                 android:textColor="@color/custom_white"
                 android:textSize="12sp" />
@@ -116,7 +116,7 @@
                 style="@style/text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mobile phone"
+                android:hint="@string/mobile_phone"
                 android:theme="@style/text_input_edit_text">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -144,7 +144,7 @@
                 android:layout_height="40dp"
                 android:background="@drawable/outlined_button_4"
                 android:fontFamily="@font/opensans_semi_bold"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:textAllCaps="false"
                 android:textColor="@color/custom_white"
                 android:textSize="16sp" />
@@ -160,7 +160,7 @@
                 android:background="@drawable/filled_button_orange"
                 android:fontFamily="@font/opensans_semi_bold"
                 android:letterSpacing="0.15"
-                android:text="Forward"
+                android:text="@string/forward"
                 android:textColor="@color/custom_white"
                 android:textSize="16sp" />
 

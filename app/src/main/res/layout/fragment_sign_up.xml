@@ -72,8 +72,7 @@
                     style="@style/text_input_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:text="s.s@s.s" />
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Space
@@ -94,8 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="textPassword"
-                    android:text="123456" />
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Space

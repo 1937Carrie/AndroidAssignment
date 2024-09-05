@@ -17,6 +17,7 @@ import com.dumchykov.socialnetworkdemo.databinding.FragmentSignUpExtendedBinding
 import com.dumchykov.socialnetworkdemo.domain.logic.toApiContact
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.EditUserResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.util.ADD_IMAGE_URL
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -65,7 +66,6 @@ class SignUpExtendedFragment : Fragment() {
                 ) {
                     binding.layoutProgress.root.visibility = View.GONE
                     val (_) = (state as ResponseState.Success<*>).data as EditUserResponse
-                    ;
                     findNavController().navigate(R.id.action_signUpExtendedFragment_to_pagerFragment)
                 }
             }
@@ -92,9 +92,8 @@ class SignUpExtendedFragment : Fragment() {
 
     private fun setOnAddImageClickListener() {
         binding.imageAddImage.setOnClickListener {
-            val url = "https://youtu.be/dQw4w9WgXcQ"
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData(Uri.parse(url))
+            intent.setData(Uri.parse(ADD_IMAGE_URL))
             startActivity(intent)
         }
     }

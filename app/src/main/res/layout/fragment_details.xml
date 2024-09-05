@@ -73,7 +73,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/opensans_semi_bold"
             android:gravity="center"
-            android:text="Profile"
+            android:text="@string/profile"
             android:textAlignment="center"
             android:textColor="@color/custom_white"
             android:textSize="24sp" />
@@ -112,12 +112,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/opensans_semi_bold"
-        android:text="Lucile Alvarado"
         android:textColor="@color/custom_white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/imageMain" />
+        app:layout_constraintTop_toBottomOf="@id/imageMain"
+        tools:text="Lucile Alvarado" />
 
     <Space
         android:id="@+id/spacerBetweenNameAndProfession"
@@ -129,12 +129,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/opensans_semi_bold"
-        android:text="Graphic designer"
         android:textColor="@color/custom_gray_2"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/textName" />
+        app:layout_constraintTop_toBottomOf="@id/textName"
+        tools:text="Graphic designer" />
 
     <Space
         android:id="@+id/spacerBetweenProfessionAndAddress"
@@ -145,11 +145,11 @@
         android:id="@+id/textAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5295 Gaylord Walks Apk. 110"
         android:textColor="@color/custom_gray_2"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/textProfession" />
+        app:layout_constraintTop_toBottomOf="@id/textProfession"
+        tools:text="5295 Gaylord Walks Apk. 110" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flowIcons"
@@ -188,7 +188,7 @@
         android:background="@drawable/filled_button_orange"
         android:fontFamily="@font/opensans_semi_bold"
         android:letterSpacing="0.15"
-        android:text="Message"
+        android:text="@string/message"
         android:textColor="@color/custom_white"
         android:textSize="16sp"
         android:visibility="visible"
@@ -203,7 +203,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/outlined_button_2"
         android:fontFamily="@font/opensans_semi_bold"
-        android:text="Message"
+        android:text="@string/message"
         android:textAllCaps="false"
         android:textSize="14sp"
         android:visibility="gone"
@@ -218,7 +218,7 @@
         android:background="@drawable/filled_button_orange"
         android:fontFamily="@font/opensans_semi_bold"
         android:letterSpacing="0.15"
-        android:text="Add to my contacts"
+        android:text="@string/add_to_my_contacts"
         android:textColor="@color/custom_white"
         android:textSize="16sp"
         android:visibility="gone"

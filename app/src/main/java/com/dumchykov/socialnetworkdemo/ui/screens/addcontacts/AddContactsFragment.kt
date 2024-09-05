@@ -29,6 +29,8 @@ import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
 import com.dumchykov.socialnetworkdemo.ui.notification.NOTIFICATION_ID
 import com.dumchykov.socialnetworkdemo.ui.notification.createOnAddNotification
 import com.dumchykov.socialnetworkdemo.ui.screens.addcontacts.adapter.AddContactsAdapter
+import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.MyContactsFragment.Companion.INDICATOR_CONTACT_ID
+import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.MyContactsFragment.Companion.INDICATOR_CONTACT_NAME
 import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.adapter.ContactsItemDecoration
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import dagger.hilt.android.AndroidEntryPoint
@@ -110,8 +112,8 @@ class AddContactsFragment : Fragment() {
         addContactsAdapter = AddContactsAdapter(
             onClickListener = { userId, userName ->
                 val bundle = bundleOf(
-                    "indicatorContact.id" to userId,
-                    "indicatorContact.name" to userName
+                    INDICATOR_CONTACT_ID to userId,
+                    INDICATOR_CONTACT_NAME to userName
                 )
                 findNavController().navigate(
                     R.id.action_addContactsFragment_to_detailsFragment,

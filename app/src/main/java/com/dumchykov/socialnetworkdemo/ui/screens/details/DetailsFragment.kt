@@ -17,6 +17,10 @@ import com.dumchykov.socialnetworkdemo.databinding.FragmentDetailsBinding
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.ContactId
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.MultipleContactResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.notification.IS_FROM_DEEP_LINK
+import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.MyContactsFragment.Companion.INDICATOR_CONTACT_ID
+import com.dumchykov.socialnetworkdemo.ui.screens.mycontacts.MyContactsFragment.Companion.INDICATOR_CONTACT_NAME
+import com.dumchykov.socialnetworkdemo.ui.util.PROFILE_IMAGE_URL
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import com.dumchykov.socialnetworkdemo.ui.util.setImageWithGlide
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,8 +54,8 @@ class DetailsFragment : Fragment() {
                 if (user.id == -1) return@collect
 
                 handleDeepLink()
-                val userId = arguments?.getInt("indicatorContact.id") ?: 0
-                val contactName = arguments?.getString("indicatorContact.name").orEmpty()
+                val userId = arguments?.getInt(INDICATOR_CONTACT_ID) ?: 0
+                val contactName = arguments?.getString(INDICATOR_CONTACT_NAME).orEmpty()
                 setTransition(userId, contactName)
                 bindUi(userId)
                 observeApiResponse()
@@ -95,7 +99,7 @@ class DetailsFragment : Fragment() {
                 binding.textName.text = indicatorContact.name
                 binding.textProfession.text = indicatorContact.career
                 binding.textAddress.text = indicatorContact.address
-                binding.imageMain.setImageWithGlide("https://www.reuters.com/resizer/v2/MKQZUV67IFKAHDUNK4LJATIVMQ.jpg?auth=85a0616067eb4e93c8895d334072973babbfedb1376eb30339e6988218abc7ab")
+                binding.imageMain.setImageWithGlide(PROFILE_IMAGE_URL)
 
                 when (indicatorContact.isAdded) {
                     true -> {
@@ -128,7 +132,7 @@ class DetailsFragment : Fragment() {
     private suspend fun handleDeepLink() {
         val navBackStackEntry = findNavController().currentBackStackEntry
         val isFromDeepLink =
-            navBackStackEntry?.arguments?.getBoolean("isFromDeepLink", false) ?: false
+            navBackStackEntry?.arguments?.getBoolean(IS_FROM_DEEP_LINK, false) ?: false
 
         setOnArrowBackClickListener(isFromDeepLink)
         if (isFromDeepLink) {

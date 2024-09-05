@@ -38,7 +38,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/opensans_semi_bold"
                     android:gravity="center"
-                    android:text="Add contact"
+                    android:text="@string/add_contact"
                     android:textAlignment="center"
                     android:textColor="@color/custom_white"
                     android:textSize="18sp" />
@@ -111,7 +111,7 @@
                     style="@style/text_input_layout_edit_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Username"
+                    android:hint="@string/username"
                     android:theme="@style/text_input_edit_text_edit_profile">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -126,7 +126,7 @@
                     style="@style/text_input_layout_edit_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Career"
+                    android:hint="@string/career"
                     android:theme="@style/text_input_edit_text_edit_profile">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -157,7 +157,7 @@
                     style="@style/text_input_layout_edit_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Phone"
+                    android:hint="@string/phone"
                     android:theme="@style/text_input_edit_text_edit_profile">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -172,7 +172,7 @@
                     style="@style/text_input_layout_edit_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Address"
+                    android:hint="@string/address"
                     android:theme="@style/text_input_edit_text_edit_profile">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -187,7 +187,7 @@
                     style="@style/text_input_layout_edit_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Date of birth"
+                    android:hint="@string/date_of_birth"
                     android:theme="@style/text_input_edit_text_edit_profile">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -207,7 +207,7 @@
                 android:background="@drawable/filled_button_orange"
                 android:fontFamily="@font/opensans_semi_bold"
                 android:letterSpacing="0.15"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="@color/custom_white"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"

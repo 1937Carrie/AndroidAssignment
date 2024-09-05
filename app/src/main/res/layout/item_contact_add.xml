@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semi_bold"
-            android:text="Add"
+            android:text="@string/add"
             android:textColor="@color/custom_orange"
             android:textSize="18sp" />
 

@@ -159,10 +159,8 @@ class MyContactsFragment : Fragment() {
             context = requireContext(),
             onClick = { view, indicatorContact ->
                 val contactBundle = bundleOf(
-                    "indicatorContact.id" to indicatorContact.id,
-                    "indicatorContact.name" to indicatorContact.name,
-                    "indicatorContact.career" to indicatorContact.career,
-                    "indicatorContact.address" to indicatorContact.address,
+                    INDICATOR_CONTACT_ID to indicatorContact.id,
+                    INDICATOR_CONTACT_NAME to indicatorContact.name
                 )
                 val extras =
                     FragmentNavigatorExtras(view to "${indicatorContact.id}_${indicatorContact.name}")
@@ -274,5 +272,10 @@ class MyContactsFragment : Fragment() {
                 (parentFragment as PagerFragment).changeCurrentItem(Page.MyProfile.ordinal)
             }
         )
+    }
+
+    companion object {
+        const val INDICATOR_CONTACT_ID = "indicatorContact.id"
+        const val INDICATOR_CONTACT_NAME = "indicatorContact.name"
     }
 }

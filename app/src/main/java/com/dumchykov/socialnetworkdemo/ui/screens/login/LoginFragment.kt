@@ -19,6 +19,7 @@ import com.dumchykov.socialnetworkdemo.data.webapi.ResponseState
 import com.dumchykov.socialnetworkdemo.databinding.FragmentLoginBinding
 import com.dumchykov.socialnetworkdemo.domain.webapi.models.AuthenticationResponse
 import com.dumchykov.socialnetworkdemo.ui.SharedViewModel
+import com.dumchykov.socialnetworkdemo.ui.util.FORGOT_PASSWORD_URL
 import com.dumchykov.socialnetworkdemo.ui.util.handleStandardResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -102,10 +103,8 @@ class LoginFragment : Fragment() {
 
     private fun setForgotPasswordClickListener() {
         binding.textForgotPassword.setOnClickListener {
-            val url =
-                "https://memi.klev.club/uploads/posts/2024-05/memi-klev-club-qtvt-p-memi-chelovek-sidit-za-stolom-s-butilkoi-7.jpg"
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData(Uri.parse(url))
+            intent.setData(Uri.parse(FORGOT_PASSWORD_URL))
             startActivity(intent)
         }
     }

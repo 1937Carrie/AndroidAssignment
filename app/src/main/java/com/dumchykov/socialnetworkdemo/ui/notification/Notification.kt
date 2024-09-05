@@ -10,13 +10,17 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
 import com.dumchykov.socialnetworkdemo.R
 
+const val CHANNEL_ID = "channel_miscellaneous"
+const val IS_FROM_DEEP_LINK = "isFromDeepLink"
+const val NOTIFICATION_ID = 10001
+
 private fun createNotification(
     context: Context,
     title: String,
     contextText: String,
 ): Notification {
     val args = bundleOf(
-        "isFromDeepLink" to true
+        IS_FROM_DEEP_LINK to true
     )
     val pendingIntent = NavDeepLinkBuilder(context)
         .setGraph(R.navigation.nav_graph)
@@ -38,7 +42,7 @@ fun createOnAddNotification(context: Context, userName: String): Notification {
     return createNotification(
         context,
         userName,
-        "Contact was added"
+        context.getString(R.string.contact_was_added)
     )
 }
 
@@ -46,7 +50,7 @@ fun createOnRemoveNotification(context: Context, userName: String): Notification
     return createNotification(
         context,
         userName,
-        "Contact was removed"
+        context.getString(R.string.contact_was_removed)
     )
 }
 
@@ -54,8 +58,8 @@ fun createNotificationChannel(context: Context) {
     // Create the NotificationChannel, but only on API 26+ because
     // the NotificationChannel class is not in the Support Library.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val name = "Channel name"
-        val descriptionText = "Channel description"
+        val name = context.getString(R.string.miscellaneous)
+        val descriptionText = context.getString(R.string.channel_for_miscellaneous_notifications)
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
             description = descriptionText
@@ -66,6 +70,3 @@ fun createNotificationChannel(context: Context) {
         notificationManager.createNotificationChannel(channel)
     }
 }
-
-const val CHANNEL_ID = "Miscellaneous"
-const val NOTIFICATION_ID = 10001

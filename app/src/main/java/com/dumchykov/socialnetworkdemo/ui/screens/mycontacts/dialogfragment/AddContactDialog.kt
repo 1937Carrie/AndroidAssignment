@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.dumchykov.socialnetworkdemo.R
 import com.dumchykov.socialnetworkdemo.databinding.DialogAddContactBinding
 
 class AddContactDialog(
@@ -24,7 +25,7 @@ class AddContactDialog(
             // layout.
             builder.setView(binding.root)
                 // Add action buttons.
-                .setPositiveButton("Confirm") { _, _ ->
+                .setPositiveButton(getString(R.string.confirm)) { _, _ ->
                     with(binding) {
                         onConfirmAction(
                             editTextName.text.toString(),
@@ -38,7 +39,7 @@ class AddContactDialog(
                     }
                     dialog?.cancel()
                 }
-                .setNegativeButton("Cancel") { _, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                     with(binding) {
                         editTextName.setText("")
                         editTextCareer.setText("")

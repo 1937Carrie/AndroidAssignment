@@ -115,12 +115,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/opensans_semi_bold"
-        android:text="Lucile Alvarado"
         android:textColor="@color/custom_white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/imageMain" />
+        app:layout_constraintTop_toBottomOf="@id/imageMain"
+        tools:text="Lucile Alvarado" />
 
     <Space
         android:id="@+id/spacerBetweenNameAndProfession"
@@ -132,12 +132,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/opensans_semi_bold"
-        android:text="Graphic designer"
         android:textColor="@color/custom_gray_2"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/textName" />
+        app:layout_constraintTop_toBottomOf="@id/textName"
+        tools:text="Graphic designer" />
 
     <Space
         android:id="@+id/spacerBetweenProfessionAndAddress"
@@ -148,11 +148,11 @@
         android:id="@+id/textAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5295 Gaylord Walks Apk. 110"
         android:textColor="@color/custom_gray_2"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintTop_toBottomOf="@id/textProfession" />
+        app:layout_constraintTop_toBottomOf="@id/textProfession"
+        tools:text="5295 Gaylord Walks Apk. 110" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flowIcons"
@@ -190,7 +190,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/opensans_semi_bold"
-        android:text="Go to settings and fill out the profile"
+        android:text="@string/go_to_settings_and_fill_out_the_profile"
         android:textAlignment="center"
         android:textColor="@color/custom_blue"
         android:textSize="14sp"
